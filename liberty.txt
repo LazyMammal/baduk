@@ -1,0 +1,30 @@
+Board      |  Liberty Count
+
+X . X . .  |  2 . 3 . .
+. X . . X  |  . 4 . . 4
+. . X . X  |  . . 6 . 4
+X . X . .  |  3 . 6 . .
+X X . X X  |  3 3 . 3 3
+
+X . . . O  |  1 . . . 1
+O . X . X  |  2 . 8 . 2
+. X X X .  |  . 8 8 8 .
+O . X . O  |  2 . 8 . 2
+O X . O X  |  2 2 . 2 0  <-- Zero liberty count (either captured or illegal)
+
+---
+
+Board      |  Enclosed   |  Score
+
+X . X . .  |  . x . ? ?  |  X x X ? ?  Black: 7
+. X . . O  |  x . ? ? .  |  x X ? ? O  White: 12
+X . X O O  |  . ? . . .  |  X ? X O O  ?????: 6
+O . O . .  |  . ? . o o  |  O ? O o o
+O O . O O  |  . . o . .  |  O O o O O
+
+. . . . .  |  x x x x x  |  x x x x x  Black: 17
+. X . X X  |  x . x . .  |  x X x X X  White: 8
+. . X O O  |  x x . . .  |  x x X O O
+. X O . O  |  x . . o .  |  x X O o O
+. X O O .  |  x . . . o  |  x X O O o
+
