@@ -1,6 +1,32 @@
 aside nav {
   margin: 1.5rem 0;
 }
+
 aside nav a {
   display: block;
+}
+
+main h1 a:link,
+main h1 a:visited,
+main h2 a:link,
+main h2 a:visited,
+main h3 a:link,
+main h3 a:visited,
+main h4 a:link,
+main h4 a:visited,
+main h5 a:link,
+main h5 a:visited,
+main h6 a:link,
+main h6 a:visited {
+  color: var(--text);
+  text-decoration: none;
+}
+
+main h1 a:hover,
+main h2 a:hover,
+main h3 a:hover,
+main h4 a:hover,
+main h5 a:hover,
+main h6 a:hover {
+  text-decoration: underline;
 }

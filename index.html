@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preload" href="main.js" as="script" />
+
   <title>Baduk JS - Step By Step</title>
 </head>
 
@@ -19,24 +21,48 @@
   <main>
     <aside>
       <nav>
-        <a href="#">Intro</a>
-        <a href="#section1">Content</a>
+        <a href="#Introduction">Introduction</a>
+        <a href="#TheVisionAhead">The Vision Ahead</a>
+        <a href="#TheFirstStep">The First Step</a>
       </nav>
     </aside>
+    <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
+    <p>This page intends to demonstrate a series of small steps that all together will reach a more distant goal.</p>
+    <p>Writing a large program can be a daunting task. Even if the end goal is clearly envisioned, the steps to get
+      there might be only somewhat understood in advance. Many times the path forward must be discovered one step at a
+      time.</p>
+    <p>I have the goal of writing a <i>reasonably</i> performing Monte Carlo Tree Search (MCTS) bot for playing the Game
+      of Go. I'm going to write it all in JavaScript.</p>
+    <p>In order to avoid burnout along the way, I will be dividing up the large size task into many small steps. Each of
+      the sections below will focus on one of those small steps.</p>
+    <p>This page is a <i>living document</i> and will be updated as I write more sections ...</p>
 
-    <p>Introduction text explaining the purpose and scope of the web page. Briefly mention the motivation for creating
-      the page and how it will be layed out.</p>
+    <section>
+      <h2 id="TheVisionAhead"><a href="#TheVisionAhead">The Vision Ahead</a></h2>
+      <p>I want to pick a medium sized goal to directly plan towards. I know that an MCTS bot will need to enact the
+        <i>rules of the game</i> in order to perform automated Rollouts. It will also need a way to score a finished game
+        for counting wins and losses.
+      </p>
+      <p>The file <code>liberty_score.txt</code> contains my vision for the minimum abilities a computer would need to
+        enforce the rules of Go.</p>
+      <ol>
+        <li>Count Liberties</li>
+        <li>Score a Finished Board</li>
+      </ol>
 
-    <section id="section1">
-      Specific introduction to this section.
-      <pre>
-        <code>
-var obj = {
-  name: 'obj'
-}
-        </code>
-      </pre>
-      Final words.
+      <figure>
+        <pre preload-code="liberty_score.txt"></pre>
+        <figcaption>liberty_score.txt</figcaption>
+      </figure>
+
+      <p> The text file is written so a human can read it. It's also carefully formatted so it can be read into a
+        script and parsed into a set of Unit Tests.</p>
+      <p>The next section will start on the path to loading, parsing and eventually executing the Unit Tests in this file.</p>
+    </section>
+
+    <section>
+      <h2 id="TheFirstStep"><a href="#TheFirstStep">The First Step</a></h2>
+      <p>...</p>
     </section>
 
   </main>
@@ -44,6 +70,7 @@ var obj = {
   <footer>
     <p>by LazyMammal</p>
   </footer>
+  <script src="main.js" defer></script>
 </body>
 
 </html>
