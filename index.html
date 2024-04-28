@@ -50,8 +50,8 @@
       <p>The file <code>liberty_score.txt</code> contains my vision for the minimum abilities a computer would need to
         enforce the rules of Go.</p>
       <ol>
-        <li>Count Liberties</li>
-        <li>Score a Finished Board</li>
+        <li><mark>Count Liberties</mark></li>
+        <li><mark>Score a Finished Board</mark></li>
       </ol>
 
       <figure>
@@ -78,8 +78,8 @@
         <figcaption><code>board5x5.txt</code></figcaption>
       </figure>
 
-      <p>Let's add some whitespace between the columns again. We can also add coordinate labels for both axes while
-        we're parsing the board.</p>
+      <p>We can add coordinate labels for both axes while we're parsing the board. Let's also add some whitespace
+        between the columns again.</p>
 
       <figure>
         <pre><code preload-javascript="board5x5.js"></code></pre>
@@ -101,12 +101,12 @@
       <p>To reach our medium goal we need to "count liberties" and "score the game". Scoring the game further relies on
         identifying "enclosed empty spots" and which stone colour they "belong to".</p>
       <ol>
-        <li>Count Liberties<ul>
+        <li><mark>Count Liberties</mark><ul>
             <li>Follow a chain of same-colour stones.</li>
             <li>Count all the adjacent empty spots.</li>
           </ul>
         </li>
-        <li>Enclosed<ul>
+        <li><mark>Enclosed Empty Spots</mark><ul>
             <li>Follow a chain of empty spots.</li>
             <li>Identify the adjacent stone colours.</li>
           </ul>
