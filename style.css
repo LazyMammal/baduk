@@ -1,3 +1,34 @@
+:root,
+::backdrop {
+  color-scheme: dark;
+  --bg: #404A40; /* Feldgrau */
+  --accent-bg: #122335; /* Oxford Blue */ 
+  --text: #dcdcdc;
+  --text-light: #ababab;
+  --accent: #f0b641; /* Xanthous */
+  --accent-hover: #ffca60;
+  --accent-text: var(--bg);
+  --code: #6799B2; /* Light Blue */
+  --preformatted: var(--code);
+  --disabled: #111;
+  --blue: #0d47a1;
+  --input-bg: black;
+  --red: #AF1B3F; /* Amaranth Purple */
+  --green: #307351; /* Dark Spring Green */
+  --marked-text: var(--accent-bg);
+  --marked: var(--green);
+}
+
+li {
+  line-height: 2em;
+}
+
+p code, figcaption code {
+  background-color: var(--accent-bg);
+  border-radius: var(--standard-border-radius);
+  padding: .15em;
+}
+
 aside nav {
   margin: 1.5rem 0;
 }
@@ -5,6 +36,16 @@ aside nav {
 aside nav a {
   display: block;
 }
+
+main h1,
+main h2,
+main h3,
+main h4,
+main h5,
+main h6 {
+  margin-top: 0;
+}
+
 
 main h1 a:link,
 main h1 a:visited,
@@ -29,4 +70,12 @@ main h4 a:hover,
 main h5 a:hover,
 main h6 a:hover {
   text-decoration: underline;
+}
+
+input[type=checkbox]:checked:after {
+  background-color: var(--input-bg);
+}
+
+button, mark {
+  color: var(--marked-text);
 }

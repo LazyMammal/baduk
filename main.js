@@ -1,13 +1,17 @@
-/*
-    <figure>
-      <pre preload-code="board.txt"></pre>
-      <figcaption>board.txt</figcaption>
-    </figure>
-*/
-$("[preload-code]")
-  .each((i, e) => jQuery.get(e.getAttribute("preload-code"),
+const preload_txt = "preload-txt";
+$(`[${preload_txt}]`)
+  .each((i, e) => jQuery.get(e.getAttribute(preload_txt),
     (data) => { e.innerText = data }
   ));
+
+const preload_js = "preload-javascript";
+$(`[${preload_js}]`)
+  .each((i, e) => jQuery.get(e.getAttribute(preload_js),
+    (data) => {
+      e.insertAdjacentHTML("afterbegin",
+        hljs.highlight(data, { language: 'javascript' }).value
+      );
+    }));
 
 /*
     <div data="board.txt" run="board">

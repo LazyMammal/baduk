@@ -7,6 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/an-old-hope.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
   <script src="main.js" defer></script>
   <title>Baduk JS - Step By Step</title>
@@ -53,8 +55,8 @@
       </ol>
 
       <figure>
-        <pre preload-code="liberty_score.txt"></pre>
-        <figcaption>liberty_score.txt</figcaption>
+        <pre><code preload-txt="liberty_score.txt"></code></pre>
+        <figcaption><code>liberty_score.txt</code></figcaption>
       </figure>
 
       <p>The text file is written so a human can read it. It's also carefully formatted so it can be read into a
@@ -72,23 +74,23 @@
         as we can make it while still being a meaningful first step.</p>
 
       <figure>
-        <pre preload-code="board5x5.txt"></pre>
-        <figcaption>board5x5.txt</figcaption>
+        <pre><code preload-txt="board5x5.txt"></code></pre>
+        <figcaption><code>board5x5.txt</code></figcaption>
       </figure>
 
       <p>Let's add some whitespace between the columns again. We can also add coordinate labels for both axes while
         we're parsing the board.</p>
 
       <figure>
-        <pre preload-code="board5x5.js"></pre>
-        <figcaption>board5x5.js</figcaption>
+        <pre><code preload-javascript="board5x5.js"></code></pre>
+        <figcaption><code>board5x5.js</code></figcaption>
       </figure>
 
       <script src="board5x5.js" defer></script>
       <figure data="board5x5.txt" run="board5x5">
         <button> Run </button>
-        <pre output></pre>
-        <figcaption>output</figcaption>
+        <pre><code output></code></pre>
+        <figcaption><code>output</code></figcaption>
       </figure>
     </section>
 
