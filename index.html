@@ -15,7 +15,7 @@
 <body>
   <header>
     <h1>Baduk JS - Step By Step</h1>
-    <p>Experiments in Baduk/Go/Weiqi using JavaScript</p>
+    <p>Experiments in Baduk/Game of Go/Weiqi using JavaScript</p>
   </header>
 
   <main>
@@ -24,6 +24,7 @@
         <a href="#Introduction">Introduction</a>
         <a href="#TheVisionAhead">The Vision Ahead</a>
         <a href="#TheFirstStep">The First Step</a>
+        <a href="#FloodFill">Flood Fill</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -66,7 +67,8 @@
       <h2 id="TheFirstStep"><a href="#TheFirstStep">The First Step</a></h2>
       <p>Before we tackle <code>liberty_score.txt</code> let's start with something less complicated. The first step is
         reading a text file with an example position from a 5x5 board. It will be easier to parse because it only has a
-        single board, no whitespace, headers, or comments. The overall structure of <code>board5x5.txt</code> is as simple
+        single board, no whitespace, headers, or comments. The overall structure of <code>board5x5.txt</code> is as
+        simple
         as we can make it while still being a meaningful first step.</p>
 
       <figure>
@@ -74,7 +76,8 @@
         <figcaption>board5x5.txt</figcaption>
       </figure>
 
-      <p>Let's add some whitespace between the columns again. We can also add coordinate labels for both axes while we're parsing the board.</p>
+      <p>Let's add some whitespace between the columns again. We can also add coordinate labels for both axes while
+        we're parsing the board.</p>
 
       <figure>
         <pre preload-code="board5x5.js"></pre>
@@ -89,10 +92,35 @@
       </figure>
     </section>
 
+    <section>
+      <h2 id="FloodFill"><a href="#FloodFill">Flood Fill</a></h2>
+      <p>Now that we feel comfortable <i>parsing</i> the text board we can look ahead to processing the board for more
+        details.</p>
+      <p>To reach our medium goal we need to "count liberties" and "score the game". Scoring the game further relies on
+        identifying "enclosed empty spots" and which stone colour they "belong to".</p>
+      <ol>
+        <li>Count Liberties<ul>
+            <li>Follow a chain of same-colour stones.</li>
+            <li>Count all the adjacent empty spots.</li>
+          </ul>
+        </li>
+        <li>Enclosed<ul>
+            <li>Follow a chain of empty spots.</li>
+            <li>Identify the adjacent stone colours.</li>
+          </ul>
+        </li>
+      </ol>
+      <p>Both of these abilities rely on an even smaller ability. We need to be able to follow "chains" of
+        same-type pieces on the board. I know from experience that trying to do this task by "scanning" is possible
+        but very time consuming. The efficient approach here is to use "Flood Fill"</p>
+
+
+    </section>
+
   </main>
 
   <footer>
-    <p>by LazyMammal</p>
+    <p>by <a href="https://lazymammal.github.io/">LazyMammal</a></p>
   </footer>
 </body>
 
