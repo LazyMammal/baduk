@@ -1,26 +1,25 @@
-function board(data, output) {
-  // split text data by row and by col
+function board5x5(data) {
+  // split text data by row and col
   let array = data.split("\n")
     .map(row => row.split(""));
 
-  // get board size from data size
+  // get board size from data length
   let size = array.length;
 
-  // x-axis coordinates
+  // x-axis coordinate labels
   let header = [];
   for (let col = 0; col < size; col++) {
     header.push(String.fromCharCode(65 + col));
   }
 
-  // y-axis coordinates
+  // y-axis coordinate labels
   for (let row = size, y = 0; row > 0; row--, y++) {
     array[y].push(`${row}`);
   }
 
-  // arrange board
+  // arrange board with spaces and labels
   let text = [header, ...array]
     .map(row => row.join(" ")).join("\n")
 
-  // output board
-  output.text(text);
+  return text;
 }

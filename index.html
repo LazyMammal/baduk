@@ -66,23 +66,23 @@
       <h2 id="TheFirstStep"><a href="#TheFirstStep">The First Step</a></h2>
       <p>Before we tackle <code>liberty_score.txt</code> let's start with something less complicated. The first step is
         reading a text file with an example position from a 5x5 board. It will be easier to parse because it only has a
-        single board, no whitespace, headers, or comments. The overall structure of <code>board.txt</code> is as simple
+        single board, no whitespace, headers, or comments. The overall structure of <code>board5x5.txt</code> is as simple
         as we can make it while still being a meaningful first step.</p>
 
       <figure>
-        <pre preload-code="board.txt"></pre>
-        <figcaption>board.txt</figcaption>
+        <pre preload-code="board5x5.txt"></pre>
+        <figcaption>board5x5.txt</figcaption>
       </figure>
 
-      <p>...</p>
+      <p>Let's add some whitespace between the columns again. We can also add coordinate labels for both axes while we're parsing the board.</p>
 
       <figure>
-        <pre preload-code="board.js"></pre>
-        <figcaption>board.js</figcaption>
+        <pre preload-code="board5x5.js"></pre>
+        <figcaption>board5x5.js</figcaption>
       </figure>
 
-      <script src="board.js" defer></script>
-      <figure data="board.txt" run="board">
+      <script src="board5x5.js" defer></script>
+      <figure data="board5x5.txt" run="board5x5">
         <button> Run </button>
         <pre output></pre>
         <figcaption>output</figcaption>

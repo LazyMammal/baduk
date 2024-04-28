@@ -21,6 +21,6 @@ $("[run]").on("click", "button", function () {
   let parent = $(this).parent();
   let output = parent.find("[output]");
   jQuery.get(parent.attr("data"), (data) => {
-    window[parent.attr("run")](data, output)
+    output.text(window[parent.attr("run")](data));
   });
 })
