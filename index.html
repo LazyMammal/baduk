@@ -118,9 +118,33 @@
       </ol>
       <p>Both of these abilities rely on an even smaller ability. We need to be able to follow "chains" of
         same-type pieces on the board. I know from experience that trying to do this task by "scanning" is possible
-        but very time consuming. The efficient approach here is to use "Flood Fill"</p>
+        but very time consuming. The efficient approach here is to use Flood Fill (aka DFS, Depth First Search)</p>
+      <p>The scenario in <code>flood5x5.txt</code> challenges us to handle several issues.</p>
+      <ul>
+        <li>Follow the chain of stones through several branching points.</li>
+        <li>Avoid an infinite loop following the circular path of stones.</li>
+        <li>Avoid re-counting adjacent empty spots from multiple angles.</li>
+      </ul>
 
+      <figure>
+        <pre><code preload-txt="flood5x5.txt"></code></pre>
+        <figcaption><code>flood5x5.txt</code></figcaption>
+      </figure>
 
+      <p>Let's count the number stones in the black chain and the number of liberties it's touching.
+        We'll also show the number of <i>visits</i> at each location of the board during our Flood Fill.</p>
+
+      <figure>
+        <pre><code preload-javascript="flood5x5.js"></code></pre>
+        <figcaption><code>flood5x5.js</code></figcaption>
+      </figure>
+
+      <script src="flood5x5.js" defer></script>
+      <figure data="flood5x5.txt" run="flood5x5">
+        <button> Run </button>
+        <pre><code output></code></pre>
+        <figcaption><code>output</code></figcaption>
+      </figure>
     </section>
 
   </main>
