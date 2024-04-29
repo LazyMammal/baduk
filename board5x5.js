@@ -1,6 +1,6 @@
 function parse(text) { // text -> array[][]
   return text.split("\n") // split rows into array
-    .map(row => row.split("")); // make cols sub-array
+    .map(row => row.split(" ")); // make cols sub-array
 }
 
 // col -> 'A','B','C'
