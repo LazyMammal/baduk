@@ -28,6 +28,7 @@
         <a href="#TheFirstStep">The First Step</a>
         <a href="#FloodFill">Flood Fill</a>
         <a href="#Metadata">Metadata</a>
+        <a href="#Scoring">Scoring</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -172,18 +173,50 @@
         The chain ids must not be re-used for other chains.
         We also won't be assigning chain ids to empty spots.</p>
 
-        <figure>
-          <pre><code preload-javascript="chain5x5.js"></code></pre>
-          <figcaption><code>chain5x5.js</code></figcaption>
-        </figure>
-  
-        <script src="chain5x5.js" defer></script>
-        <figure data="board5x5.txt" run="chain5x5">
-          <button> Run </button>
-          <pre><code output></code></pre>
-          <figcaption><code>output</code></figcaption>
-        </figure>
-      </section>
+      <figure>
+        <pre><code preload-javascript="chain5x5.js"></code></pre>
+        <figcaption><code>chain5x5.js</code></figcaption>
+      </figure>
+
+      <script src="chain5x5.js" defer></script>
+      <figure data="board5x5.txt" run="chain5x5">
+        <button> Run </button>
+        <pre><code output></code></pre>
+        <figcaption><code>output</code></figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2 id="Scoring"><a href="#Scoring">Scoring</a></h2>
+      <p>The function <code>buildChains()</code> also doubles as a great way to count liberties.
+        With that done the only ability we need code for now is Scoring the Game.
+        Scoring is very similar to Counting Liberties with these differences:</p>
+      <ul>
+        <li>Follow empty spots instead of stones.</li>
+        <li>Identify the <i>types</i> of adjacent stones instead of summing them up.</li>
+      </ul>
+
+      <figure>
+        <pre><code preload-txt="board5x5.txt"></code></pre>
+        <figcaption><code>board5x5.txt</code></figcaption>
+      </figure>
+
+      <p>We'll need to scan the board for stones but not follow them,
+        and follow empty spots as we find them.
+        Let's only invoke DFS the first time we encounter each "chain" of empty spots.</p>
+
+      <figure>
+        <pre><code preload-javascript="score5x5.js"></code></pre>
+        <figcaption><code>score5x5.js</code></figcaption>
+      </figure>
+
+      <script src="score5x5.js" defer></script>
+      <figure data="board5x5.txt" run="score5x5">
+        <button> Run </button>
+        <pre><code output></code></pre>
+        <figcaption><code>output</code></figcaption>
+      </figure>
+    </section>
 
   </main>
 
