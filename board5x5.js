@@ -21,7 +21,7 @@ function addAxisLabels(data) {
   return data;
 }
 
-function data2text(data) { // add whitespace, flatten array
+function data2text(data) { // add spaces, flatten array
   return data.map(row => row.join(" ")).join("\n");
 }
 
