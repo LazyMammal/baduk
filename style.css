@@ -79,3 +79,11 @@ input[type=checkbox]:checked:after {
 button, mark {
   color: var(--marked-text);
 }
+
+@keyframes fadeIn { 
+  from { opacity: 0; } 
+}
+
+.loading {
+  animation: fadeIn 1s infinite alternate;
+}
