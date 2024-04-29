@@ -5,6 +5,8 @@ function DFS(start, data,
 ) {
   let Q = [start];
   let visited = {};
+  visited[start] = start;
+  callback(start, data);
   while (Q.length) {
     let cur = Q.pop();
     if (earlyexit(cur, data)) break;
@@ -44,7 +46,7 @@ function flood5x5(input) {
     return (piece === 'X');
   }
   DFS([0, 0], data, adj4way, countFunc);
-  let text = data2text(visits);
+  let text = data2text(addAxisLabels(visits));
   text += '\n' + `Black stones: ${black}`;
   text += '\n' + `Liberty count: ${libs}`;
   return text;

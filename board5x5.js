@@ -14,7 +14,7 @@ function addAxisLabels(data) {
   data.push([]); // add row for x-axis labels
   for (let i = 0; i < size; i++) {
     data[size][i] = xLabel(i);
-    data[i][size] = yLabel(i);
+    data[i][size] = `:${yLabel(i)}`;
   }
   return data;
 }

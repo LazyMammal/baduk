@@ -27,6 +27,7 @@
         <a href="#TheVisionAhead">The Vision Ahead</a>
         <a href="#TheFirstStep">The First Step</a>
         <a href="#FloodFill">Flood Fill</a>
+        <a href="#Metadata">Metadata</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -146,6 +147,43 @@
         <figcaption><code>output</code></figcaption>
       </figure>
     </section>
+
+    <section>
+      <h2 id="Metadata"><a href="#Metadata">Metadata</a></h2>
+      <p>At this point we have most of the pieces we need to calculate Liberties and Score.
+        However, it would be quite slow if we naively try to continue with only this.
+        For example, to display Liberty Counts for the entire board, each stone would need to run Flood Fill,
+        which would then visit every stone and Liberty associated with the stone's chain.
+        For long chains this redunancy would be very time consuming.</p>
+      <p>We need a way to identify which chain each stone belongs to.
+        We can store information related to a chain as metadata once it has been calculated.
+        Whenever the metadata is required it can be retrieved by the "chain id".
+        This will also be of value later when we simulate entire games.
+        The metadata for a chain remains unchanged until another stone is placed next to it.</p>
+
+      <figure>
+        <pre><code preload-txt="board5x5.txt"></code></pre>
+        <figcaption><code>board5x5.txt</code></figcaption>
+      </figure>
+
+      <p>Let's assign chain ids to each stone in <code>board5x5.txt</code>.
+        Stones that are connected and of the same colour will share the same "chain id".
+        Unconnected stones or adjacent stones of different colour need unique ids.
+        The chain ids must not be re-used for other chains.
+        We also won't be assigning chain ids to empty spots.</p>
+
+        <figure>
+          <pre><code preload-javascript="chain5x5.js"></code></pre>
+          <figcaption><code>chain5x5.js</code></figcaption>
+        </figure>
+  
+        <script src="chain5x5.js" defer></script>
+        <figure data="board5x5.txt" run="chain5x5">
+          <button> Run </button>
+          <pre><code output></code></pre>
+          <figcaption><code>output</code></figcaption>
+        </figure>
+      </section>
 
   </main>
 
