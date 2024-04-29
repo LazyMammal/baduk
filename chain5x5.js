@@ -10,7 +10,7 @@ function buildChains(data, chains, libs) {
   }
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      if (!chains[y][x] && data[y][x] != '.') {
+      if (!chains[y][x] && data[y][x] !== '.') {
         chainId++;
         libs[chainId] = 0;
         stoneType = data[y][x];
