@@ -87,3 +87,15 @@ button, mark {
 .loading {
   animation: fadeIn 1s infinite alternate;
 }
+
+details pre {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+pre summary {
+  margin-bottom: .5rem;
+  color: var(--text);
+  cursor: auto;
+}

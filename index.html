@@ -58,10 +58,10 @@
         <li><mark>Score a Finished Board</mark></li>
       </ol>
 
-      <figure>
+      <details>
+        <summary>liberty_score.txt</summary>
         <pre><code preload-txt="liberty_score.txt"></code></pre>
-        <figcaption><code>liberty_score.txt</code></figcaption>
-      </figure>
+      </details>
 
       <p>The text file is written so a human can read it. It's also carefully formatted so it can be read into a
         script and parsed into a set of Unit Tests.</p>
@@ -79,25 +79,22 @@
         first step.
       </p>
 
-      <figure>
-        <pre><code preload-txt="board5x5.txt"></code></pre>
-        <figcaption><code>board5x5.txt</code></figcaption>
-      </figure>
+      <pre><summary>board5x5.txt</summary><code preload-txt="board5x5.txt"></code></pre>
 
       <p>We can add coordinate labels for both axes while we're parsing the board.
         Let's also restore the whitespace between the columns.</p>
 
-      <figure>
+      <details>
+        <summary>board5x5.js</summary>
         <pre><code preload-javascript="board5x5.js"></code></pre>
-        <figcaption><code>board5x5.js</code></figcaption>
-      </figure>
+      </details>
 
       <script src="board5x5.js" defer></script>
-      <figure data="board5x5.txt" run="board5x5">
+      <div data="board5x5.txt" run="board5x5">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><code output></code></pre>
-        <figcaption><code>output</code></figcaption>
-      </figure>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+
     </section>
 
     <section>
@@ -130,25 +127,21 @@
         <li>Avoid re-counting adjacent empty spots from multiple angles.</li>
       </ul>
 
-      <figure>
-        <pre><code preload-txt="flood5x5.txt"></code></pre>
-        <figcaption><code>flood5x5.txt</code></figcaption>
-      </figure>
+      <pre><summary>flood5x5.txt</summary><code preload-txt="flood5x5.txt"></code></pre>
 
       <p>Let's count the number stones in the black chain and the number of liberties it's touching.
         We'll also show the number of <i>visits</i> at each location of the board during our Flood Fill.</p>
 
-      <figure>
+      <details>
+        <summary>flood5x5.js</summary>
         <pre><code preload-javascript="flood5x5.js"></code></pre>
-        <figcaption><code>flood5x5.js</code></figcaption>
-      </figure>
+      </details>
 
       <script src="flood5x5.js" defer></script>
-      <figure data="flood5x5.txt" run="flood5x5">
+      <div data="flood5x5.txt" run="flood5x5">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><code output></code></pre>
-        <figcaption><code>output</code></figcaption>
-      </figure>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
     </section>
 
     <section>
@@ -164,10 +157,7 @@
         This will also be of value later when we simulate entire games.
         The metadata for a chain remains unchanged until another stone is placed next to it.</p>
 
-      <figure>
-        <pre><code preload-txt="board5x5.txt"></code></pre>
-        <figcaption><code>board5x5.txt</code></figcaption>
-      </figure>
+      <pre><summary>board5x5.txt</summary><code preload-txt="board5x5.txt"></code></pre>
 
       <p>Let's assign chain ids to each stone in <code>board5x5.txt</code>.
         Stones that are connected and of the same colour will share the same "chain id".
@@ -175,17 +165,16 @@
         The chain ids must not be re-used for other chains.
         We also won't be assigning chain ids to empty spots.</p>
 
-      <figure>
+      <details>
+        <summary>chain5x5.js</summary>
         <pre><code preload-javascript="chain5x5.js"></code></pre>
-        <figcaption><code>chain5x5.js</code></figcaption>
-      </figure>
+      </details>
 
       <script src="chain5x5.js" defer></script>
-      <figure data="board5x5.txt" run="chain5x5">
+      <div data="board5x5.txt" run="chain5x5">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><code output></code></pre>
-        <figcaption><code>output</code></figcaption>
-      </figure>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
     </section>
 
     <section>
@@ -198,26 +187,24 @@
         <li>Identify the <i>types</i> of adjacent stones instead of summing them up.</li>
       </ul>
 
-      <figure>
-        <pre><code preload-txt="board5x5.txt"></code></pre>
-        <figcaption><code>board5x5.txt</code></figcaption>
-      </figure>
+      <div>
+        <pre><summary>board5x5.txt</summary><code preload-txt="board5x5.txt"></code></pre>
+      </div>
 
       <p>We'll need to scan the board for stones but not follow them,
         and follow empty spots as we find them.
         Let's only invoke DFS the first time we encounter each "chain" of empty spots.</p>
 
-      <figure>
+      <details>
+        <summary>score5x5.js</summary>
         <pre><code preload-javascript="score5x5.js"></code></pre>
-        <figcaption><code>score5x5.js</code></figcaption>
-      </figure>
+      </details>
 
       <script src="score5x5.js" defer></script>
-      <figure data="board5x5.txt" run="score5x5">
+      <div data="board5x5.txt" run="score5x5">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><code output></code></pre>
-        <figcaption><code>output</code></figcaption>
-      </figure>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
     </section>
 
   </main>

@@ -23,11 +23,10 @@ $(`[${preload_js}]`)
 
 /*
   <script src="board5x5.js" defer></script>
-  <figure data="board5x5.txt" run="board5x5">
+  <div data="board5x5.txt" run="board5x5">
     <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-    <pre><code output></code></pre>
-    <figcaption><code>output</code></figcaption>
-  </figure>
+    <pre><summary>output</summary><code output></code></pre>
+  </div>
 */
 $("button[run]").on("click", function () {
   let parent = $(this).parent();
