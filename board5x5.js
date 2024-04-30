@@ -9,11 +9,10 @@ const xLabel = (col) => String.fromCharCode(65 + col);
 // row -> '1','2','3'
 const yLabel = (row) => `${1 + row}`;
 
-function addAxisLabels(data, trunc = false) {
+function addAxisLabels(data) {
   let size = data.length; // board size
   data.push([]); // add row for x-axis labels
   for (let i = 0; i < size; i++) {
-    if (trunc) data[i].length = size;
     data[size][i] = xLabel(i);
     data[i][size] = `:${yLabel(i)}`;
   }

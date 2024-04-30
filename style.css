@@ -23,7 +23,7 @@ li {
   line-height: 2em;
 }
 
-p code, figcaption code {
+code {
   background-color: var(--accent-bg);
   border-radius: var(--standard-border-radius);
   padding: .15em;
