@@ -7,7 +7,7 @@ function nestedWords(text) {
 
 function extractBoards(lines) {
   let tests = {}, board = [], category = "None";
-  for (let line of lines) {
+  for (let line of [...lines, ""]) {
     const text = _.flatten(line).join(" ");
     if (!text) { // blank line
       if (board.length)
@@ -15,14 +15,12 @@ function extractBoards(lines) {
       board = [];
     }
     else if (text.startsWith("Board")) { // category
-      category = text.slice(6);
+      category = text.slice(6); // skip "Board "
       tests[category] = [];
     } else {
       board.push(line);
     }
   }
-  if (board.length)
-    tests[category].push(_.unzip(board));
   return tests;
 }
 
