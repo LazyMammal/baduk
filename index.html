@@ -31,6 +31,7 @@
         <a href="#FloodFill">Flood Fill</a>
         <a href="#Metadata">Metadata</a>
         <a href="#Scoring">Scoring</a>
+        <a href="#UnitTests">Unit Tests</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -205,6 +206,48 @@
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
+    </section>
+
+    <section>
+      <h2 id="UnitTests"><a href="#UnitTests">Unit Tests</a></h2>
+      <p>We have enough code now to solve all the unit tests in <code>liberty_score.txt</code>.
+        But we still need to extract the tests from the text file and verify the outputs.</p>
+
+      <details>
+        <summary>liberty_score.txt</summary>
+        <pre><code preload-txt="liberty_score.txt"></code></pre>
+      </details>
+
+      <p>Let's start by extracting the input/output boards:</p>
+
+      <ul>
+        <li><mark>Liberty Count</mark>
+          <ul>
+            <li>1 input board</li>
+            <li>1 output board</li>
+            <li>1 comment (ignore)</li>
+          </ul>
+        </li>
+        <li><mark>Enclosed Score</mark>
+          <ul>
+            <li>1 input board</li>
+            <li>2 output boards</li>
+            <li>3 comments (ignore)</li>
+          </ul>
+        </li>
+      </ul>
+
+      <details>
+        <summary>extract_tests.js</summary>
+        <pre><code preload-javascript="extract_tests.js"></code></pre>
+      </details>
+
+      <script src="extract_tests.js" defer></script>
+      <div data="liberty_score.txt" run="extract_tests">
+        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+
     </section>
 
   </main>
