@@ -80,6 +80,11 @@ button, mark {
   color: var(--marked-text);
 }
 
+mark[warn] {
+  background-color: var(--red);
+  color: black;
+}
+
 @keyframes fadeIn { 
   from { opacity: 0; } 
 }

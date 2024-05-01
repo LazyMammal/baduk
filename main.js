@@ -33,7 +33,7 @@ $("button[run]").on("click", function () {
   let run = parent.attr("run");
   let output = parent.find("[output]");
   let data = window.baduk.data[parent.attr("data")];
-  output.text(window[run](data));
+  output.html(window[run](data));
 });
 $("button[time]").on("click", function () {
   let parent = $(this).parent();
