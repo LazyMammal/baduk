@@ -65,14 +65,14 @@ function createScore(data) {
 
 function score5x5(input) {
   let data = parse(input);
-  let lookup = createScore(data);
+  let score = createScore(data);
   return [
-    data2text(addAxisLabels(lookup.Enclosed)),
-    `Enclose: x:${lookup.empty['x']} o:${lookup.empty['o']}`,
-    `Stones:  X:${lookup.stone['X']} O:${lookup.stone['O']}`,
-    data2text(addAxisLabels(lookup.Score)),
-    `Black: ${lookup.Black}`,
-    `White: ${lookup.White}`,
-    `?????: ${lookup['?????']}`,
+    data2text(addAxisLabels(score.Enclosed)),
+    `Enclose: x:${score.empty['x']} o:${score.empty['o']}`,
+    `Stones:  X:${score.stone['X']} O:${score.stone['O']}`,
+    data2text(addAxisLabels(score.Score)),
+    `Black: ${score.Black}`,
+    `White: ${score.White}`,
+    `?????: ${score['?????']}`,
   ].join("\n");
 }
