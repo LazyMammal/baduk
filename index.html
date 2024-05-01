@@ -21,7 +21,6 @@
     <h1>Baduk JS - Step By Step</h1>
     <p>Experiments in Baduk/Game of Go/Weiqi using JavaScript</p>
   </header>
-
   <main>
     <aside>
       <nav>
@@ -44,7 +43,6 @@
     <p>In order to avoid burnout along the way, I will be dividing up the large size task into many small steps. Each of
       the sections below will focus on one of those small steps.</p>
     <p>This page is a <i>living document</i> and will be updated as I write more sections ...</p>
-
     <section>
       <h2 id="TheVisionAhead"><a href="#TheVisionAhead">The Vision Ahead</a></h2>
       <p>I want to pick a medium sized goal to directly plan towards.
@@ -56,18 +54,15 @@
         <li><mark>Count Liberties</mark></li>
         <li><mark>Score a Finished Board</mark></li>
       </ol>
-
       <details>
         <summary>liberty_score.txt</summary>
         <pre><code preload-txt="liberty_score.txt"></code></pre>
       </details>
-
       <p>The text file is written so a human can read it. It's also carefully formatted so it can be read into a
         script and parsed into a set of Unit Tests.</p>
       <p>The next section will start on the path to loading, parsing and <i>eventually</i> executing the Unit Tests in
         this file.</p>
     </section>
-
     <section>
       <h2 id="TheFirstStep"><a href="#TheFirstStep">The First Step</a></h2>
       <p>Before we tackle <code>liberty_score.txt</code> let's start with something less complicated.
@@ -77,25 +72,19 @@
         The overall structure of <code>board5x5.txt</code> is as simple as we can make it while still being a meaningful
         first step.
       </p>
-
       <pre><summary>board5x5.txt</summary><code preload-txt="board5x5.txt"></code></pre>
-
       <p>We can add coordinate labels for both axes while we're parsing the board.
         Let's also restore the whitespace between the columns.</p>
-
       <details>
         <summary>board5x5.js</summary>
         <pre><code preload-javascript="board5x5.js"></code></pre>
       </details>
-
       <script src="board5x5.js" defer></script>
       <div data="board5x5.txt" run="board5x5">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
-
     </section>
-
     <section>
       <h2 id="FloodFill"><a href="#FloodFill">Flood Fill</a></h2>
       <p>Now that we feel comfortable <i>parsing</i> the text board we can look ahead to processing the board for more
@@ -125,24 +114,19 @@
         <li>Avoid an infinite loop following the circular path of stones.</li>
         <li>Avoid re-counting adjacent empty spots from multiple angles.</li>
       </ul>
-
       <pre><summary>flood5x5.txt</summary><code preload-txt="flood5x5.txt"></code></pre>
-
       <p>Let's count the number stones in the black chain and the number of liberties it's touching.
         We'll also show the number of <i>visits</i> at each location of the board during our Flood Fill.</p>
-
       <details>
         <summary>flood5x5.js</summary>
         <pre><code preload-javascript="flood5x5.js"></code></pre>
       </details>
-
       <script src="flood5x5.js" defer></script>
       <div data="flood5x5.txt" run="flood5x5">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
     </section>
-
     <section>
       <h2 id="Metadata"><a href="#Metadata">Metadata</a></h2>
       <p>At this point we have most of the pieces we need to calculate Liberties and Score.
@@ -155,27 +139,22 @@
         Whenever the metadata is required it can be retrieved by the "chain id".
         This will also be of value later when we simulate entire games.
         The metadata for a chain remains unchanged until another stone is placed next to it.</p>
-
       <pre><summary>board5x5.txt</summary><code preload-txt="board5x5.txt"></code></pre>
-
       <p>Let's assign chain ids to each stone in <code>board5x5.txt</code>.
         Stones that are connected and of the same colour will share the same "chain id".
         Unconnected stones or adjacent stones of different colour need unique ids.
         The chain ids must not be re-used for other chains.
         We also won't be assigning chain ids to empty spots.</p>
-
       <details>
         <summary>chain5x5.js</summary>
         <pre><code preload-javascript="chain5x5.js"></code></pre>
       </details>
-
       <script src="chain5x5.js" defer></script>
       <div data="board5x5.txt" run="chain5x5">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
     </section>
-
     <section>
       <h2 id="Scoring"><a href="#Scoring">Scoring</a></h2>
       <p>The function <code>buildChains()</code> also doubles as a great way to count liberties.
@@ -185,39 +164,31 @@
         <li>Follow empty spots instead of stones.</li>
         <li>Identify the <i>types</i> of adjacent stones instead of summing them up.</li>
       </ul>
-
       <div>
         <pre><summary>board5x5.txt</summary><code preload-txt="board5x5.txt"></code></pre>
       </div>
-
       <p>We'll need to scan the board for stones but not follow them,
         and follow empty spots as we find them.
         Let's only invoke DFS the first time we encounter each "chain" of empty spots.</p>
-
       <details>
         <summary>score5x5.js</summary>
         <pre><code preload-javascript="score5x5.js"></code></pre>
       </details>
-
       <script src="score5x5.js" defer></script>
       <div data="board5x5.txt" run="score5x5">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
     </section>
-
     <section>
       <h2 id="UnitTests"><a href="#UnitTests">Unit Tests</a></h2>
       <p>We have enough code now to solve all the unit tests in <code>liberty_score.txt</code>.
         But we still need to extract the tests from the text file and verify the outputs.</p>
-
       <details>
         <summary>liberty_score.txt</summary>
         <pre><code preload-txt="liberty_score.txt"></code></pre>
       </details>
-
       <p>Let's start by extracting the input/output boards:</p>
-
       <ul>
         <li><mark>Liberty Count</mark>
           <ul>
@@ -233,36 +204,28 @@
           </ul>
         </li>
       </ul>
-
       <details>
         <summary>extract_tests.js</summary>
         <pre><code preload-javascript="extract_tests.js"></code></pre>
       </details>
-
       <script src="extract_tests.js" defer></script>
       <div data="liberty_score.txt" run="extract_tests">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
-
       <p>We now have the full extraction of the Unit Tests.
         With tests in hand we can verify the correctness of our previous functions.</p>
-
       <details>
         <summary>test5x5.js</summary>
         <pre><code preload-javascript="test5x5.js"></code></pre>
       </details>
-
       <script src="test5x5.js" defer></script>
       <div data="liberty_score.txt" run="test5x5">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
-
     </section>
-
   </main>
-
   <footer>
     <p>by <a href="https://lazymammal.github.io/">LazyMammal</a></p>
   </footer>
