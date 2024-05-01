@@ -4,7 +4,9 @@ const badge = (success) => success ?
 function test5x5(input) {
   let tests = extractBoards(nestedWords(input));
   let res = [];
-  for (let test of tests) {
+  let T = tests.length;
+  for (let t = 0; t < tests.length; t++) {
+    let test = tests[t];
     let data = test.boards[0]; // test data
     let lookup = createLookup(data); // run code
     Object.assign(lookup, createScore(data));
@@ -12,9 +14,14 @@ function test5x5(input) {
       let label = test.labels[b];
       let board = test.boards[b];
       let compare = [board, lookup[label]]; // validate
-      let success = `${compare[0]}` == `${compare[1]}`;
-      res.push(`${badge(success)} ${label}`);
-      if (!success) { // feedback
+      let pass = `${compare[0]}` == `${compare[1]}`;
+      let msg = [
+        badge(pass),
+        `Test ${t + 1}/${T}`,
+        label,
+      ]; 
+      res.push(msg.join(" "));
+      if (!pass) { // feedback
         res.push(parallelPrint(compare
           .map(addAxisLabels)
           .map(board => board.map(row => row.join(" ")))
@@ -23,9 +30,14 @@ function test5x5(input) {
       let extra = test.extras[b];
       for (let named of Object.keys(extra)) {
         let compare = [extra[named], lookup[named]];
-        let success = `${compare[0]}` == `${compare[1]}`;
-        res.push(`${badge(success)} ${label}.${named}`);
-        if (!success) { // feedback
+        let pass = `${compare[0]}` == `${compare[1]}`;
+        let msg = [
+          badge(pass),
+          `Test ${t + 1}/${T}`,
+          `${label}.${named}`,
+        ]; 
+        res.push(msg.join(" "));
+        if (!pass) { // feedback
           res.push(`  ${compare[0]} != ${compare[1]}`);
         }
       }
