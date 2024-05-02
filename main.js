@@ -3,28 +3,39 @@ var BLACK = 0, WHITE = 1, EMPTY = -1;
 
 window.baduk = { data: {}, bench: {} };
 
+async function cacheFetch(url) {
+  if (url in window.baduk.data) {
+    return window.baduk.data[url];
+  } else {
+    try {
+      const response = await fetch(url);
+      const data = await response.text();
+      window.baduk.data[url] = data;
+      return data;
+    } catch (error) {
+      console.error(`Download error: ${url} - ${error.message}`);
+    }
+  }
+  return null;
+}
+
 Array.from(document.querySelectorAll("[preload-txt]"))
   .forEach(async (e) => {
     let url = e.getAttribute("preload-txt");
-    try {
-      const response = await fetch(url);
-      window.baduk.data[url] = e.innerText = await response.text();
-    } catch (error) {
-      console.error(`Download error: ${error.message}`);
+    let data = await cacheFetch(url);
+    if(data !== null) {
+      e.innerText = data;
     }
   });
 
 Array.from(document.querySelectorAll("[preload-javascript]"))
   .forEach(async (e) => {
     let url = e.getAttribute("preload-javascript");
-    try {
-      const response = await fetch(url);
-      const data = window.baduk.data[url] = await response.text();
+    let data = await cacheFetch(url);
+    if(data !== null) {
       e.insertAdjacentHTML("afterbegin",
         hljs.highlight(data, { language: "javascript" }).value
       );
-    } catch (error) {
-      console.error(`Download error: ${error.message}`);
     }
   });
 /*

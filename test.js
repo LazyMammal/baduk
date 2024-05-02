@@ -13,4 +13,4 @@ gobo.setStoneAt(3, 3, BLACK);
 //gobo.setStoneAt(3, 1, EMPTY); // removes stone
 
 gobo.render();
-$("#section1_gobo").append(gobo.canvas);
+document.querySelector("#section1_gobo").append(gobo.canvas);
