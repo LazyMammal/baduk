@@ -113,3 +113,12 @@ pre summary {
   color: var(--text);
   cursor: auto;
 }
+
+.goban {
+  float: right;
+  margin: 0 0 16px 10px;
+}
+
+section, article, .notice {
+  clear: both;
+}
