@@ -42,7 +42,7 @@ $("button[time]").on("click", function () {
   let parent = $(this).parent();
   let run = parent.attr("run");
   let data = window.baduk.data[parent.attr("data")];
-  let result = parent.find("mark");
+  let result = parent.children("mark");
   result.toggleClass("loading");
   result.text("...");
   result.prop("hidden", false);
