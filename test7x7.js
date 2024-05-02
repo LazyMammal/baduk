@@ -1,11 +1,11 @@
 const badge = (success) => success ?
   '<mark>PASS</mark>' : '<mark warn>FAIL</mark>';
 
-function test7x7(input) {
+function test7x7(input, callback = createLookup) {
   let res = [];
   let test = parseTest(getTokens(input));
   let [label, data] = test[0]; // data to run
-  let lookup = createLookup(data); // run
+  let lookup = callback(data); // run
 
   for (let t = 1; t < test.length; t++) {
     let [label, data] = test[t];
