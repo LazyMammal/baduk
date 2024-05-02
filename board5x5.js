@@ -11,12 +11,14 @@ const yLabel = (row) => `${1 + row}`;
 
 function addAxisLabels(data) {
   let size = data.length; // board size
+  data.reverse(); // invert y-axis
   data.push([]); // add row for x-axis labels
   for (let i = 0; i < size; i++) {
     data[size][i] = xLabel(i);
     data[i][size] = `:${yLabel(i)}`;
   }
-  data[size][size] = "  ";  // spacing
+  data[size][size] = "  "; // spacing
+  data.reverse(); // restore y-axis
   return data;
 }
 
