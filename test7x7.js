@@ -1,6 +1,12 @@
 const badge = (success) => success ?
   '<mark>PASS</mark>' : '<mark warn>FAIL</mark>';
 
+function createLookup(data) {
+  return Object.assign(calcScore(data), {
+    'LibertyCount': buildLibs(data)
+  });
+}
+
 function test7x7(input, callback = createLookup) {
   let res = [];
   let test = parseTest(getTokens(input));

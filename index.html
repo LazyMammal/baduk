@@ -91,43 +91,12 @@
     <section>
       <h2 id="Rules"><a href="#Rules">Rules of the Game</a></h2>
       <p>Here's a quick refresher on the rules of Go:</p>
-      <ol>
-        <li>Two players take alternating turns placing single stones on the board.
-          Each player can only play stones of their assigned colour (black or white).
-          Stones can only be played on the intersections of lines.
-          Stones cannot be <i>moved</i> from one spot to another.
-          There is one rule (see below) that allows the removal of stones by "capture".</li>
-        <li>A liberty is <i>acquired</i> by a stone from an empty spot.
-          The empty spot must be adjacent in one of the four cardinal directions (along the lines).</li>
-        <li>Liberties are <i>shared</i> among same-colour stones (forming a chain).
-          The sharing stones must be connected in one of the four cardinal directions (along the lines).
-          By successive application of this rule, chains can be arbitrarily large and any shape overall.</li>
-        <li>Liberties are <i>unique</i> locations and cannot be counted twice.
-          This means a chain of stones may wrap around an empty spot, and be adjacent to it, on up to four sides.
-          However, that empty spot still only <i>counts</i> as one liberty for the chain.</li>
-        <li>A stone (or chain of stones) must have at least one liberty.
-          If a stone or chain has zero liberties it must be removed from the board.
-          In the event of capture, all connected stones in the chain are removed at once.
-          A board arrangement left with stones having zero liberties is invalid.</li>
-        <li>Stones of different colours cannot share liberties.
-          In fact, an important tactic of Go is playing upon the last liberty of an opponent chain.
-          The action of <i>taking</i> the last liberty results in the capture of the starved chain.</li>
-        <li>The capture rule is handled prior to the final assessment of liberties of a newly placed stone.
-          This means a player may legally place a stone in a spot <i>with no apparent liberties</i>, if by
-          <i>capture</i> or <i>liberty sharing</i> the new stone will end up with at least one liberty.
-        </li>
-        <li>Self-capture is illegal in most versions of the rules around the world.</li>
-        <li>Repetition of the arrangement of stones is illegal under various rulesets.
-          For more detail see <i>local</i>, <i>positional</i> and <i>global</i> Ko rules.</li>
-        <li>A game of Go is only finished when both players pass consecutively.
-          This signifies that neither player has any meaningful moves left to play.</li>
-        <li>Winning is determined by scoring the <i>area controlled</i> by the player's stones.
-          Each stone or controlled empty spot is worth one point.
-          An empty spot is considered controlled if fully enclosed by a player's stones (or edges of the board).
-          Empty spots are <i>contested</i> if both player's stones partially surround them.
-          Therefore, scoring the board can only be done once the game is finished.
-          The player must attack and capture opponent stones placed inside the area it intends to claim.</li>
-      </ol>
+      <ul>
+        <li>Starting with Black, players takes turns placing a single stone on the board.</li>
+        <li>If a stone is placed so that an opponent chain has no liberties, that chain is captured.</li>
+        <li>(After the capture rule is applied) the placed stone must have or share at least one liberty.</li>
+        <li>It is prohibited to place a stone that repeats a previous board state.</li>
+      </ul>
     </section>
     <section>
       <h2 id="FloodFill"><a href="#FloodFill">Flood Fill</a></h2>
@@ -188,9 +157,7 @@
     </section>
     <section>
       <h2 id="Scoring"><a href="#Scoring">Scoring</a></h2>
-      <p>The function <code>buildChains()</code> also doubles as a great way to count liberties.
-        With that done the only ability we need code for now is Scoring the Game.
-        Scoring is very similar to Counting Liberties with these differences:</p>
+      <p>Scoring is very similar to Counting Liberties with these differences:</p>
       <ul>
         <li>Follow empty spots instead of stones.</li>
         <li>Identify the <i>types</i> of adjacent stones instead of summing them up.</li>
@@ -200,7 +167,7 @@
       </div>
       <p>We'll need to scan the board for stones but not follow them,
         and follow empty spots as we find them.
-        Let's only invoke DFS the first time we encounter each "chain" of empty spots.</p>
+      </p>
       <details>
         <summary>score7x7.js</summary>
         <pre><code preload-javascript="score7x7.js"></code></pre>
