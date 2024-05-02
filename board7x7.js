@@ -3,11 +3,14 @@ function parse(text) { // text -> array[][]
     .map(row => row.split(" ")); // make cols sub-array
 }
 
-// col -> 'A','B','C'
-const xLabel = (col) => String.fromCharCode(65 + col);
+export function xLabel(col) { // A,B,C,D,E,F,G,H,J,K...
+  // return String.fromCharCode(65 + col); // incl "I"
+  return String.fromCharCode(col + (col < 8 ? 65 : 66));
+}
 
-// row -> '1','2','3'
-const yLabel = (row) => `${1 + row}`;
+export function yLabel(row) { // 1,2,3 ...
+  return `${1 + row}`;
+}
 
 function addAxisLabels(data) {
   let size = data.length; // board size

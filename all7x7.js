@@ -114,10 +114,11 @@ export function adj4way(cur, data) {
   return adj;
 }
 
-export function xLabel(col) { // A,B,C ...
-  // return String.fromCharCode(65 + col); // with "I"
-  return String.fromCharCode(65 + col + (col > 7 ? 1 : 0));
+export function xLabel(col) { // A,B,C,D,E,F,G,H,J,K...
+  // return String.fromCharCode(65 + col); // incl "I"
+  return String.fromCharCode(col + (col < 8 ? 65 : 66));
 }
+
 export function yLabel(row) { // 1,2,3 ...
   return `${1 + row}`;
 }
@@ -125,6 +126,7 @@ export function yLabel(row) { // 1,2,3 ...
 export function data2text(data) { // add spaces, newlines
   return data.map(row => row.join(" ")).join("\n");
 }
+
 export function addAxisLabels(data) {
   let size = data.length; // board size
   data.reverse(); // invert y-axis
