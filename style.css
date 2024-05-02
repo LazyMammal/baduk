@@ -1,32 +1,52 @@
 :root,
 ::backdrop {
   color-scheme: dark;
-  --bg: #404A40; /* Feldgrau */
-  --accent-bg: #122335; /* Oxford Blue */ 
+  --goban: hsl(37, 70%, 60%); /* #e0aa52 */
+  --red: hsl(6, 50%, 50%);
+  --blue: hsl(203, 25%, 50%);
+  --dark-blue: hsl(228, 50%, 15%);
+  --green: hsl(94, 35%, 35%);
+  --dark-green: hsl(94, 7%, 25%);
+  --bg: var(--dark-green); 
+  --accent-bg: var(--dark-blue);
+  --marked-text: black;
+  --marked: var(--green);
+  --accent: var(--goban);
+  --accent-hover: color-mix(in srgb, var(--accent), white 20%);
+  --accent-text: var(--bg);
   --text: #dcdcdc;
   --text-light: #ababab;
-  --accent: #f0b641; /* Xanthous */
-  --accent-hover: #ffca60;
-  --accent-text: var(--bg);
-  --code: #6799B2; /* Light Blue */
+  --code: var(--text-light);
   --preformatted: var(--code);
   --disabled: #111;
-  --blue: #0d47a1;
   --input-bg: black;
-  --red: #AF1B3F; /* Amaranth Purple */
-  --green: #307351; /* Dark Spring Green */
-  --marked-text: var(--accent-bg);
-  --marked: var(--green);
 }
 
-li {
-  line-height: 2em;
+kbd {
+  color: var(--text);
+}
+
+mark[warn] {
+  background-color: var(--red);
+}
+
+button,
+mark {
+  color: var(--marked-text);
 }
 
 code {
   background-color: var(--accent-bg);
   border-radius: var(--standard-border-radius);
   padding: .15em;
+}
+
+input[type=checkbox]:checked:after {
+  background-color: var(--input-bg);
+}
+
+li {
+  line-height: 2em;
 }
 
 aside nav {
@@ -72,21 +92,10 @@ main h6 a:hover {
   text-decoration: underline;
 }
 
-input[type=checkbox]:checked:after {
-  background-color: var(--input-bg);
-}
-
-button, mark {
-  color: var(--marked-text);
-}
-
-mark[warn] {
-  background-color: var(--red);
-  color: black;
-}
-
-@keyframes fadeIn { 
-  from { opacity: 0; } 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
 }
 
 .loading {

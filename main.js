@@ -1,3 +1,6 @@
+var Gobo = window['gobo'].Gobo;
+var BLACK = 0, WHITE = 1, EMPTY = -1;
+
 window.baduk = { data: {}, bench: {} };
 
 const preload_txt = "preload-txt";
