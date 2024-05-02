@@ -1,27 +1,43 @@
-Board      |  Liberty Count
+Board
 
-X . X . .  |  2 . 3 . .
-. X . . X  |  . 4 . . 4
-. . X . X  |  . . 6 . 4
-X . X . .  |  3 . 6 . .
-X X . X X  |  3 3 . 3 3
+B . B . . B .
+. B . B . B .
+B . B B B . B
+B B . B . . B
+W W W . . B B
+W . W W W W W
+. . W B W . .
 
-X . . . O  |  1 . . . 1
-O . X . X  |  2 . 8 . 2
-. X X X .  |  . 8 8 8 .
-O . X . O  |  2 . 8 . 2
-O X . O X  |  2 2 . 2 0  <-- Zero liberty count
+LibertyCount
 
-Board      |  Enclosed   |  Score
+2 . 3 . . 5 .
+. 4 . 8 . 5 .
+3 . 8 8 8 . 4
+3 3 . 8 . . 4
+8 8 8 . . 4 4
+8 . 8 8 8 8 8
+. . 8 0 8 . .
 
-X . X . .  |  . x . ? ?  |  X x X ? ?  Black: 7
-. X . . O  |  x . ? ? .  |  x X ? ? O  White: 12
-X . X O O  |  . ? . . .  |  X ? X O O  ?????: 6
-O . O . .  |  . ? . o o  |  O ? O o o
-O O . O O  |  . . o . .  |  O O o O O
+Enclosed
 
-. . . . .  |  x x x x x  |  x x x x x  Black: 17
-. X . X X  |  x . x . .  |  x X x X X  White: 8
-. . X O O  |  x x . . .  |  x x X O O
-. X O . O  |  x . . o .  |  x X O o O
-. X O O .  |  x . . . o  |  x X O O o
+. b . b b . b
+b . b . b . b
+. b . . . ? .
+. . ? . ? ? .
+. . . ? ? . .
+. w . . . . .
+w w . . . w w
+
+Score
+
+B b B b b B b
+b B b B b B b
+B b B B B ? B
+B B ? B ? ? B
+W W W ? ? B B
+W w W W W W W
+w w W B W w w
+
+B = 27
+W = 16
+? = 6

@@ -1,84 +1,45 @@
-function nestedWords(text) {
+function getTokens(text) {
   return text.split("\n")
-    .map(line => line.split("|")
-      .map(seg => seg.trim().split(" "))
-    );
+    .map(line => line.trim().split(" "));
 }
 
-function extractBoards(lines) {
-  let tests = [], labels = [], boards = [], extras = [];
-  for (let line of [...lines, ""]) {
-    const text = _.flatten(line).join(" ");
-    if (!text) { // blank line
-      if (boards.length) {
-        tests.push({
-          labels: labels,
-          boards: _.unzip(boards),
-          extras: extras,
-        });
+function parseTest(lines) {
+  let test = [];
+  let label = '';
+  let board = [];
+  for (let line of lines) {
+    if (!line[0].length) { // blank line
+      if (board.length) {
+        test.push([label, board]);
       }
-      boards = [];
-      extras = [];
+      board = [];
     }
-    else if (text.startsWith("Board")) { // category
-      labels = line.map(b => b.join(" ")); // rejoin words
+    else if (line.length === 1) { // label
+      label = line[0];
+    } else if (line[1] === "=") { // named
+      test.push([line[0], line[2]]);
     } else {
-      let size = line[0].length; // input board size
-      let trunc = line.map(b => b.slice(0, size));
-      boards.push(trunc);
-
-      for (let b = 0; b < line.length; b++) { // boards
-        let n = extras[b] ??= {};
-        let extra = line[b].slice(size); // comments
-        for (let w = 0; w < extra.length; w++) {
-          let word = extra[w];
-          if (word.endsWith(":")) { // named output value
-            n[word.slice(0, -1)] = extra[w + 1];
-          }
-        }
-      }
+      board.push(line);
     }
   }
-  return tests;
-}
-
-function parallelPrint(boards) {
-  return _.zip(...boards)
-    .map(line => line.join("  |  "))
-    .join("\n");
+  return test;
 }
 
 function testPrint(test) {
-  let boards = parallelPrint(test.boards
-    .map(addAxisLabels)
-    .map(board => board.map(row => row.join(" ")))
-  );
-  let width = boards.indexOf("  |  ");
-  let labels = test.labels
-    .map(b => b.padEnd(width, " ")).join("  |  ");
-
-  let named = test.extras //key:val pairs
-    .map(b => Object.entries(b)
-      .map(([k, v]) => `${k}: ${v}`)
-    );
-  let max = Math.max(...named.map(b => b.length));
-  for (let board of named) {
-    for (let n = 0; n < max; n++) {
-      board[n] = (board[n] ?? "").padEnd(width, " ");
+  let res = [];
+  for(let [label, data] of test) {
+    if(Array.isArray(data)) {
+      res.push(label);
+      res.push(data2text(addAxisLabels(data)));
+    } else {
+      res.push(`${label} = ${data}`);
     }
   }
-  let extras = _.zip(...named)  // transpose
-    .map(b => b.join("     "))
-    .join("\n");
-  return [labels, boards, extras].flat().join("\n");
+  return res.join("\n");
 }
 
 function extract_tests(input) {
-  let lines = nestedWords(input);
-  let tests = extractBoards(lines);
-  let res = [];
-  for (let test of tests) {
-    res.push(testPrint(test));
-  }
-  return res.join("\n");
+  let lines = getTokens(input);
+  let test = parseTest(lines);
+  return testPrint(test);
 }

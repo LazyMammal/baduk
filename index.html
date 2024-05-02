@@ -69,21 +69,21 @@
     <section>
       <h2 id="TheFirstStep"><a href="#TheFirstStep">The First Step</a></h2>
       <p>Before we tackle <code>liberty_score.txt</code> let's start with something less complicated.
-        The first step is reading a text file with an example position from a 5x5 board.
+        The first step is reading a text file with an example position from a 7x7 board.
         It will be easier to parse because it only has a single board and has no extra headers, comments, or trailing
         whitespace.
-        The overall structure of <code>board5x5.txt</code> is as simple as we can make it while still being a meaningful
+        The overall structure of <code>board7x7.txt</code> is as simple as we can make it while still being a meaningful
         first step.
       </p>
-      <pre><summary>board5x5.txt</summary><code preload-txt="board5x5.txt"></code></pre>
+      <pre><summary>board7x7.txt</summary><code preload-txt="board7x7.txt"></code></pre>
       <p>We can add coordinate labels for both axes while we're parsing the board.
         Let's also restore the whitespace between the columns.</p>
       <details>
-        <summary>board5x5.js</summary>
-        <pre><code preload-javascript="board5x5.js"></code></pre>
+        <summary>board7x7.js</summary>
+        <pre><code preload-javascript="board7x7.js"></code></pre>
       </details>
-      <script src="board5x5.js" defer></script>
-      <div data="board5x5.txt" run="board5x5">
+      <script src="board7x7.js" defer></script>
+      <div data="board7x7.txt" run="board7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -152,21 +152,21 @@
       <p>Both of these abilities rely on an even smaller ability. We need to be able to follow "chains" of
         same-type pieces on the board. I know from experience that trying to do this task by "scanning" is possible
         but very time consuming. The efficient approach here is to use Flood Fill (aka DFS, Depth First Search)</p>
-      <p>The scenario in <code>flood5x5.txt</code> challenges us to handle several issues.</p>
+      <p>The scenario in <code>flood7x7.txt</code> challenges us to handle several issues.</p>
       <ul>
         <li>Follow the chain of stones through several branching points.</li>
         <li>Avoid an infinite loop following the circular path of stones.</li>
         <li>Avoid re-counting adjacent empty spots from multiple angles.</li>
       </ul>
-      <pre><summary>flood5x5.txt</summary><code preload-txt="flood5x5.txt"></code></pre>
+      <pre><summary>flood7x7.txt</summary><code preload-txt="flood7x7.txt"></code></pre>
       <p>Let's count the number stones in the black chain and the number of liberties it's touching.
         We'll also show the number of <i>visits</i> at each location of the board during our Flood Fill.</p>
       <details>
-        <summary>flood5x5.js</summary>
-        <pre><code preload-javascript="flood5x5.js"></code></pre>
+        <summary>flood7x7.js</summary>
+        <pre><code preload-javascript="flood7x7.js"></code></pre>
       </details>
-      <script src="flood5x5.js" defer></script>
-      <div data="flood5x5.txt" run="flood5x5">
+      <script src="flood7x7.js" defer></script>
+      <div data="flood7x7.txt" run="flood7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -183,18 +183,18 @@
         Whenever the metadata is required it can be retrieved by the "chain id".
         This will also be of value later when we simulate entire games.
         The metadata for a chain remains unchanged until another stone is placed next to it.</p>
-      <pre><summary>board5x5.txt</summary><code preload-txt="board5x5.txt"></code></pre>
-      <p>Let's assign chain ids to each stone in <code>board5x5.txt</code>.
+      <pre><summary>board7x7.txt</summary><code preload-txt="board7x7.txt"></code></pre>
+      <p>Let's assign chain ids to each stone in <code>board7x7.txt</code>.
         Stones that are connected and of the same colour will share the same "chain id".
         Unconnected stones or adjacent stones of different colour need unique ids.
         The chain ids must not be re-used for other chains.
         We also won't be assigning chain ids to empty spots.</p>
       <details>
-        <summary>chain5x5.js</summary>
-        <pre><code preload-javascript="chain5x5.js"></code></pre>
+        <summary>chain7x7.js</summary>
+        <pre><code preload-javascript="chain7x7.js"></code></pre>
       </details>
-      <script src="chain5x5.js" defer></script>
-      <div data="board5x5.txt" run="chain5x5">
+      <script src="chain7x7.js" defer></script>
+      <div data="board7x7.txt" run="chain7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -209,17 +209,17 @@
         <li>Identify the <i>types</i> of adjacent stones instead of summing them up.</li>
       </ul>
       <div>
-        <pre><summary>board5x5.txt</summary><code preload-txt="board5x5.txt"></code></pre>
+        <pre><summary>board7x7.txt</summary><code preload-txt="board7x7.txt"></code></pre>
       </div>
       <p>We'll need to scan the board for stones but not follow them,
         and follow empty spots as we find them.
         Let's only invoke DFS the first time we encounter each "chain" of empty spots.</p>
       <details>
-        <summary>score5x5.js</summary>
-        <pre><code preload-javascript="score5x5.js"></code></pre>
+        <summary>score7x7.js</summary>
+        <pre><code preload-javascript="score7x7.js"></code></pre>
       </details>
-      <script src="score5x5.js" defer></script>
-      <div data="board5x5.txt" run="score5x5">
+      <script src="score7x7.js" defer></script>
+      <div data="board7x7.txt" run="score7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -260,11 +260,11 @@
       <p>We now have the full extraction of the Unit Tests.
         With tests in hand we can verify the correctness of our previous functions.</p>
       <details>
-        <summary>test5x5.js</summary>
-        <pre><code preload-javascript="test5x5.js"></code></pre>
+        <summary>test7x7.js</summary>
+        <pre><code preload-javascript="test7x7.js"></code></pre>
       </details>
-      <script src="test5x5.js" defer></script>
-      <div data="liberty_score.txt" run="test5x5">
+      <script src="test7x7.js" defer></script>
+      <div data="liberty_score.txt" run="test7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>

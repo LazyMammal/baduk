@@ -43,11 +43,11 @@ function createLookup(data) {
     chains: chains,
     id2libs: id2libs,
     libCount: libCount,
-    'Liberty Count': libCount,
+    'LibertyCount': libCount,
   }
 }
 
-function chain5x5(input) {
+function chain7x7(input) {
   let data = parse(input);
   let lookup = createLookup(data);
   return [

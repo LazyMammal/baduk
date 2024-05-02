@@ -1,5 +1,5 @@
 var gobo = new Gobo({
-  gobanSize: 5,
+  gobanSize: 7,
   noCoords: false,
   widthPx: 320,
   background: "#e0aa52",

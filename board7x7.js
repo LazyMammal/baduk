@@ -26,6 +26,6 @@ function data2text(data) { // add spaces, flatten array
   return data.map(row => row.join(" ")).join("\n");
 }
 
-function board5x5(input) { // final output
+function board7x7(input) { // final output
   return data2text(addAxisLabels(parse(input)));
 }

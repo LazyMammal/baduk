@@ -5,27 +5,27 @@ function scoreBoard(data, emptyIds, owner) {
   const scoreFunc = ([x, y], data) => {
     let piece = data[y][x];
     adjCount[piece]++;
-    if (piece === '.') emptyIds[y][x] = emptyId;
-    return (piece === '.');
+    if (piece === ".") emptyIds[y][x] = emptyId;
+    return (piece === ".");
   }
-  let emptyCount = { 'x': 0, 'o': 0, '?': 0 };
-  let stoneCount = { 'X': 0, 'O': 0, '.': 0 };
+  let emptyCount = { "b": 0, "w": 0, "?": 0 };
+  let stoneCount = { "B": 0, "W": 0, ".": 0 };
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       if (!emptyIds[y][x]) {
         let piece = data[y][x];
-        if (piece === '.') {
+        if (piece === ".") {
           emptyId++;
-          adjCount = { 'X': 0, 'O': 0, '.': 0 };
+          adjCount = { "B": 0, "W": 0, ".": 0 };
           DFS([x, y], data, adj4way, scoreFunc);
-          owner[emptyId] = '?';
-          if (adjCount['O'] && adjCount['X'] === 0) {
-            owner[emptyId] = 'o';
+          owner[emptyId] = "?";
+          if (adjCount["W"] && adjCount["B"] === 0) {
+            owner[emptyId] = "w";
           }
-          else if (adjCount['X'] && adjCount['O'] === 0) {
-            owner[emptyId] = 'x';
+          else if (adjCount["B"] && adjCount["W"] === 0) {
+            owner[emptyId] = "b";
           }
-          emptyCount[owner[emptyId]] += adjCount['.'];
+          emptyCount[owner[emptyId]] += adjCount["."];
         } else {
           stoneCount[piece]++;
         }
@@ -48,7 +48,7 @@ function createScore(data) {
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
       let id = emptyIds[y][x];
-      emptyIds[y][x] = id ? owner[id] : '.';
+      emptyIds[y][x] = id ? owner[id] : ".";
       scoreArr[y][x] = pairMax(data[y][x], emptyIds[y][x]);
     }
   }
@@ -57,22 +57,22 @@ function createScore(data) {
     empty: empty,
     stone: stone,
     Score: scoreArr,
-    Black: empty['x'] + stone['X'],
-    White: empty['o'] + stone['O'],
-    '?????': empty['?']
+    B: empty["b"] + stone["B"],
+    W: empty["w"] + stone["W"],
+    "?": empty["?"]
   }
 }
 
-function score5x5(input) {
+function score7x7(input) {
   let data = parse(input);
   let score = createScore(data);
   return [
     data2text(addAxisLabels(score.Enclosed)),
-    `Enclose: x:${score.empty['x']} o:${score.empty['o']}`,
-    `Stones:  X:${score.stone['X']} O:${score.stone['O']}`,
+    `Enclose: b:${score.empty["b"]} w:${score.empty["w"]}`,
+    `Stones:  B:${score.stone["B"]} W:${score.stone["W"]}`,
     data2text(addAxisLabels(score.Score)),
-    `Black: ${score.Black}`,
-    `White: ${score.White}`,
-    `?????: ${score['?????']}`,
+    `Black: ${score.B}`,
+    `White: ${score.W}`,
+    `?????: ${score["?"]}`,
   ].join("\n");
 }

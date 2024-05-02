@@ -31,7 +31,7 @@ function adj4way(cur, data) {
   return adj;
 }
 
-function flood5x5(input) {
+function flood7x7(input) {
   let data = parse(input);
   let size = data.length;
   let black = 0;
@@ -40,14 +40,14 @@ function flood5x5(input) {
     .map(() => Array(size).fill(0));
   const countFunc = ([x, y], data) => {
     let piece = data[y][x];
-    black += (piece === 'X');
-    libs += (piece === '.');
+    black += (piece === "B");
+    libs += (piece === ".");
     visits[y][x]++;
-    return (piece === 'X');
+    return (piece === "B");
   }
   DFS([0, 0], data, adj4way, countFunc);
   let text = data2text(addAxisLabels(visits));
-  text += '\n' + `Black stones: ${black}`;
-  text += '\n' + `Liberty count: ${libs}`;
+  text += "\n" + `Black stones: ${black}`;
+  text += "\n" + `Liberty count: ${libs}`;
   return text;
 }

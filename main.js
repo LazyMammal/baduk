@@ -25,8 +25,8 @@ $(`[${preload_js}]`)
   });
 
 /*
-  <script src="board5x5.js" defer></script>
-  <div data="board5x5.txt" run="board5x5">
+  <script src="board7x7.js" defer></script>
+  <div data="board7x7.txt" run="board7x7">
     <button run>Run</button> <button time>Time</button> <mark hidden></mark>
     <pre><summary>output</summary><code output></code></pre>
   </div>
