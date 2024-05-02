@@ -37,7 +37,7 @@ function scoreBoard(data, emptyIds, owner) {
 
 const pairMax = (a, b) => a > b ? a : b;
 
-function createScore(data) {
+function createLookup(data) {
   let size = data.length;
   let emptyIds = Array(size).fill(0)
     .map(() => Array(size).fill(0));
@@ -59,13 +59,14 @@ function createScore(data) {
     Score: scoreArr,
     B: empty["b"] + stone["B"],
     W: empty["w"] + stone["W"],
-    "?": empty["?"]
+    "?": empty["?"],
+    'LibertyCount': buildLibs(data)
   }
 }
 
 function score7x7(input) {
   let data = parse(input);
-  let score = createScore(data);
+  let score = createLookup(data);
   return [
     data2text(addAxisLabels(score.Enclosed)),
     `Enclose: b:${score.empty["b"]} w:${score.empty["w"]}`,

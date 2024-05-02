@@ -6,7 +6,6 @@ function test7x7(input) {
   let test = parseTest(getTokens(input));
   let [label, data] = test[0]; // data to run
   let lookup = createLookup(data); // run
-  Object.assign(lookup, createScore(data));
 
   for (let t = 1; t < test.length; t++) {
     let [label, data] = test[t];
