@@ -3,27 +3,30 @@ var BLACK = 0, WHITE = 1, EMPTY = -1;
 
 window.baduk = { data: {}, bench: {} };
 
-const preload_txt = "preload-txt";
-$(`[${preload_txt}]`)
-  .each((i, e) => {
-    let filename = e.getAttribute(preload_txt);
-    jQuery.get(filename, (data) => {
-      window.baduk.data[filename] = e.innerText = data;
-    })
+Array.from(document.querySelectorAll("[preload-txt]"))
+  .forEach(async (e) => {
+    let url = e.getAttribute("preload-txt");
+    try {
+      const response = await fetch(url);
+      window.baduk.data[url] = e.innerText = await response.text();
+    } catch (error) {
+      console.error(`Download error: ${error.message}`);
+    }
   });
 
-const preload_js = "preload-javascript";
-$(`[${preload_js}]`)
-  .each((i, e) => {
-    let filename = e.getAttribute(preload_js);
-    jQuery.get(filename, (data) => {
-      window.baduk.data[filename] = data;
+Array.from(document.querySelectorAll("[preload-javascript]"))
+  .forEach(async (e) => {
+    let url = e.getAttribute("preload-javascript");
+    try {
+      const response = await fetch(url);
+      const data = window.baduk.data[url] = await response.text();
       e.insertAdjacentHTML("afterbegin",
-        hljs.highlight(data, { language: 'javascript' }).value
+        hljs.highlight(data, { language: "javascript" }).value
       );
-    })
+    } catch (error) {
+      console.error(`Download error: ${error.message}`);
+    }
   });
-
 /*
   <script src="board7x7.js" defer></script>
   <div data="board7x7.txt" run="board7x7">
@@ -31,30 +34,39 @@ $(`[${preload_js}]`)
     <pre><summary>output</summary><code output></code></pre>
   </div>
 */
-$("button[run]").on("click", function () {
-  let parent = $(this).parent();
-  let run = parent.attr("run");
-  let output = parent.find("[output]");
-  let data = window.baduk.data[parent.attr("data")];
-  output.html(window[run](data));
-});
-$("button[time]").on("click", function () {
-  let parent = $(this).parent();
-  let run = parent.attr("run");
-  let data = window.baduk.data[parent.attr("data")];
-  let result = parent.children("mark");
-  result.toggleClass("loading");
-  result.text("...");
-  result.prop("hidden", false);
-  $(this).prop("disabled", true);
-  let bench = new Benchmark(() => {
-    window[run](data)
-  }, {
-    'onComplete': (evt) => {
-      result.text(`${evt.currentTarget}`);
-      result.toggleClass("loading");
-      $(this).prop("disabled", false);
-      console.log(`${evt.currentTarget}`);
-    },
-  }).run({ 'async': true });
-});
+Array.from(document.querySelectorAll("button[run]"))
+  .forEach((e) => {
+    e.addEventListener("click", () => {
+      let parent = e.parentElement;
+      let run = parent.getAttribute("run");
+      let output = parent.querySelector("[output]");
+      let url = parent.getAttribute("data");
+      let data = window.baduk.data[url];
+      let text = window[run](data);
+      output.insertAdjacentHTML("afterbegin", text);
+    });
+  });
+
+Array.from(document.querySelectorAll("button[time]"))
+  .forEach((e) => {
+    e.addEventListener("click", () => {
+      let parent = e.parentElement;
+      let run = parent.getAttribute("run");
+      let data = window.baduk.data[parent.getAttribute("data")];
+      let result = parent.querySelector(":scope > mark");
+      console.log(result);
+      result.classList.add("loading");
+      result.innerText = "...";
+      result.removeAttribute("hidden");
+      e.setAttribute("disabled", true);
+      new Benchmark(() => {
+        window[run](data)
+      }, {
+        "onComplete": (evt) => {
+          result.innerText = `${evt.currentTarget}`;
+          result.classList.remove("loading");
+          e.setAttribute("disabled", false);
+        },
+      }).run({ "async": true });
+    });
+  });
