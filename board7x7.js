@@ -69,7 +69,9 @@ function printBoard(board, addLabels = false, pad = 1) {
   for (let y = 0; y < board.size; y++) {
     let row = [];
     for (let x = 0; x < board.size; x++) {
-      row.push(`${board.get(x, y)}`.padStart(pad, " "));
+      const piece = board.get(x, y);
+      const char = piece !== 0 ? piece : ".";
+      row.push(`${char}`.padStart(pad, " "));
     }
     if (addLabels)
       row.push(`:${board.size - y}`); // ":yLabel"
