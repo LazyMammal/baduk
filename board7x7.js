@@ -1,34 +1,77 @@
-function parse(text) { // text -> array[][]
-  return text.split("\n") // split rows into array
-    .map(row => row.split(" ")); // make cols sub-array
+class Board2D {
+  /* 
+  Board2D
+  - intentionally abstracted
+  - can be extended or used as template
+  */
+  #_size;
+  #_data;
+  constructor(size) {
+    this.#_size = size;
+    this.#_data = {}; // not an array!
+  }
+  get size() {
+    return this.#_size;
+  }
+  _key(x, y) {
+    return `${x}|${y}`;
+  }
+  _xyValid(x, y) {
+    return x >= 0 && x < this.#_size
+      && y >= 0 && y < this.#_size;
+  }
+  get(x, y) {
+    if (this._xyValid(x, y))
+      return this.#_data[this._key(x, y)] ?? ".";
+    return "#";
+  }
+  set(x, y, val) {
+    if (this._xyValid(x, y))
+      this.#_data[this._key(x, y)] = val;
+  }
 }
 
-export function xLabel(col) { // A,B,C,D,E,F,G,H,J,K...
-  // return String.fromCharCode(65 + col); // incl "I"
+function parse(text, TYPE = Board2D) {
+  /*
+  parse()
+  - knows the internal structure of `text`
+  - cannot know the internals of TYPE
+  */
+  const arr = text.split("\n").map(r => r.split(" "));
+  const board = new TYPE(arr.length);
+  for (let y = 0; y < arr.length; y++) {
+    const row = arr[y];
+    for (let x = 0; x < row.length; x++) {
+      board.set(x, y, row[x]);
+    }
+  }
+  return board;
+}
+
+function xLabel(col) { // ABCDEFGH_JKLM... skip "I"
   return String.fromCharCode(col + (col < 8 ? 65 : 66));
 }
 
-export function yLabel(row) { // 1,2,3 ...
+function yLabel(row) { // 1,2,3...
   return `${1 + row}`;
 }
 
-function addAxisLabels(data) {
-  let size = data.length; // board size
-  data.reverse(); // invert y-axis
-  data.push([]); // add row for x-axis labels
-  for (let i = 0; i < size; i++) {
-    data[size][i] = xLabel(i);
-    data[i][size] = `:${yLabel(i)}`;
+function printBoard(board, addLabels = false) {
+  let res = [];
+  if (addLabels)
+    res.push(_.range(board.size).map(xLabel).join(" "));
+  for (let y = 0; y < board.size; y++) {
+    let row = [];
+    for (let x = 0; x < board.size; x++) {
+      row.push(board.get(x, y));
+    }
+    if (addLabels)
+      row.push(yLabel(board.size - y));
+    res.push(row.join(" "));
   }
-  data[size][size] = "  "; // spacing
-  data.reverse(); // restore y-axis
-  return data;
-}
-
-function data2text(data) { // add spaces, flatten array
-  return data.map(row => row.join(" ")).join("\n");
+  return res.join("\n");
 }
 
 function board7x7(input) { // final output
-  return data2text(addAxisLabels(parse(input)));
+  return printBoard(parse(input), true);
 }
