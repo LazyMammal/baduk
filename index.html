@@ -230,17 +230,26 @@
         Depending on captures, the colour that needs to pass may change hands several times.</p>
       <p>Key abilities needed for Rollouts:</p>
       <ul>
-        <li><mark>Legal Moves</mark><br>
-          Detecting which locations can be played on that will result in a valid board after the move.
+        <li><mark>State</mark><br>
+          Keep a copy of the board position and modify it when a stone is played.
         </li>
         <li><mark>Captures</mark><br>
-          Detecting which chains need to be removed as a result of a stone being played.
+          Remove chains starved of liberties after a move.
         </li>
-        <li><mark>Metadata</mark><br>
-          Updating chains, ids and liberty counts.
-          Preferably without recalculating the entire board.
+        <li><mark>Legal Move</mark><br>
+          Is a board position still valid after playing a stone and possible captures?
         </li>
       </ul>
+      <details>
+        <summary>rollout7x7.js</summary>
+        <pre><code preload-javascript="rollout7x7.js"></code></pre>
+      </details>
+      <script src="rollout7x7.js" defer></script>
+      <div run="rollout7x7">
+        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+
     </section>
 
   </main>
