@@ -44,7 +44,7 @@ function parse(input, TYPE = Board2D) {
   if (!Array.isArray(input)) {
     input = input.split("\n").map(r => r.split(" "));
   }
-  const board = new TYPE(input.length);
+  const board = new TYPE(input[0].length);
   for (let y = 0; y < input.length; y++) {
     const row = input[y];
     for (let x = 0; x < row.length; x++) {

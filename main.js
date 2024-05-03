@@ -15,7 +15,7 @@ Array.from(document.querySelectorAll(".goban"))
       background: "#e0aa52",
       pixelRatio: window.devicePixelRatio,
     });
-    
+
     gobo.render();
     e.append(gobo.canvas);
   });
@@ -23,8 +23,7 @@ Array.from(document.querySelectorAll(".goban"))
 function updateGoban(id, input) {
   const board = parse(input);
   const gobo = window.baduk.gobo[id];
-  const lookup = {"B": BLACK, "W": WHITE, ".": EMPTY};
-
+  const lookup = { "B": BLACK, "W": WHITE, ".": EMPTY };
   for (let y = 0; y < board.size; y++) {
     for (let x = 0; x < board.size; x++) {
       const piece = board.get(x, y);
