@@ -5,9 +5,11 @@ class GoState {
     this.board = board;
     this.toPlay = toPlay;
   }
+
   nextToPlay(toPlay = this.toPlay) {
     return toPlay === "B" ? "W" : "B";
   }
+
   validToPlay(x, y, toPlay = this.toPlay) {
     // check for empty spot
     const isEmpty = this.board.get(x, y) === ".";
@@ -16,6 +18,7 @@ class GoState {
     // TODO: non-zero liberties?
     return isEmpty;
   }
+
   moveList(toPlay = this.toPlay) {
     const moves = [];
     for (let y = 0; y < this.board.size; y++) {
@@ -26,6 +29,7 @@ class GoState {
     }
     return moves;
   }
+
   playMove(x, y) {
     this.board.set(x, y, this.toPlay);
     // TODO: check for captures
@@ -34,14 +38,14 @@ class GoState {
   }
 }
 
-function state7x7(input) {
+function state7x7(input, TYPE = GoState) {
   // retrieve current game state from input
   const board = input ? parse(input) : new Board2D(7);
   const lines = input.split("\n").slice(board.size);
   const toPlay = input ? lines[0].slice(-1) : "B";
 
   // model game state
-  const state = new GoState(board, toPlay);
+  const state = new TYPE(board, toPlay);
 
   // play random move
   const moves = state.moveList(toPlay);

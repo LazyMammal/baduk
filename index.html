@@ -34,6 +34,8 @@
         <a href="#UnitTests">Unit Tests</a>
         <a href="#Rollouts">Rollouts</a>
         <a href="#GameState">Game State</a>
+        <a href="#Captures">Captures</a>
+        <a href="#LegalMoves">Legal Moves</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -269,7 +271,7 @@
         <li><mark>Captures</mark><br>
           Remove chains captured during the turn.
         </li>
-        <li><mark>Legal Move</mark><br>
+        <li><mark>Legal Moves</mark><br>
           Check if a given location is valid for each player under the rules.
         </li>
       </ul>
@@ -284,6 +286,9 @@
         <summary>state7x7.js</summary>
         <pre><code preload-javascript data-url="state7x7.js"></code></pre>
       </details>
+      <p>Each click of the <code>[Run]</code> button will add another stone and end the turn.
+        The result is a rather peculier "game of Go" because we are not enforcing all the rules yet.
+      </p>
       <script src="state7x7.js" defer></script>
       <div data-id="state7x7" run="state7x7">
         <div>
@@ -292,7 +297,53 @@
         <div class="goban" size="7" id="state7x7_goban"></div>
         <pre><summary>input/output</summary><code output id="state7x7"></code></pre>
       </div>
-
+      <div style="clear: both"></div>
+    </section>
+    <section>
+      <h2 id="Captures"><a href="#Captures">Captures</a></h2>
+      <p>To handle captures we need to be able to count liberties.
+        Whenever we place a stone we will check the four adjacent chains.
+        If any of the opponent chains have zero liberties they are removed according to the rules.
+      </p>
+      <p></p>
+      <details>
+        <summary>captures7x7.js</summary>
+        <pre><code preload-javascript data-url="captures7x7.js"></code></pre>
+      </details>
+      <p>It's starting to look more like a real game of Go.
+        The "illegal" moves are now quite obvious.
+      </p>
+      <script src="captures7x7.js" defer></script>
+      <div data-id="captures7x7" run="captures7x7">
+        <div>
+          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban" size="7" id="captures7x7_goban"></div>
+        <pre><summary>input/output</summary><code output id="captures7x7"></code></pre>
+      </div>
+      <div style="clear: both"></div>
+    </section>
+    <section>
+      <h2 id="LegalMoves"><a href="#LegalMoves">Legal Moves</a></h2>
+      <p>The easiest way to check if a move is allowed under the rules is simply to try it.
+        We will simulate the desired move, process any captures and then count the remaining liberties.
+        If the new stone has at least one liberty then the spot is valid for play by that colour.
+      </p>
+      <p></p>
+      <details>
+        <summary>legal7x7.js</summary>
+        <pre><code preload-javascript data-url="legal7x7.js"></code></pre>
+      </details>
+      <p>The only rule we are missing now is Repetition.</p>
+      <script src="legal7x7.js" defer></script>
+      <div data-id="legal7x7" run="legal7x7">
+        <div>
+          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban" size="7" id="legal7x7_goban"></div>
+        <pre><summary>input/output</summary><code output id="legal7x7"></code></pre>
+      </div>
+      <div style="clear: both"></div>
     </section>
 
   </main>
