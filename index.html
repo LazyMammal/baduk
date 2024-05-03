@@ -25,9 +25,9 @@
     <aside>
       <nav>
         <a href="#Introduction">Introduction</a>
+        <a href="#Rules">Rules of the Game</a>
         <a href="#TheVisionAhead">The Vision Ahead</a>
         <a href="#TheFirstStep">The First Step</a>
-        <a href="#Rules">Rules of the Game</a>
         <a href="#FloodFill">Flood Fill</a>
         <a href="#LibertyCount">Liberty Count</a>
         <a href="#Scoring">Scoring</a>
@@ -45,6 +45,42 @@
     <p>In order to avoid burnout along the way, I will be dividing up the large size task into many small steps. Each of
       the sections below will focus on one of those small steps.</p>
     <p>This page is a <i>living document</i> and will be updated as I write more sections ...</p>
+    <section>
+      <h2 id="Rules"><a href="#Rules">Rules of the Game</a></h2>
+      <p>Here's a quick refresher on the rules of Go:</p>
+      <ul>
+        <li><mark>Liberties</mark><br>
+          A liberty is an empty spot next to a stone along a painted line.
+          Liberties are shared by chains of connected same-colour stones along those same lines.
+          Lines are painted in 4 cardinal directions on a Go board.
+          Diagonally adjacent spots have no relation and cannot directly affect one another.
+          Lines do not extend beyond the bounds of the playable board.
+        </li>
+        <li><mark>Actions</mark><br>
+          Starting with Black, players take turns placing a single stone on the board.
+          Once placed, stones cannot be moved by either player.
+          Therefore stones are forever stationary (or removed entirely from the board).
+          A player may choose to "pass" instead of placing a stone.
+          The game is considered over after two passes in a row (with no play between).</li>
+        <li><mark>Capture</mark><br>
+          Stones must always have or share at least one liberty.
+          A move is invalid if the new stone would not have any liberties <i>at the end of the turn</i>.
+          If a stone is placed so that an opponent chain has no liberties, that chain is captured.
+          The entire chain is removed from the board at once.
+          This is the only way any stone can be removed from the board.
+          Revealed empty spots are counted as liberties on the same turn.
+          This allows a stone to be placed on a spot that otherwise would have zero liberties if not for the capture.
+        </li>
+        <li><mark>Repetition</mark><br>
+          It's prohibited to place a stone that repeats a previous board state.
+          Retaking single stones on adjacent spots is called a "Ko Fight".
+          To avoid the repetition rule players must wait one turn before retaking a previously captured stone.
+          This rule can be applied more generally and is called "Super-Ko".
+          According to Super-Ko players may be prevented from retaking even after "waiting one turn".
+          This usually occurs because more than one Ko Fight is present on the board.
+        </li>
+      </ul>
+    </section>
     <section>
       <h2 id="TheVisionAhead"><a href="#TheVisionAhead">The Vision Ahead</a></h2>
       <p>I want to pick a medium sized goal to directly plan towards.
@@ -86,16 +122,6 @@
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
-    </section>
-    <section>
-      <h2 id="Rules"><a href="#Rules">Rules of the Game</a></h2>
-      <p>Here's a quick refresher on the rules of Go:</p>
-      <ul>
-        <li>Starting with Black, players takes turns placing a single stone on the board.</li>
-        <li>If a stone is placed so that an opponent chain has no liberties, that chain is captured.</li>
-        <li>(After the capture rule is applied) the placed stone must have or share at least one liberty.</li>
-        <li>It is prohibited to place a stone that repeats a previous board state.</li>
-      </ul>
     </section>
     <section>
       <h2 id="FloodFill"><a href="#FloodFill">Flood Fill</a></h2>
@@ -141,8 +167,10 @@
     </section>
     <section>
       <h2 id="LibertyCount"><a href="#LibertyCount">Liberty Count</a></h2>
-      <p>At this point we have all of the pieces we need to calculate Liberties and Score.
-        To get Liberty Counts for the whole board we only need to run Flood Fill for each stone.</p>
+      <p>Liberties are an essential attribute in playing Go.
+        To perform a capture you need to know a chain has zero liberties.
+        It's impossible to enforce the <a href="#Rules">Rules of the Game</a> without the ability to count liberties.
+        To count liberties for the whole board we only need to run Flood Fill for each stone.</p>
       <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
       <details>
         <summary>liberty7x7.js</summary>
