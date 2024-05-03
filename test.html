@@ -13,9 +13,6 @@
   <script src="https://cdn.jsdelivr.net/npm/benchmark@2.1.4/benchmark.min.js" defer></script>
   <script src="gobo.js" defer></script>
   <script src="main.js" defer></script>
-  <script src="extract_tests.js" defer></script>
-  <script src="test7x7.js" defer></script>
-  <script src="test2.js" type="module" defer></script>
   <title>Baduk JS - Step By Step</title>
 </head>
 
@@ -66,18 +63,17 @@
         <kbd>Alt+F4</kbd>
       </p>
 
-      <!-- Text accordion -->
       <details>
-        <summary>Spoiler alert!</summary>
-        <p>Hidden text (until revealed)</p>
+        <summary>rollout7x7.js</summary>
+        <pre><code preload-javascript data-url="rollout7x7.js"></code></pre>
       </details>
-
-      <button run>Run</button> <button time>Time</button> <mark>...</mark>
-
-      <div>
-        <script src="test.js" defer></script>
-        <div class="goban" id="section1_gobo"></div>
-        <pre><summary>output</summary><code output></code></pre>
+      <script src="rollout7x7.js" defer></script>
+      <div data-id="rollout7x7" run="rollout7x7">
+        <div>
+          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban" size="7" id="rollout7x7_goban"></div>
+        <pre><summary>input/output</summary><code output id="rollout7x7"></code></pre>
       </div>
 
       <section>

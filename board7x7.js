@@ -48,7 +48,7 @@ function parse(input, TYPE = Board2D) {
   for (let y = 0; y < input.length; y++) {
     const row = input[y];
     for (let x = 0; x < row.length; x++) {
-      board.set(x, y, row[x]);
+      board.set(x, board.size - y - 1, row[x]);
     }
   }
   return board;
@@ -72,7 +72,7 @@ function printBoard(board, {
     res.push(_.range(board.size).map(
       col => xLabel(col).padStart(pad, " ")
     ).join(" "));
-  for (let y = 0; y < board.size; y++) {
+  for (let y = board.size - 1; y >= 0; y--) {
     let row = [];
     for (let x = 0; x < board.size; x++) {
       const piece = board.get(x, y);
@@ -80,7 +80,7 @@ function printBoard(board, {
       row.push(`${char}`.padStart(pad, " "));
     }
     if (addLabels)
-      row.push(`:${board.size - y}`); // ":yLabel"
+      row.push(`:${yLabel(y)}`); // ":yLabel"
     res.push(row.join(" "));
   }
   return res.join("\n");

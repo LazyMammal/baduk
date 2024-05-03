@@ -58,7 +58,7 @@
       </ol>
       <details>
         <summary>liberty_score.txt</summary>
-        <pre><code preload-txt="liberty_score.txt"></code></pre>
+        <pre><code preload-txt data-url="liberty_score.txt"></code></pre>
       </details>
       <p>The text file is written so a human can read it. It's also carefully formatted so it can be read into a
         script and parsed into a set of Unit Tests.</p>
@@ -74,15 +74,15 @@
         The overall structure of <code>board7x7.txt</code> is as simple as we can make it while still being a meaningful
         first step.
       </p>
-      <pre><summary>board7x7.txt</summary><code preload-txt="board7x7.txt"></code></pre>
+      <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
       <p>We can add coordinate labels for both axes while we're parsing the board.
         Let's also restore the whitespace between the columns.</p>
       <details>
         <summary>board7x7.js</summary>
-        <pre><code preload-javascript="board7x7.js"></code></pre>
+        <pre><code preload-javascript data-url="board7x7.js"></code></pre>
       </details>
       <script src="board7x7.js" defer></script>
-      <div data="board7x7.txt" run="board7x7">
+      <div data-url="board7x7.txt" run="board7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -126,15 +126,15 @@
         <li>Avoid an infinite loop following the circular path of stones.</li>
         <li>Avoid re-counting adjacent empty spots from multiple angles.</li>
       </ul>
-      <pre><summary>flood7x7.txt</summary><code preload-txt="flood7x7.txt"></code></pre>
+      <pre><summary>flood7x7.txt</summary><code preload-txt data-url="flood7x7.txt"></code></pre>
       <p>Let's count the number stones in the black chain and the number of liberties it's touching.
         We'll also show the number of <i>visits</i> at each location of the board during our Flood Fill.</p>
       <details>
         <summary>flood7x7.js</summary>
-        <pre><code preload-javascript="flood7x7.js"></code></pre>
+        <pre><code preload-javascript data-url="flood7x7.js"></code></pre>
       </details>
       <script src="flood7x7.js" defer></script>
-      <div data="flood7x7.txt" run="flood7x7">
+      <div data-url="flood7x7.txt" run="flood7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -143,13 +143,13 @@
       <h2 id="LibertyCount"><a href="#LibertyCount">Liberty Count</a></h2>
       <p>At this point we have all of the pieces we need to calculate Liberties and Score.
         To get Liberty Counts for the whole board we only need to run Flood Fill for each stone.</p>
-      <pre><summary>board7x7.txt</summary><code preload-txt="board7x7.txt"></code></pre>
+      <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
       <details>
         <summary>liberty7x7.js</summary>
-        <pre><code preload-javascript="liberty7x7.js"></code></pre>
+        <pre><code preload-javascript data-url="liberty7x7.js"></code></pre>
       </details>
       <script src="liberty7x7.js" defer></script>
-      <div data="board7x7.txt" run="liberty7x7">
+      <div data-url="board7x7.txt" run="liberty7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -162,17 +162,17 @@
         <li>Identify the <i>types</i> of adjacent stones instead of summing them up.</li>
       </ul>
       <div>
-        <pre><summary>board7x7.txt</summary><code preload-txt="board7x7.txt"></code></pre>
+        <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
       </div>
       <p>We'll need to scan the board for stones but not follow them,
         and follow empty spots as we find them.
       </p>
       <details>
         <summary>score7x7.js</summary>
-        <pre><code preload-javascript="score7x7.js"></code></pre>
+        <pre><code preload-javascript data-url="score7x7.js"></code></pre>
       </details>
       <script src="score7x7.js" defer></script>
-      <div data="board7x7.txt" run="score7x7">
+      <div data-url="board7x7.txt" run="score7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -183,7 +183,7 @@
         But we still need to extract the tests from the text file and verify the outputs.</p>
       <details>
         <summary>liberty_score.txt</summary>
-        <pre><code preload-txt="liberty_score.txt"></code></pre>
+        <pre><code preload-txt data-url="liberty_score.txt"></code></pre>
       </details>
       <p>Let's start by extracting the input/output boards:</p>
       <ul>
@@ -203,10 +203,10 @@
       </ul>
       <details>
         <summary>extract_tests.js</summary>
-        <pre><code preload-javascript="extract_tests.js"></code></pre>
+        <pre><code preload-javascript data-url="extract_tests.js"></code></pre>
       </details>
       <script src="extract_tests.js" defer></script>
-      <div data="liberty_score.txt" run="extract_tests">
+      <div data-url="liberty_score.txt" run="extract_tests">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -214,10 +214,10 @@
         With tests in hand we can verify the correctness of our previous functions.</p>
       <details>
         <summary>test7x7.js</summary>
-        <pre><code preload-javascript="test7x7.js"></code></pre>
+        <pre><code preload-javascript data-url="test7x7.js"></code></pre>
       </details>
       <script src="test7x7.js" defer></script>
-      <div data="liberty_score.txt" run="test7x7">
+      <div data-url="liberty_score.txt" run="test7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -242,12 +242,15 @@
       </ul>
       <details>
         <summary>rollout7x7.js</summary>
-        <pre><code preload-javascript="rollout7x7.js"></code></pre>
+        <pre><code preload-javascript data-url="rollout7x7.js"></code></pre>
       </details>
       <script src="rollout7x7.js" defer></script>
-      <div run="rollout7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><summary>output</summary><code output></code></pre>
+      <div data-id="rollout7x7" run="rollout7x7">
+        <div>
+          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban" size="7" id="rollout7x7_goban"></div>
+        <pre><summary>input/output</summary><code output id="rollout7x7"></code></pre>
       </div>
 
     </section>

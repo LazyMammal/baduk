@@ -1,4 +1,4 @@
-var gobo = new Gobo({
+var gobo7x7 = new Gobo({
   gobanSize: 7,
   noCoords: false,
   widthPx: 320,
@@ -6,11 +6,11 @@ var gobo = new Gobo({
   pixelRatio: window.devicePixelRatio,
 });
 
-gobo.setStoneAt(2, 2, WHITE);
-gobo.setStoneAt(2, 3, BLACK);
-gobo.setStoneAt(3, 1, WHITE);
-gobo.setStoneAt(3, 3, BLACK);
+gobo7x7.setStoneAt(2, 2, WHITE);
+gobo7x7.setStoneAt(2, 3, BLACK);
+gobo7x7.setStoneAt(3, 1, WHITE);
+gobo7x7.setStoneAt(3, 3, BLACK);
 //gobo.setStoneAt(3, 1, EMPTY); // removes stone
 
-gobo.render();
-document.querySelector("#section1_gobo").append(gobo.canvas);
+gobo7x7.render();
+document.querySelector("#rollout7x7").append(gobo7x7.canvas);
