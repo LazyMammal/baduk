@@ -30,7 +30,7 @@ function testPrint(test) {
   for(let [label, data] of test) {
     if(Array.isArray(data)) {
       res.push(label);
-      res.push(data2text(addAxisLabels(data)));
+      res.push(printBoard(parse(data), true));
     } else {
       res.push(`${label} = ${data}`);
     }

@@ -35,16 +35,18 @@ class Board2D {
   }
 }
 
-function parse(text, TYPE = Board2D) {
+function parse(input, TYPE = Board2D) {
   /*
   parse()
   - knows the internal structure of `text`
   - cannot know the internals of TYPE
   */
-  const arr = text.split("\n").map(r => r.split(" "));
-  const board = new TYPE(arr.length);
-  for (let y = 0; y < arr.length; y++) {
-    const row = arr[y];
+  if(!Array.isArray(input)) {
+    input = input.split("\n").map(r => r.split(" "));
+  }
+  const board = new TYPE(input.length);
+  for (let y = 0; y < input.length; y++) {
+    const row = input[y];
     for (let x = 0; x < row.length; x++) {
       board.set(x, y, row[x]);
     }
@@ -60,7 +62,7 @@ function yLabel(row) { // 1,2,3...
   return `${1 + row}`;
 }
 
-function printBoard(board, addLabels = false, pad = 1) {
+function printBoard(board, addLabels = false, pad = 1, zero = true) {
   let res = [];
   if (addLabels)
     res.push(_.range(board.size).map(
@@ -70,7 +72,7 @@ function printBoard(board, addLabels = false, pad = 1) {
     let row = [];
     for (let x = 0; x < board.size; x++) {
       const piece = board.get(x, y);
-      const char = piece !== 0 ? piece : ".";
+      const char = zero && piece === 0 ? "." : piece;
       row.push(`${char}`.padStart(pad, " "));
     }
     if (addLabels)

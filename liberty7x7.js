@@ -15,6 +15,8 @@ function buildLibs(board) {
         libs = 0;
         DFS([x, y], xy4way, followStoneType);
         libCount.set(x, y, libs);
+      } else {
+        libCount.set(x, y, ".");
       }
     }
   }
@@ -24,5 +26,5 @@ function buildLibs(board) {
 function liberty7x7(input) {
   const board = parse(input);
   const libCount = buildLibs(board);
-  return printBoard(libCount, true);
+  return printBoard(libCount, true, 1, false);
 }
