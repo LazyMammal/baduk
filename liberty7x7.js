@@ -1,20 +1,20 @@
-function buildLibs(data) {
-  let size = data.length;
-  let libCount = Array(size).fill(0)
-    .map(() => Array(size).fill("."));
-  let stoneType = '', count = 0;
-  const libFunc = ([x, y], data) => {
-    let piece = data[y][x];
-    count += piece === '.';
-    return (piece === stoneType);
+function buildLibs(board) {
+  const libCount = new Board2D(board.size, 0, 0);
+  let stoneType = "";
+  let libs = 0;
+  const followStoneType = ([x, y]) => {
+    const piece = board.get(x, y);
+    libs += piece === ".";
+    return piece === stoneType;
   }
-  for (let y = 0; y < size; y++) {
-    for (let x = 0; x < size; x++) {
-      if (data[y][x] !== '.') {
-        stoneType = data[y][x];
-        count = 0;
-        DFS([x, y], data, adj4way, libFunc);
-        libCount[y][x] = count;
+  for (let y = 0; y < board.size; y++) {
+    for (let x = 0; x < board.size; x++) {
+      const piece = board.get(x, y);
+      if (piece !== ".") {
+        stoneType = piece;
+        libs = 0;
+        DFS([x, y], xy4way, followStoneType);
+        libCount.set(x, y, libs);
       }
     }
   }
@@ -22,7 +22,7 @@ function buildLibs(data) {
 }
 
 function liberty7x7(input) {
-  let data = parse(input);
-  let libCount = buildLibs(data);
-  return data2text(addAxisLabels(libCount));
+  const board = parse(input);
+  const libCount = buildLibs(board);
+  return printBoard(libCount, true);
 }
