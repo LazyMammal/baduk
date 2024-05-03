@@ -26,5 +26,5 @@ function buildLibs(board) {
 function liberty7x7(input) {
   const board = parse(input);
   const libCount = buildLibs(board);
-  return printBoard(libCount, true, 1, false);
+  return printBoard(libCount, {dotZero: false});
 }

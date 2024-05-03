@@ -47,12 +47,12 @@ function score7x7(input) {
   let board = parse(input);
   let score = scoreBoard(board);
   return [
-    printBoard(score.Enclosed, true),
+    printBoard(score.Enclosed),
     `Enclosed: b: ${score.empty["b"]}`,
     `          w: ${score.empty["w"]}`,
     `Stones:   B: ${score.stone["B"]}`,
     `          W: ${score.stone["W"]}`,
-    printBoard(score.Score, true),
+    printBoard(score.Score),
     `B: ${score.B}`,
     `W: ${score.W}`,
     `?: ${score["?"]}`,

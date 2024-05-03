@@ -5,9 +5,11 @@ function createLookup(data) {
   const board = parse(data);
   const score = scoreBoard(board);
   return Object.assign(score, {
-    Enclosed: printBoard(score.Enclosed, false),
-    Score: printBoard(score.Score, false),
-    'LibertyCount': printBoard(buildLibs(board), false, 1, false),
+    Enclosed: printBoard(score.Enclosed, { addLabels: false }),
+    Score: printBoard(score.Score, { addLabels: false }),
+    'LibertyCount': printBoard(buildLibs(board), {
+      addLabels: false, dotZero: false
+    }),
   });
 }
 
@@ -21,7 +23,7 @@ function test7x7(input, callback = createLookup) {
     let pass = `${data}` == `${lookup[label]}`;
     let data2;
     if (Array.isArray(data)) {
-      data2 = printBoard(parse(data), false);
+      data2 = printBoard(parse(data), { addLabels: false });
       pass = `${data2}` == `${lookup[label]}`;
     }
     let msg = [

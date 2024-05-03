@@ -59,10 +59,10 @@ function flood7x7(input) {
   }
   DFS([0, 0], xy4way, followStone);
   return [
-    printBoard(visits, true),
-    `Black stones: ${black}`,
+    printBoard(visits),
+    `Black stones:  ${black}`,
     `Liberty count: ${libs}`,
-    `Total visits: ${total}`,
+    `Total visits:  ${total}`,
     `Out of bounds: ${total - black - libs}`
   ].join("\n");
 }
