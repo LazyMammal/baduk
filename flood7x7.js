@@ -1,53 +1,68 @@
-function DFS(start, data,
-  adjacent = (cur, data) => [],
-  callback = (adj, data) => true,
-  earlyexit = (cur, data) => false,
+function DFS(start,
+  adjacent = (pos) => [],
+  callback = (pos) => true,
+  earlyexit = (pos) => false,
 ) {
+  /*
+  Depth First Search (DFS)
+  - generic with callbacks
+  - no knowledge of TYPE
+  - not optimized
+  */
   let Q = [start];
   let visited = {};
   visited[start] = start;
-  callback(start, data);
+  callback(start);
   while (Q.length) {
     let cur = Q.pop();
-    if (earlyexit(cur, data)) break;
-    for (let adj of adjacent(cur, data)) {
+    if (earlyexit(cur))
+      break;
+    for (let adj of adjacent(cur)) {
       if (!(adj in visited)) {
         visited[adj] = cur;
-        if (callback(adj, data)) Q.push(adj);
+        if (callback(adj))
+          Q.push(adj);
       }
     }
   }
   return visited;
 }
 
-function adj4way(cur, data) {
-  let max = data.length - 1;
-  let [x, y] = cur;
-  let adj = [];
-  if (x > 0) adj.push([x - 1, y]);
-  if (y > 0) adj.push([x, y - 1]);
-  if (x < max) adj.push([x + 1, y]);
-  if (y < max) adj.push([x, y + 1]);
-  return adj;
+function xy4way(pos) {
+  /*
+  - generic for [x, y] 
+  - doesn't know board.size
+  */
+  const [x, y] = pos;
+  return [
+    [x - 1, y],
+    [x + 1, y],
+    [x, y - 1],
+    [x, y + 1]
+  ];
 }
 
 function flood7x7(input) {
-  let data = parse(input);
-  let size = data.length;
+  const board = parse(input);
   let black = 0;
   let libs = 0;
-  let visits = Array(size).fill(0)
-    .map(() => Array(size).fill(0));
-  const countFunc = ([x, y], data) => {
-    let piece = data[y][x];
-    black += (piece === "B");
-    libs += (piece === ".");
-    visits[y][x]++;
-    return (piece === "B");
+  let total = 0;
+  let visits = new Board2D(board.size, 0, 0);
+  const followStone = ([x, y]) => {
+    const piece = board.get(x, y);
+    const isStone = piece === "B";
+    black += isStone;
+    libs += piece === ".";
+    visits.set(x, y, visits.get(x, y) + 1);
+    total++;
+    return isStone;
   }
-  DFS([0, 0], data, adj4way, countFunc);
-  let text = data2text(addAxisLabels(visits));
-  text += "\n" + `Black stones: ${black}`;
-  text += "\n" + `Liberty count: ${libs}`;
-  return text;
+  DFS([0, 0], xy4way, followStone);
+  return [
+    printBoard(visits, true),
+    `Black stones: ${black}`,
+    `Liberty count: ${libs}`,
+    `Total visits: ${total}`,
+    `Out of bounds: ${total - black - libs}`
+  ].join("\n");
 }
