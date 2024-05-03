@@ -6,9 +6,13 @@ class Board2D {
   */
   #_size;
   #_data;
-  constructor(size) {
+  #_empty;
+  #_oob;
+  constructor(size, empty = ".", oob = "#") {
     this.#_size = size;
     this.#_data = {}; // not an array!
+    this.#_empty = empty;
+    this.#_oob = oob;
   }
   get size() {
     return this.#_size;
@@ -22,8 +26,8 @@ class Board2D {
   }
   get(x, y) {
     if (this._xyValid(x, y))
-      return this.#_data[this._key(x, y)] ?? ".";
-    return "#";
+      return this.#_data[this._key(x, y)] ?? this.#_empty;
+    return this.#_oob;
   }
   set(x, y, val) {
     if (this._xyValid(x, y))
@@ -56,14 +60,16 @@ function yLabel(row) { // 1,2,3...
   return `${1 + row}`;
 }
 
-function printBoard(board, addLabels = false) {
+function printBoard(board, addLabels = false, pad = 1) {
   let res = [];
   if (addLabels)
-    res.push(_.range(board.size).map(xLabel).join(" "));
+    res.push(_.range(board.size).map(
+      col => xLabel(col).padStart(pad, " ")
+    ).join(" "));
   for (let y = 0; y < board.size; y++) {
     let row = [];
     for (let x = 0; x < board.size; x++) {
-      row.push(board.get(x, y));
+      row.push(`${board.get(x, y)}`.padStart(pad, " "));
     }
     if (addLabels)
       row.push(`:${board.size - y}`); // ":yLabel"
