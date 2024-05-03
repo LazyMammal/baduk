@@ -33,6 +33,7 @@
         <a href="#Scoring">Scoring</a>
         <a href="#UnitTests">Unit Tests</a>
         <a href="#Rollouts">Rollouts</a>
+        <a href="#GameState">Game State</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -252,33 +253,44 @@
     </section>
     <section>
       <h2 id="Rollouts"><a href="#Rollouts">Rollouts</a></h2>
-      <p>Rollouts are the repeated action of adding stones to the board.
+      <p>The purpose of a Rollout is to simulate an entire game quickly and randomly.
+        Upon completion the board state will be scored as a Win or a Loss.
+        Each Rollout is a <i>statistical sample</i> for use in a larger algorithm.
+      </p>
+      <p>Rollouts entail the repeated action of adding stones to the board.
         For most of the Rollout the stone colour will strictly alternate.
-        Near the end of the Rollout, one colour may need to pass (skip turn) before the other has run out of moves.
-        Depending on captures, the colour that needs to pass may change hands several times.</p>
+        Near the end of the Rollout one player may need to pass before the other has run out of moves.
+        In the event of captures the player that needs to pass may change hands several times.</p>
       <p>Key abilities needed for Rollouts:</p>
       <ul>
-        <li><mark>State</mark><br>
-          Keep a copy of the board position and modify it when a stone is played.
+        <li><mark>Game State</mark><br>
+          The location of stones on the board and which player is to take action.
         </li>
         <li><mark>Captures</mark><br>
-          Remove chains starved of liberties after a move.
+          Remove chains captured during the turn.
         </li>
         <li><mark>Legal Move</mark><br>
-          Is a board position still valid after playing a stone and possible captures?
+          Check if a given location is valid for each player under the rules.
         </li>
       </ul>
+    </section>
+    <section>
+      <h2 id="GameState"><a href="#GameState">Game State</a></h2>
+      <p>Game State is the information we need to handle each player turn.
+        We need to know what stones are on the board, where we can play and whose turn it is.
+        After the player takes action we also need to <i>update the game state</i> according to the rules.
+      </p>
       <details>
-        <summary>rollout7x7.js</summary>
-        <pre><code preload-javascript data-url="rollout7x7.js"></code></pre>
+        <summary>state7x7.js</summary>
+        <pre><code preload-javascript data-url="state7x7.js"></code></pre>
       </details>
-      <script src="rollout7x7.js" defer></script>
-      <div data-id="rollout7x7" run="rollout7x7">
+      <script src="state7x7.js" defer></script>
+      <div data-id="state7x7" run="state7x7">
         <div>
           <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban" size="7" id="rollout7x7_goban"></div>
-        <pre><summary>input/output</summary><code output id="rollout7x7"></code></pre>
+        <div class="goban" size="7" id="state7x7_goban"></div>
+        <pre><summary>input/output</summary><code output id="state7x7"></code></pre>
       </div>
 
     </section>
