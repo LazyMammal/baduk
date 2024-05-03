@@ -66,7 +66,7 @@ function printBoard(board, addLabels = false) {
       row.push(board.get(x, y));
     }
     if (addLabels)
-      row.push(yLabel(board.size - y));
+      row.push(`:${board.size - y}`); // ":yLabel"
     res.push(row.join(" "));
   }
   return res.join("\n");
