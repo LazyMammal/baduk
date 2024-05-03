@@ -1,48 +1,42 @@
-function scoreBoard(data) {
-  let size = data.length;
-  let encloseArr = Array(size).fill(0)
-    .map(() => Array(size).fill("."));
-  let scoreArr = Array(size).fill(0)
-    .map(() => Array(size).fill("."));
-  let adjCount;
-  const scoreFunc = ([x, y], data) => {
-    let piece = data[y][x];
-    adjCount[piece]++;
-    return (piece === ".");
+function scoreBoard(board) {
+  const size = board.size;
+  const enclosed = new Board2D(size);
+  const stoneArr = new Board2D(size);
+  let tally;
+  const followEmpty = ([x, y]) => {
+    const piece = board.get(x, y);
+    tally[piece] = 1 + (tally[piece] ?? 0);
+    return piece === ".";
   }
-  let emptyCount = { "b": 0, "w": 0, "?": 0 };
-  let stoneCount = { "B": 0, "W": 0, ".": 0 };
+  const empty = {};
+  const stone = {};
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      let piece = data[y][x];
+      const piece = board.get(x, y);
       if (piece === ".") {
-        adjCount = { "B": 0, "W": 0, ".": 0 };
-        DFS([x, y], data, adj4way, scoreFunc);
-        scoreArr[y][x] = "?";
-        if (adjCount["W"] && adjCount["B"] === 0) {
-          scoreArr[y][x] = "w";
+        tally = {};
+        DFS([x, y], xy4way, followEmpty);
+        let result = "?";
+        if (tally["W"] && !tally["B"]) {
+          result = "w";
         }
-        else if (adjCount["B"] && adjCount["W"] === 0) {
-          scoreArr[y][x] = "b";
+        if (tally["B"] && !tally["W"]) {
+          result = "b";
         }
-        encloseArr[y][x] = scoreArr[y][x];
-        emptyCount[scoreArr[y][x]]++;
+        stoneArr.set(x, y, result);
+        enclosed.set(x, y, result);
+        empty[result] = 1 + (empty[result] ?? 0);
       } else {
-        scoreArr[y][x] = piece;
-        stoneCount[piece]++;
+        stoneArr.set(x, y, piece);
+        stone[piece] = 1 + (stone[piece] ?? 0);
       }
     }
   }
-  return [emptyCount, stoneCount, encloseArr, scoreArr];
-}
-
-function calcScore(data) {
-  let [empty, stone, enclosed, score] = scoreBoard(data);
   return {
     Enclosed: enclosed,
+    Score: stoneArr,
     empty: empty,
     stone: stone,
-    Score: score,
     B: empty["b"] + stone["B"],
     W: empty["w"] + stone["W"],
     "?": empty["?"],
@@ -50,15 +44,17 @@ function calcScore(data) {
 }
 
 function score7x7(input) {
-  let data = parse(input);
-  let score = calcScore(data);
+  let board = parse(input);
+  let score = scoreBoard(board);
   return [
-    data2text(addAxisLabels(score.Enclosed)),
-    `Enclose: b:${score.empty["b"]} w:${score.empty["w"]}`,
-    `Stones:  B:${score.stone["B"]} W:${score.stone["W"]}`,
-    data2text(addAxisLabels(score.Score)),
-    `Black: ${score.B}`,
-    `White: ${score.W}`,
-    `?????: ${score["?"]}`,
+    printBoard(score.Enclosed, true),
+    `Enclosed: b: ${score.empty["b"]}`,
+    `          w: ${score.empty["w"]}`,
+    `Stones:   B: ${score.stone["B"]}`,
+    `          W: ${score.stone["W"]}`,
+    printBoard(score.Score, true),
+    `B: ${score.B}`,
+    `W: ${score.W}`,
+    `?: ${score["?"]}`,
   ].join("\n");
 }
