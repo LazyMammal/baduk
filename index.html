@@ -37,6 +37,7 @@
         <a href="#Captures">Captures</a>
         <a href="#LegalMoves">Legal Moves</a>
         <a href="#Repetition">Repetition</a>
+        <a href="#Eyes">Eyes</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -361,12 +362,40 @@
       <script src="repetition7x7.js" defer></script>
       <div data-id="repetition7x7" run="repetition7x7">
         <div>
-          <button run>Run</button> <button reset onclick="window.baduk.history = {}">Reset</button> <button time>Time</button> <mark hidden></mark>
+          <button run>Run</button> <button reset onclick="window.baduk.history = {}">Reset</button> <button
+            time>Time</button> <mark hidden></mark>
         </div>
         <div class="goban" size="7" id="repetition7x7_goban"></div>
         <pre><summary>input/output</summary><code
           output id="repetition7x7"
           preload-txt data-url="repetition7x7.txt"></code></pre>
+      </div>
+      <div style="clear: both"></div>
+    </section>
+    <section>
+      <h2 id="Eyes"><a href="#Eyes">Eyes</a></h2>
+      <p>Rollout policies can go beyond official rules.
+        We want to encourage <i>stability</i> and <i>efficiency</i> by preventing some unwanted moves.
+        Random moves that fill in same-colour eyes are chaotic and drastically extend Rollouts.
+      </p>
+      <p>We will do a quick test to identify Eyes vs False-eyes.
+        Notice how the game naturally comes to an end when both players run out of moves.
+      </p>
+      <details>
+        <summary>eyes7x7.js</summary>
+        <pre><code preload-javascript data-url="eyes7x7.js"></code></pre>
+      </details>
+      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
+      <script src="eyes7x7.js" defer></script>
+      <div data-id="eyes7x7" run="eyes7x7">
+        <div>
+          <button run>Run</button> <button reset onclick="window.baduk.history = {}">Reset</button> <button
+            time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban" size="7" id="eyes7x7_goban"></div>
+        <pre><summary>input/output</summary><code
+          output id="eyes7x7"
+          preload-txt data-url="eyes7x7.txt"></code></pre>
       </div>
       <div style="clear: both"></div>
     </section>

@@ -1,7 +1,8 @@
 class GoLegal extends GoCaptures {
   validToPlay(x, y, toPlay = this.toPlay) {
     // check for empty spot
-    if (this.board.get(x, y) !== ".")
+    if (this.board.get(x, y) !== "."
+      || this.isEye(x, y, toPlay))
       return false;
 
     // simulate adding stone
@@ -16,6 +17,10 @@ class GoLegal extends GoCaptures {
       return false;
 
     return !this.isRepeat(board);
+  }
+
+  isEye(x, y, toPlay = this.toPlay) {
+    return false; // TODO: real or false eye?
   }
 
   isRepeat(board = this.board) {

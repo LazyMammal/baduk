@@ -55,8 +55,12 @@ function printState(state) {
 
 function playRandom(state) {
   const moves = state.moveList();
-  let [x, y] = _.sample(moves); // random
-  state.playMove(x, y);
+  if (moves.length) {
+    let [x, y] = _.sample(moves); // random
+    state.playMove(x, y);
+  } else {
+    state.playMove(-1, -1);
+  }
 }
 
 function state7x7(input, TYPE = GoState) {
