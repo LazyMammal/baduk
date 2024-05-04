@@ -58,8 +58,10 @@ function playRandom(state) {
   if (moves.length) {
     let [x, y] = _.sample(moves); // random
     state.playMove(x, y);
+    return true;
   } else {
     state.playMove(-1, -1);
+    return false;
   }
 }
 

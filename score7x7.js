@@ -37,9 +37,11 @@ function scoreBoard(board) {
     Score: stoneArr,
     empty: empty,
     stone: stone,
-    B: empty["b"] + stone["B"],
-    W: empty["w"] + stone["W"],
-    "?": empty["?"],
+    B: (empty["b"] ?? 0)
+      + (stone["B"] ?? 0),
+    W: (empty["w"] ?? 0)
+      + (stone["W"] ?? 0),
+    "?": empty["?"] ?? 0,
   }
 }
 

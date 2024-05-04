@@ -114,18 +114,17 @@ pre summary {
   cursor: auto;
 }
 
-.goban {
+.goban, .right {
   clear: both;
   float: right;
-  margin: 1rem 0 1rem .5rem;
+  margin: 1rem 0 0 .5rem;
+  width: 340px;
 }
 
 .goban.clickable {
   cursor: pointer;
-  user-drag: none;  
   user-select: none;
   -moz-user-select: none;
-  -webkit-user-drag: none;
   -webkit-user-select: none;
   -ms-user-select: none;
 }

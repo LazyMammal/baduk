@@ -2,11 +2,16 @@ window.baduk = { data: {}, bench: {}, gobo: {} };
 
 var Gobo = window["gobo"].Gobo;
 var BLACK = 0, WHITE = 1, EMPTY = -1;
-var lookupPiece = { "B": BLACK, "W": WHITE, ".": EMPTY };
-var lookupStone = { };
-lookupStone[BLACK] = "B";
-lookupStone[WHITE] = "W";
-lookupStone[EMPTY] = ".";
+var lookupPiece = {
+  "B": BLACK,
+  "W": WHITE,
+  ".": EMPTY
+};
+var lookupStone = Object.fromEntries([
+  [BLACK, "B"],
+  [WHITE, "W"],
+  [EMPTY, "."]
+]);
 
 Array.from(document.querySelectorAll(".goban"))
   .forEach((elem) => {
@@ -153,8 +158,18 @@ async function runButton(e) {
   let goban = parent.querySelector(".goban")?.getAttribute("id");
   let output = parent.querySelector("[output]");
   let text = window[run](data);
-  output.innerText = text;
+  output.innerText = "";
+  output.insertAdjacentHTML("afterbegin", text);
   if (goban) updateGoban(goban, text);
+}
+
+async function startButton(elem) {
+  let [parent, run, data] = await buttonSetup(elem);
+  elem.setAttribute("disabled", true);
+  setTimeout(
+    () => { window[run](data, elem, parent) },
+    100
+  );
 }
 
 Array.from(document.querySelectorAll("button[run]"))
@@ -162,12 +177,18 @@ Array.from(document.querySelectorAll("button[run]"))
     e.addEventListener("click", async () => runButton(e));
   });
 
+Array.from(document.querySelectorAll("button[start]"))
+  .forEach((elem) => {
+    elem.addEventListener("click", async () => startButton(elem));
+  });
+
 Array.from(document.querySelectorAll("button[reset]"))
   .forEach((e) => {
     e.addEventListener("click", async () => {
       let parent = findParent(e);
-      let output = parent.querySelector("[output][preload-txt]");
-      if (output) await preloadTxt(output);
+      let output = parent.querySelector("[output]");
+      output.innerText = "";
+      if (output.hasAttribute("preload-txt")) await preloadTxt(output);
       await buttonSetup(e);
       let goban = parent.querySelector(".goban")?.getAttribute("id");
       if (goban) updateGoban(goban, output?.innerText);

@@ -414,10 +414,12 @@
       <script src="montecarlo7x7.js" defer></script>
       <div data-id="montecarlo7x7" run="montecarlo7x7">
         <div>
-          <button run>Run</button> <button reset>Reset</button>
+          <button start>Start</button> <button reset>Reset</button>
         </div>
-        <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban"></div>
-        <pre><summary>input</summary><code id="montecarlo7x7"></code></pre>
+        <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban" draggable="false"></div>
+        <pre class="right"><summary>input</summary><code
+            id="montecarlo7x7"
+            preload-txt data-url="montecarlo7x7.txt"></code></pre>
         <pre><summary>output</summary><code output></code></pre>
       </div>
       <div style="clear: both"></div>
