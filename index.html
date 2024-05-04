@@ -38,6 +38,7 @@
         <a href="#LegalMoves">Legal Moves</a>
         <a href="#Repetition">Repetition</a>
         <a href="#Eyes">Eyes</a>
+        <a href="#MonteCarlo">Monte Carlo</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -398,6 +399,29 @@
           preload-txt data-url="eyes7x7.txt"></code></pre>
       </div>
       <div style="clear: both"></div>
+    </section>
+    <section>
+      <h2 id="MonteCarlo"><a href="#MonteCarlo">Monte Carlo</a></h2>
+      <p>Monte Carlo methods rely on collecting statistics from many Rollouts.
+        Let's collect win/loss results with Black to play first.
+      </p>
+      <p></p>
+      <details>
+        <summary>montecarlo7x7.js</summary>
+        <pre><code preload-javascript data-url="montecarlo7x7.js"></code></pre>
+      </details>
+      <p>Click the go board to change the "starting position" for the Rollouts.</p>
+      <script src="montecarlo7x7.js" defer></script>
+      <div data-id="montecarlo7x7" run="montecarlo7x7">
+        <div>
+          <button run>Run</button> <button reset>Reset</button>
+        </div>
+        <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban"></div>
+        <pre><summary>input</summary><code id="montecarlo7x7"></code></pre>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div style="clear: both"></div>
+
     </section>
   </main>
   <footer>

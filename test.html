@@ -64,17 +64,20 @@
       </p>
 
       <details>
-        <summary>rollout7x7.js</summary>
-        <pre><code preload-javascript data-url="rollout7x7.js"></code></pre>
+        <summary>state7x7.js</summary>
+        <pre><code preload-javascript data-url="state7x7.js"></code></pre>
       </details>
-      <script src="rollout7x7.js" defer></script>
-      <div data-id="rollout7x7" run="rollout7x7">
+      <script src="board7x7.js" defer></script>
+      <script src="state7x7.js" defer></script>
+      <div data-id="state7x7" run="state7x7">
         <div>
-          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+          <button run>Run</button> <button reset>Reset</button>
         </div>
-        <div class="goban" size="7" id="rollout7x7_goban"></div>
-        <pre><summary>input/output</summary><code output id="rollout7x7"></code></pre>
+        <div class="goban clickable" size="7" id="state7x7_goban"></div>
+        <pre><summary>input</summary><code id="state7x7"></code></pre>
+        <pre><summary>output</summary><code output></code></pre>
       </div>
+      <div style="clear: both"></div>
 
       <section>
         <h2>This is a section</h2>

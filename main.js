@@ -2,35 +2,83 @@ window.baduk = { data: {}, bench: {}, gobo: {} };
 
 var Gobo = window["gobo"].Gobo;
 var BLACK = 0, WHITE = 1, EMPTY = -1;
+var lookupPiece = { "B": BLACK, "W": WHITE, ".": EMPTY };
+var lookupStone = { };
+lookupStone[BLACK] = "B";
+lookupStone[WHITE] = "W";
+lookupStone[EMPTY] = ".";
 
 Array.from(document.querySelectorAll(".goban"))
-  .forEach((e) => {
-    let id = e.getAttribute("id");
-    let size = Number(e.getAttribute("size")) ?? 7;
-
-    let gobo = window.baduk.gobo[id] = new Gobo({
-      gobanSize: size,
-      noCoords: false,
-      widthPx: 320,
-      background: "#e0aa52",
-      pixelRatio: window.devicePixelRatio,
-    });
-
-    gobo.render();
-    e.append(gobo.canvas);
+  .forEach((elem) => {
+    let id = elem.getAttribute("id");
+    let size = Number(elem.getAttribute("size")) ?? 7;
+    let gobo = createGoban(id, size);
+    elem.append(gobo.canvas);
+    if (elem.classList.contains("clickable")) {
+      elem.addEventListener("click",
+        (event) => clickGoban(event, elem, id, size, gobo)
+      );
+    }
   });
 
+function createGoban(id, size) {
+  let gobo = window.baduk.gobo[id] = new Gobo({
+    gobanSize: size,
+    noCoords: false,
+    widthPx: 320,
+    background: "#e0aa52",
+    pixelRatio: window.devicePixelRatio,
+  });
+  gobo.render();
+  return gobo;
+}
+
+function mouse2coord(event, gobo) {
+  let bounds = gobo.canvas.getBoundingClientRect();
+  let mx = event.clientX - bounds.left;
+  let my = event.clientY - bounds.top;
+  return gobo.pixelToGridCoordinates(mx, my);
+}
+
+function clickGoban(event, elem, id, size, gobo) {
+  let [x, y] = mouse2coord(event, gobo);
+  if (x >= 0 && x < size && y >= 0 && y < size) {
+    let stone = gobo.getStoneColorAt(x, y);
+    gobo.setStoneAt(x, y, stone > 0 ? -1 : stone + 1);
+    gobo.render();
+    const update = elem.getAttribute("update");
+    if (update) {
+      window[update](event, elem, id, size, gobo);
+    }
+  }
+}
+
+function copy2input(event, elem, id, size, gobo) {
+  let parent = findParent(elem);
+  let input_id = parent.getAttribute("data-id");
+  if (input_id) {
+    const board = new Board2D(size);
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const stone = gobo.getStoneColorAt(x, y);
+        const piece = lookupStone[stone];
+        board.set(x, y, piece);
+      }
+    }
+    document.getElementById(input_id).innerText = printBoard(board, { addLabels: false });
+  }
+}
+
 function updateGoban(id, input) {
-  const board = parse(input);
+  const board = input ? window?.parse(input) : null;
   const gobo = window.baduk.gobo[id];
-  const stone = { "B": BLACK, "W": WHITE };
-  const mark = { "+": "+:6,6" };
-  for (let y = 0; y < board.size; y++) {
-    for (let x = 0; x < board.size; x++) {
-      const piece = board.get(x, y);
+  const size = document.getElementById(id).getAttribute("size");
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const piece = board ? board.get(x, y) : ".";
       gobo.clearVertexAt(x, y);
-      if (piece in stone)
-        gobo.setStoneAt(x, y, stone[piece]);
+      if (piece in lookupPiece)
+        gobo.setStoneAt(x, y, lookupPiece[piece]);
       else if (piece !== ".")
         gobo.setMarkAt(x, y, `${piece}:6,6`);
     }
@@ -122,7 +170,7 @@ Array.from(document.querySelectorAll("button[reset]"))
       if (output) await preloadTxt(output);
       await buttonSetup(e);
       let goban = parent.querySelector(".goban")?.getAttribute("id");
-      if (goban) updateGoban(goban, output.innerText);
+      if (goban) updateGoban(goban, output?.innerText);
     });
   });
 
