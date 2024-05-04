@@ -42,7 +42,7 @@ function inputState(input, TYPE = GoState) {
   // retrieve current game state from input
   const board = input ? parse(input) : new Board2D(7);
   const lines = input.split("\n").slice(board.size);
-  const toPlay = input ? lines[0].slice(-1) : "B";
+  const toPlay = lines.length ? lines[0].slice(-1) : "B";
   return new TYPE(board, toPlay);
 }
 
