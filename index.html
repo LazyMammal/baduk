@@ -36,6 +36,7 @@
         <a href="#GameState">Game State</a>
         <a href="#Captures">Captures</a>
         <a href="#LegalMoves">Legal Moves</a>
+        <a href="#Repetition">Repetition</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -292,7 +293,7 @@
       <script src="state7x7.js" defer></script>
       <div data-id="state7x7" run="state7x7">
         <div>
-          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+          <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
         <div class="goban" size="7" id="state7x7_goban"></div>
         <pre><summary>input/output</summary><code output id="state7x7"></code></pre>
@@ -316,7 +317,7 @@
       <script src="captures7x7.js" defer></script>
       <div data-id="captures7x7" run="captures7x7">
         <div>
-          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+          <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
         <div class="goban" size="7" id="captures7x7_goban"></div>
         <pre><summary>input/output</summary><code output id="captures7x7"></code></pre>
@@ -334,18 +335,41 @@
         <summary>legal7x7.js</summary>
         <pre><code preload-javascript data-url="legal7x7.js"></code></pre>
       </details>
-      <p>The only rule we are missing now is Repetition.</p>
+      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
       <script src="legal7x7.js" defer></script>
       <div data-id="legal7x7" run="legal7x7">
         <div>
-          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+          <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
         <div class="goban" size="7" id="legal7x7_goban"></div>
-        <pre><summary>input/output</summary><code output id="legal7x7"></code></pre>
+        <pre><summary>input/output</summary><code
+          output id="legal7x7"
+          preload-txt data-url="legal7x7.txt"></code></pre>
       </div>
       <div style="clear: both"></div>
     </section>
-
+    <section>
+      <h2 id="Repetition"><a href="#Repetition">Repetition</a></h2>
+      <p>We will mark moves that repeat any previous board position as invalid.
+      </p>
+      <p></p>
+      <details>
+        <summary>repetition7x7.js</summary>
+        <pre><code preload-javascript data-url="repetition7x7.js"></code></pre>
+      </details>
+      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
+      <script src="repetition7x7.js" defer></script>
+      <div data-id="repetition7x7" run="repetition7x7">
+        <div>
+          <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban" size="7" id="repetition7x7_goban"></div>
+        <pre><summary>input/output</summary><code
+          output id="repetition7x7"
+          preload-txt data-url="repetition7x7.txt"></code></pre>
+      </div>
+      <div style="clear: both"></div>
+    </section>
   </main>
   <footer>
     <p>by <a href="https://lazymammal.github.io/">LazyMammal</a></p>

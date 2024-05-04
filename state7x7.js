@@ -38,22 +38,29 @@ class GoState {
   }
 }
 
-function state7x7(input, TYPE = GoState) {
+function inputState(input, TYPE = GoState) {
   // retrieve current game state from input
   const board = input ? parse(input) : new Board2D(7);
   const lines = input.split("\n").slice(board.size);
   const toPlay = input ? lines[0].slice(-1) : "B";
+  return new TYPE(board, toPlay);
+}
 
-  // model game state
-  const state = new TYPE(board, toPlay);
-
-  // play random move
-  const moves = state.moveList(toPlay);
-  let [x, y] = _.sample(moves);
-  state.playMove(x, y);
-
+function printState(state) {
   return [
-    printBoard(board, { addLabels: false }),
+    printBoard(state.board, { addLabels: false }),
     `toPlay: ${state.toPlay}`
   ].join("\n");
+}
+
+function playRandom(state) {
+  const moves = state.moveList();
+  let [x, y] = _.sample(moves); // random
+  state.playMove(x, y);
+}
+
+function state7x7(input, TYPE = GoState) {
+  const state = inputState(input, TYPE);
+  playRandom(state);
+  return printState(state);
 }

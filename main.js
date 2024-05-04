@@ -23,12 +23,16 @@ Array.from(document.querySelectorAll(".goban"))
 function updateGoban(id, input) {
   const board = parse(input);
   const gobo = window.baduk.gobo[id];
-  const lookup = { "B": BLACK, "W": WHITE, ".": EMPTY };
+  const stone = { "B": BLACK, "W": WHITE };
+  const mark = { "+": "+:6,6" };
   for (let y = 0; y < board.size; y++) {
     for (let x = 0; x < board.size; x++) {
       const piece = board.get(x, y);
       gobo.clearVertexAt(x, y);
-      gobo.setStoneAt(x, y, lookup[piece]);
+      if (piece in stone)
+        gobo.setStoneAt(x, y, stone[piece]);
+      else if (piece !== ".")
+        gobo.setMarkAt(x, y, `${piece}:6,6`);
     }
   }
   gobo.render();
@@ -50,14 +54,15 @@ async function cacheFetch(url) {
   return null;
 }
 
-Array.from(document.querySelectorAll("[preload-txt]"))
-  .forEach(async (e) => {
-    let url = e.getAttribute("data-url");
-    let data = await cacheFetch(url);
-    if (data !== null) {
-      e.innerText = data;
-    }
-  });
+async function preloadTxt(e) {
+  let url = e.getAttribute("data-url");
+  let data = await cacheFetch(url);
+  if (data !== null) {
+    e.innerText = data;
+  }
+}
+
+Array.from(document.querySelectorAll("[preload-txt]")).forEach(preloadTxt);
 
 Array.from(document.querySelectorAll("[preload-javascript]"))
   .forEach(async (e) => {
@@ -76,11 +81,16 @@ Array.from(document.querySelectorAll("[preload-javascript]"))
     <pre><summary>output</summary><code output></code></pre>
   </div>
 */
-async function buttonSetup(e) {
+function findParent(e) {
   let parent = e.parentElement;
   while (parent && !parent.hasAttribute("run")) {
     parent = parent.parentElement;
   }
+  return parent;
+}
+
+async function buttonSetup(e) {
+  let parent = findParent(e);
   let run = parent.getAttribute("run");
   let url = parent.getAttribute("data-url");
   let id = parent.getAttribute("data-id");
@@ -90,16 +100,29 @@ async function buttonSetup(e) {
   return [parent, run, data];
 }
 
+async function runButton(e) {
+  let [parent, run, data] = await buttonSetup(e);
+  let goban = parent.querySelector(".goban")?.getAttribute("id");
+  let output = parent.querySelector("[output]");
+  let text = window[run](data);
+  output.innerText = text;
+  if (goban) updateGoban(goban, text);
+}
+
 Array.from(document.querySelectorAll("button[run]"))
   .forEach((e) => {
+    e.addEventListener("click", async () => runButton(e));
+  });
+
+Array.from(document.querySelectorAll("button[reset]"))
+  .forEach((e) => {
     e.addEventListener("click", async () => {
-      let [parent, run, data] = await buttonSetup(e);
+      let parent = findParent(e);
+      let output = parent.querySelector("[output][preload-txt]");
+      if (output) await preloadTxt(output);
+      await buttonSetup(e);
       let goban = parent.querySelector(".goban")?.getAttribute("id");
-      let output = parent.querySelector("[output]");
-      output.innerText = "";
-      let text = window[run](data);
-      output.insertAdjacentHTML("afterbegin", text);
-      if (goban) updateGoban(goban, text);
+      if (goban) updateGoban(goban, output.innerText);
     });
   });
 

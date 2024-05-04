@@ -11,11 +11,46 @@ class GoLegal extends GoCaptures {
     const state = new GoLegal(board, toPlay);
     state.playMove(x, y);
 
-    // non-zero liberties?
-    return state.countLibs(x, y) > 0;
+    // zero liberties?
+    if (!state.countLibs(x, y))
+      return false;
+
+    return !this.isRepeat(board);
+  }
+
+  isRepeat(board = this.board) {
+    return false; // TODO: check history
   }
 }
 
-function legal7x7(input) {
-  return state7x7(input, GoLegal);
+function cleanInput(input) {
+  return !input ? input :
+    input.replaceAll(/[^BW#\n ]/g, ".");
+}
+
+function markLegal(state) {
+  const moves = state.moveList();
+  markInverse(state, moves);
+}
+
+function markInverse(state, moves) {
+  const warn = "V";
+  for (let y = 0; y < state.board.size; y++) {
+    for (let x = 0; x < state.board.size; x++) {
+      if (state.board.get(x, y) === ".")
+        state.board.set(x, y, warn);
+    }
+  }
+  for (let [x, y] of moves) {
+    if (state.board.get(x, y) === warn)
+      state.board.set(x, y, ".");
+  }
+}
+
+function legal7x7(input, TYPE = GoLegal) {
+  const clean = cleanInput(input);
+  const state = inputState(clean, TYPE);
+  playRandom(state);
+  markLegal(state);
+  return printState(state);
 }
