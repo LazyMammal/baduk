@@ -78,12 +78,12 @@ const testList = [{
   ]],
 }]
 
-function move_tests(input, TYPE = GoEyes) {
+function move_tests(input, STATE = GoEyes, BOARD = GoBoard2D) {
   const output = [];
   for (let t = 0; t < testList.length; t++) {
     const test = testList[t];
     const res = [];
-    const state = inputState(test.input.join("\n"), TYPE);
+    const state = inputState(test.input.join("\n"), STATE, BOARD);
     let passTurn = 0;
     for (let b = 0; b < test.boards.length; b++) {
       const expected = test.boards[b].join("\n");

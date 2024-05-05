@@ -45,10 +45,10 @@ class GoCaptures extends GoState {
 
   playMove(x, y) {
     const enemyType = this.nextToPlay();
-    this.setColour[this.toPlay](x, y);
+    this.setColour(x, y, this.toPlay);
     let caps = 0;
     for (let [i, j] of xy4way([x, y])) {
-      if (this.isColour[enemyType](i, j)
+      if (this.isColour(i, j, enemyType)
         && this.isCapture(i, j)) {
         caps += this.eraseChain(i, j);
       }

@@ -55,9 +55,9 @@ function rolloutReport_kohack7x7(input, button, parent) {
   montecarlo7x7(input, button, parent, GoKoHack);
 }
 
-function kohack7x7(input, TYPE = GoKoHack) {
+function kohack7x7(input, STATE = GoKoHack, BOARD = GoBoard2D) {
   let clean = cleanInput(input);
-  let state = inputState(clean, TYPE);
+  let state = inputState(clean, STATE, BOARD);
   state.turn = window.baduk.turn ?? 0; // global variable
   playRandom(state);
   window.baduk.turn = state.turn;

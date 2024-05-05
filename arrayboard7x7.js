@@ -21,3 +21,11 @@ class ArrayBoard2D extends GoBoard2D {
 function arrayboard7x7(input) {
   return printBoard(parse(input, ArrayBoard2D));
 }
+
+function move_tests_arrayboard7x7(input) {
+  return move_tests(input, GoEarlyExit, ArrayBoard2D);
+}
+
+function rolloutReport_arrayboard7x7(input, button, parent) {
+  montecarlo7x7(input, button, parent, GoEarlyExit, ArrayBoard2D);
+}

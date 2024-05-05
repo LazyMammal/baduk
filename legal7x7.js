@@ -53,9 +53,9 @@ function markInverse(state, moves) {
   return printNested(board);
 }
 
-function legal7x7(input, TYPE = GoLegal) {
+function legal7x7(input, STATE = GoLegal, BOARD = GoBoard2D) {
   const clean = cleanInput(input);
-  const state = inputState(clean, TYPE);
+  const state = inputState(clean, STATE, BOARD);
   playRandom(state);
   return [
     markLegal(state),

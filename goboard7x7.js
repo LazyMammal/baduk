@@ -56,16 +56,16 @@ class GoBoard2D {
 
 }
 
-function parse(input, TYPE = GoBoard2D) {
+function parse(input, BOARD = GoBoard2D) {
   /*
   parse()
   - knows the internal structure of `input` (text)
-  - cannot know the internals of TYPE
+  - cannot know the internals of BOARD class
   */
   if (!Array.isArray(input)) {
     input = parseNested(input);
   }
-  const board = new TYPE(input[0].length);
+  const board = new BOARD(input[0].length);
   for (let y = 0; y < input.length; y++) {
     for (let x = 0; x < input[y].length; x++) {
       switch (input[y][x]) {
@@ -101,11 +101,7 @@ function printBoard(board, {
   for (let y = board.size - 1; y >= 0; y--) {
     let row = [];
     for (let x = 0; x < board.size; x++) {
-      let char = ".";
-      if (board.isBlack(x, y))
-        char = "B";
-      if (board.isWhite(x, y))
-        char = "W";
+      let char = board.getColour(x, y);
       row.push(`${char}`.padStart(pad, " "));
     }
     if (addLabels)

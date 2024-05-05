@@ -2,20 +2,10 @@ class GoState {
   board;
   toPlay;
   turn;
-  isColour;
-  setColour;
   constructor(board, toPlay, turn = 0) {
     this.board = board;
     this.toPlay = toPlay;
     this.turn = turn;
-    this.isColour = {
-      "B": (x, y) => this.board.isBlack(x, y),
-      "W": (x, y) => this.board.isWhite(x, y),
-    };
-    this.setColour = {
-      "B": (x, y) => this.board.setBlack(x, y),
-      "W": (x, y) => this.board.setWhite(x, y),
-    };
   }
 
   nextToPlay() {
@@ -37,19 +27,33 @@ class GoState {
     return moves;
   }
 
+  isColour(x, y, val) {
+    return val === "B" ?
+      this.board.isBlack(x, y)
+      : this.board.isWhite(x, y);
+  }
+
+  setColour(x, y, val) {
+    if (val === "B") {
+      this.board.setBlack(x, y);
+    } else if (val === "W") {
+      this.board.setWhite(x, y);
+    }
+  }
+
   playMove(x, y) {
-    this.setColour[this.toPlay](x, y);
+    this.setColour(x, y, this.toPlay);
     this.toPlay = this.nextToPlay();
     this.turn++;
   }
 }
 
-function inputState(input, TYPE = GoState) {
+function inputState(input, STATE = GoState, BOARD = GoBoard2D) {
   // retrieve current game state from input
-  const board = input ? parse(input) : new GoBoard2D(7);
+  const board = input ? parse(input, BOARD) : new BOARD(7);
   const lines = input.split("\n").slice(board.size);
   const toPlay = lines.length ? lines[0].slice(-1) : "B";
-  return new TYPE(board, toPlay);
+  return new STATE(board, toPlay);
 }
 
 function playRandom(state) {
@@ -64,8 +68,8 @@ function playRandom(state) {
   }
 }
 
-function state7x7(input, TYPE = GoState) {
-  const state = inputState(input, TYPE);
+function state7x7(input, STATE = GoState, BOARD = GoBoard2D) {
+  const state = inputState(input, STATE, BOARD);
   playRandom(state);
   return [
     printBoard(state.board, { addLabels: false }),

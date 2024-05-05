@@ -36,9 +36,9 @@ function hash(board) {
     .replaceAll(/[ \n]/g, "");
 }
 
-function repetition7x7(input, TYPE = GoRepeat) {
+function repetition7x7(input, STATE = GoRepeat, BOARD = GoBoard2D) {
   const clean = cleanInput(input);
-  const state = inputState(clean, TYPE);
+  const state = inputState(clean, STATE, BOARD);
   state.history = Object.assign(
     window.baduk.history, // persist between [Run] clicks
     state.history
