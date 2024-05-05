@@ -1,8 +1,4 @@
 class GoKoHack extends GoEyes_noRepeat {
-  constructor(board, toPlay, turn = 0) {
-    super(board, toPlay, turn);
-  }
-
   countStones(x, y) {
     let stoneType = this.board.get(x, y);
     if (stoneType !== "B" && stoneType !== "W")
@@ -16,6 +12,10 @@ class GoKoHack extends GoEyes_noRepeat {
     }
     DFS([x, y], xy4way, followStoneType);
     return stones;
+  }
+
+  isSingleStone(x, y) {
+    return this.countStones(x, y) === 1;
   }
 
   validToPlay(x, y) {
@@ -35,7 +35,7 @@ class GoKoHack extends GoEyes_noRepeat {
     if (libs === 1
       && caps === 1
       && this.turn % 3 !== 0 // every-3rd-turn Ko hack
-      && state.countStones(x, y) === 1) {
+      && state.isSingleStone(x, y)) {
       return false;
     }
 

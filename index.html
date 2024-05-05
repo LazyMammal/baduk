@@ -41,6 +41,7 @@
         <a href="#MonteCarlo">Monte Carlo</a>
         <a href="#MoveTests">Move Tests</a>
         <a href="#RepetitionHack">Repetition Hack</a>
+        <a href="#EarlyExit">Early Exit</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -492,6 +493,43 @@
         <pre><summary>output</summary><code output></code></pre>
       </div>
       <div run="move_tests_kohack7x7">
+        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div style="clear: both"></div>
+    </section>
+    <section>
+      <h2 id="EarlyExit"><a href="#EarlyExit">Early Exit</a></h2>
+      <p>So far we have been using the FLood Fill (aka DFS) routine to count things.
+        It works well but we haven't used all of it's abilities yet.
+      </p>
+      <p>In some cases we don't need to know the full count.
+        It's enough if the count exceeds a specified limit.
+        Once the limit is reached we can halt the branching search.
+      </p>
+      <details>
+        <summary>earlyexit7x7.js</summary>
+        <pre><code preload-javascript data-url="earlyexit7x7.js"></code></pre>
+      </details>
+      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
+      <script src="earlyexit7x7.js" defer></script>
+      <div data-id="earlyexit7x7" run="earlyexit7x7">
+        <div>
+          <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
+            time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban clickable" update="copy2input" size="7" id="earlyexit7x7_goban"></div>
+        <pre><summary>input/output</summary><code
+          output id="earlyexit7x7"
+          preload-txt data-url="kohack7x7.txt"></code></pre>
+      </div>
+      <div style="clear: both"></div>
+      <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
+      <div run="rolloutReport_earlyexit7x7" class="right">
+        <button start>Start</button>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div run="move_tests_earlyexit7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
