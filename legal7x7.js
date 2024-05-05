@@ -1,30 +1,31 @@
 class GoLegal extends GoCaptures {
-  validToPlay(x, y, toPlay = this.toPlay) {
+  validToPlay(x, y) {
     // check for empty spot
     if (this.board.get(x, y) !== "."
-      || this.isEye(x, y, toPlay))
+      || this.isEye(x, y))
       return false;
 
     // simulate adding stone
-    const board = parse(printBoard(this.board, {
-      addLabels: false
-    }));
-    board.turn = this.turn;
-    const state = new GoLegal(board, toPlay);
+    const state = this.simClone();
     state.playMove(x, y);
 
     // zero liberties?
     if (!state.countLibs(x, y))
       return false;
 
-    return !this.isRepeat(board);
+    return !this.isRepeat(state);
   }
 
-  isEye(x, y, toPlay = this.toPlay) {
+  simClone() {
+    const board = parse(printBoard(this.board, { addLabels: false }));
+    return new this.constructor(board, this.toPlay, this.turn);
+  }
+
+  isEye(x, y) {
     return false; // TODO: real or false eye?
   }
 
-  isRepeat(board = this.board) {
+  isRepeat(state) {
     return false; // TODO: check history
   }
 }

@@ -2,17 +2,17 @@ class GoState {
   board;
   toPlay;
   turn;
-  constructor(board, toPlay) {
+  constructor(board, toPlay, turn = 0) {
     this.board = board;
     this.toPlay = toPlay;
-    this.turn = 0;
+    this.turn = turn;
   }
 
-  nextToPlay(toPlay = this.toPlay) {
-    return toPlay === "B" ? "W" : "B";
+  nextToPlay() {
+    return this.toPlay === "B" ? "W" : "B";
   }
 
-  validToPlay(x, y, toPlay = this.toPlay) {
+  validToPlay(x, y) {
     // check for empty spot
     const isEmpty = this.board.get(x, y) === ".";
     // TODO: simulate adding stone
@@ -21,7 +21,7 @@ class GoState {
     return isEmpty;
   }
 
-  moveList(toPlay = this.toPlay) {
+  moveList() {
     const moves = [];
     for (let y = 0; y < this.board.size; y++) {
       for (let x = 0; x < this.board.size; x++) {

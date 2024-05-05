@@ -1,6 +1,5 @@
 function doRollouts(input, button, output, wins, reps, maxReps) {
   for (; reps < maxReps; reps++) {
-    window.baduk.history = {};
     const state = inputState(input, GoEyes);
     let pass = 0;
     while (pass < 2) {

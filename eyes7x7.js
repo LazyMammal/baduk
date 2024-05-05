@@ -1,6 +1,6 @@
 class GoEyes extends GoRepeat {
-  isEye(x, y, toPlay = this.toPlay) {
-    const enemyType = this.nextToPlay(toPlay);
+  isEye(x, y) {
+    const enemyType = this.nextToPlay();
     for (let [i, j] of xy4way([x, y])) {
       const piece = this.board.get(i, j);
       if (piece === enemyType || piece === ".")
@@ -23,5 +23,5 @@ class GoEyes extends GoRepeat {
 }
 
 function eyes7x7(input) {
-  return legal7x7(input, GoEyes);
+  return repetition7x7(input, GoEyes);
 }

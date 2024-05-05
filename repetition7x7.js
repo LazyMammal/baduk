@@ -1,37 +1,56 @@
 class GoRepeat extends GoLegal {
-  constructor(board, toPlay) {
-    super(board, toPlay);
-    addHistory(this.board, this.turn);
+  history;
+  constructor(board, toPlay, turn = 0, history = {}) {
+    super(board, toPlay, turn);
+    this.history = history;
+    this.addHistory();
   }
-  isRepeat(board = this.board) {
-    const isRep = hash(board) in window.baduk.history;
-    if (isRep) {
-      const turn = window.baduk.history[hash(board)];
-      const diff = this.turn - turn;
-      const maxDiff = window.baduk.historyDepth ?? 0;
-      if (diff > maxDiff) {
+
+  simClone() { // disable history in clone
+    const board = parse(printBoard(this.board, { addLabels: false }));
+    return new this.constructor(board, this.toPlay, this.turn, null);
+  }
+
+  addHistory() {
+    if (this.history) {
+      this.history[hash(this.board)] = this.turn;
+    }
+  }
+
+  isRepeat(state) {
+    if (!this.history)
+      return false;
+    const stateHash = hash(state.board);
+    const isRep = stateHash in this.history;
+    if (isRep) { // metrics
+      const turn = this.history[stateHash];
+      const diff = state.turn - turn;
+      if (diff > window.baduk.historyDepth) {
         window.baduk.historyDepth = diff;
       }
     }
     return isRep;
   }
+
   playMove(x, y) {
     super.playMove(x, y);
-    addHistory(this.board, this.turn);
+    this.addHistory();
   }
 }
-
-window.baduk.history = {};
 
 function hash(board) {
   return printBoard(board, { addLabels: false })
     .replaceAll(/[ \n]/g, "");
 }
 
-function addHistory(board, turn) {
-  window.baduk.history[hash(board)] = turn;
-}
-
-function repetition7x7(input) {
-  return legal7x7(input, GoRepeat);
+function repetition7x7(input, TYPE = GoRepeat) {
+  const clean = cleanInput(input);
+  const state = inputState(clean, TYPE);
+  state.history = Object.assign(
+    window.baduk.history, // persist between [Run] clicks
+    state.history
+  );
+  playRandom(state);
+  markLegal(state);
+  return printState(state);
 }
