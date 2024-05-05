@@ -42,6 +42,7 @@
         <a href="#MoveTests">Move Tests</a>
         <a href="#RepetitionHack">Repetition Hack</a>
         <a href="#EarlyExit">Early Exit</a>
+        <a href="#Containers">Containers</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -123,11 +124,11 @@
       <p>We can add coordinate labels for both axes while we're parsing the board.
         Let's also restore the whitespace between the columns.</p>
       <details>
-        <summary>board7x7.js</summary>
-        <pre><code preload-javascript data-url="board7x7.js"></code></pre>
+        <summary>goboard7x7.js</summary>
+        <pre><code preload-javascript data-url="goboard7x7.js"></code></pre>
       </details>
-      <script src="board7x7.js" defer></script>
-      <div data-url="board7x7.txt" run="board7x7">
+      <script src="goboard7x7.js" defer></script>
+      <div data-url="board7x7.txt" run="goboard7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
@@ -535,6 +536,23 @@
       </div>
       <div style="clear: both"></div>
     </section>
+    <section>
+      <h2 id="Containers"><a href="#Containers">Containers</a></h2>
+      <p>Originally we used a very flexible object container for the underlying <code>Board2D</code>.
+        Let's find out what happens if we upgrade that to a nested array.
+      </p>
+      <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
+      <details>
+        <summary>arrayboard7x7.js</summary>
+        <pre><code preload-javascript data-url="arrayboard7x7.js"></code></pre>
+      </details>
+      <script src="arrayboard7x7.js" defer></script>
+      <div data-url="board7x7.txt" run="arrayboard7x7">
+        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+
   </main>
   <footer>
     <p>by <a href="https://lazymammal.github.io/">LazyMammal</a></p>

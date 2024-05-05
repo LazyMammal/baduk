@@ -14,6 +14,26 @@ var lookupStone = Object.fromEntries([
   [EMPTY, "."]
 ]);
 
+function parseNested(input, flip = true) {
+  let array = input.split("\n");
+  let board = array.map(r => r.split(" "));
+  let size = board[0].length;
+  board = board.slice(0, size);
+  if (flip) board.reverse();
+  return board;
+}
+
+function createNested(size, fill) {
+  return Array(size).fill(0)
+    .map(() => Array(size).fill(fill));
+}
+
+function printNested(nested, flip = true) {
+  let array = nested.map(row => row.join(" "));
+  if (flip) array.reverse();
+  return array.join("\n").trim();
+}
+
 Array.from(document.querySelectorAll(".goban"))
   .forEach((elem) => {
     let id = elem.getAttribute("id");
@@ -63,25 +83,26 @@ function copy2input(event, elem, id, size, gobo) {
   let parent = findParent(elem);
   let input_id = parent.getAttribute("data-id");
   if (input_id) {
-    const board = new Board2D(size);
+    const board = createNested(size, ".");
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
         const stone = gobo.getStoneColorAt(x, y);
         const piece = lookupStone[stone];
-        board.set(x, y, piece);
+        board[y][x] = piece;
       }
     }
-    document.getElementById(input_id).innerText = printBoard(board, { addLabels: false });
+    let text = printNested(board);
+    document.getElementById(input_id).innerText = text;
   }
 }
 
 function updateGoban(id, input) {
-  const board = input ? window?.parse(input) : null;
+  const board = input ? parseNested(input) : null;
   const gobo = window.baduk.gobo[id];
   const size = document.getElementById(id).getAttribute("size");
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      const piece = board ? board.get(x, y) : ".";
+      const piece = board ? board[y][x] : ".";
       gobo.clearVertexAt(x, y);
       if (piece in lookupPiece)
         gobo.setStoneAt(x, y, lookupPiece[piece]);

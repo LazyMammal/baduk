@@ -2,10 +2,20 @@ class GoState {
   board;
   toPlay;
   turn;
+  isColour;
+  setColour;
   constructor(board, toPlay, turn = 0) {
     this.board = board;
     this.toPlay = toPlay;
     this.turn = turn;
+    this.isColour = {
+      "B": (x, y) => this.board.isBlack(x, y),
+      "W": (x, y) => this.board.isWhite(x, y),
+    };
+    this.setColour = {
+      "B": (x, y) => this.board.setBlack(x, y),
+      "W": (x, y) => this.board.setWhite(x, y),
+    };
   }
 
   nextToPlay() {
@@ -13,12 +23,7 @@ class GoState {
   }
 
   validToPlay(x, y) {
-    // check for empty spot
-    const isEmpty = this.board.get(x, y) === ".";
-    // TODO: simulate adding stone
-    // TODO: any captures?
-    // TODO: non-zero liberties?
-    return isEmpty;
+    return this.board.isEmpty(x, y);
   }
 
   moveList() {
@@ -33,9 +38,7 @@ class GoState {
   }
 
   playMove(x, y) {
-    this.board.set(x, y, this.toPlay);
-    // TODO: check for captures
-    // TODO: remove captured chains
+    this.setColour[this.toPlay](x, y);
     this.toPlay = this.nextToPlay();
     this.turn++;
   }
@@ -43,17 +46,10 @@ class GoState {
 
 function inputState(input, TYPE = GoState) {
   // retrieve current game state from input
-  const board = input ? parse(input) : new Board2D(7);
+  const board = input ? parse(input) : new GoBoard2D(7);
   const lines = input.split("\n").slice(board.size);
   const toPlay = lines.length ? lines[0].slice(-1) : "B";
   return new TYPE(board, toPlay);
-}
-
-function printState(state) {
-  return [
-    printBoard(state.board, { addLabels: false }),
-    `toPlay: ${state.toPlay}`
-  ].join("\n");
 }
 
 function playRandom(state) {
@@ -71,5 +67,8 @@ function playRandom(state) {
 function state7x7(input, TYPE = GoState) {
   const state = inputState(input, TYPE);
   playRandom(state);
-  return printState(state);
+  return [
+    printBoard(state.board, { addLabels: false }),
+    `toPlay: ${state.toPlay}`
+  ].join("\n");
 }

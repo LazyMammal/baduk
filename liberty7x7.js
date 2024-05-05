@@ -1,22 +1,23 @@
 function buildLibs(board) {
-  const libCount = new Board2D(board.size, 0, 0);
-  let stoneType = "";
+  const libCount = createNested(board.size, 0);
   let libs = 0;
-  const followStoneType = ([x, y]) => {
-    const piece = board.get(x, y);
-    libs += piece === ".";
-    return piece === stoneType;
+  const followBlack = ([x, y]) => {
+    libs += board.isEmpty(x, y);
+    return board.isBlack(x, y);
+  }
+  const followWhite = ([x, y]) => {
+    libs += board.isEmpty(x, y);
+    return board.isWhite(x, y);
   }
   for (let y = 0; y < board.size; y++) {
     for (let x = 0; x < board.size; x++) {
-      const piece = board.get(x, y);
-      if (piece !== ".") {
-        stoneType = piece;
+      if (board.isStone(x, y)) {
         libs = 0;
-        DFS([x, y], xy4way, followStoneType);
-        libCount.set(x, y, libs);
+        DFS([x, y], xy4way,
+          board.isBlack(x, y) ? followBlack : followWhite);
+        libCount[y][x] = libs;
       } else {
-        libCount.set(x, y, ".");
+        libCount[y][x] = ".";
       }
     }
   }
@@ -26,5 +27,5 @@ function buildLibs(board) {
 function liberty7x7(input) {
   const board = parse(input);
   const libCount = buildLibs(board);
-  return printBoard(libCount, {dotZero: false});
+  return printNested(libCount);
 }

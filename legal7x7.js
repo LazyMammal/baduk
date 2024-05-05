@@ -1,19 +1,19 @@
 class GoLegal extends GoCaptures {
   validToPlay(x, y) {
     // check for empty spot
-    if (this.board.get(x, y) !== "."
+    if (!this.board.isEmpty(x, y)
       || this.isEye(x, y))
       return false;
 
     // simulate adding stone
-    const state = this.simClone();
-    state.playMove(x, y);
+    const sim = this.simClone();
+    sim.playMove(x, y);
 
     // zero liberties?
-    if (!state.countLibs(x, y))
+    if (!sim.countLibs(x, y))
       return false;
 
-    return !this.isRepeat(state);
+    return !this.isRepeat(sim);
   }
 
   simClone() {
@@ -37,27 +37,28 @@ function cleanInput(input) {
 
 function markLegal(state) {
   const moves = state.moveList();
-  markInverse(state, moves);
+  return markInverse(state, moves);
 }
 
 function markInverse(state, moves) {
   const warn = "V";
-  for (let y = 0; y < state.board.size; y++) {
-    for (let x = 0; x < state.board.size; x++) {
-      if (state.board.get(x, y) === ".")
-        state.board.set(x, y, warn);
-    }
-  }
+  const board = parseNested(
+   printBoard(state.board, { addLabels: false })
+    .replaceAll(".", warn)
+  );
   for (let [x, y] of moves) {
-    if (state.board.get(x, y) === warn)
-      state.board.set(x, y, ".");
+    if (board[y][x] === warn)
+      board[y][x] = ".";
   }
+  return printNested(board);
 }
 
 function legal7x7(input, TYPE = GoLegal) {
   const clean = cleanInput(input);
   const state = inputState(clean, TYPE);
   playRandom(state);
-  markLegal(state);
-  return printState(state);
+  return [
+    markLegal(state),
+    `toPlay: ${state.toPlay}`
+  ].join("\n");
 }

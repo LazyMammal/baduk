@@ -1,16 +1,20 @@
 class GoKoHack extends GoEyes_noRepeat {
   countStones(x, y) {
-    let stoneType = this.board.get(x, y);
-    if (stoneType !== "B" && stoneType !== "W")
+    if (!this.board.isStone(x, y))
       return 0;
-    let stones = 0;
-    const followStoneType = ([x, y]) => {
-      const piece = this.board.get(x, y);
-      const isStone = piece === stoneType;
+    const followBlack = ([x, y]) => {
+      const isStone = this.board.isBlack(x, y);
       stones += isStone;
       return isStone;
     }
-    DFS([x, y], xy4way, followStoneType);
+    const followWhite = ([x, y]) => {
+      const isStone = this.board.isWhite(x, y);
+      stones += isStone;
+      return isStone;
+    }
+    let stones = 0;
+    DFS([x, y], xy4way,
+      this.board.isBlack(x, y) ? followBlack : followWhite);
     return stones;
   }
 
@@ -20,7 +24,7 @@ class GoKoHack extends GoEyes_noRepeat {
 
   validToPlay(x, y) {
     // check for empty spot
-    if (this.board.get(x, y) !== "."
+    if (!this.board.isEmpty(x, y)
       || this.isEye(x, y))
       return false;
 
@@ -31,7 +35,7 @@ class GoKoHack extends GoEyes_noRepeat {
 
     if (!libs) // self-capture
       return false;
-    
+
     if (libs === 1
       && caps === 1
       && this.turn % 3 !== 0 // every-3rd-turn Ko hack
@@ -56,10 +60,10 @@ function kohack7x7(input, TYPE = GoKoHack) {
   let state = inputState(clean, TYPE);
   state.turn = window.baduk.turn ?? 0; // global variable
   playRandom(state);
-  markLegal(state);
   window.baduk.turn = state.turn;
   return [
-    printState(state),
+    markLegal(state),
+    `toPlay: ${state.toPlay}`,
     `Turn: ${state.turn}`
   ].join("\n");
 }

@@ -1,15 +1,18 @@
 class GoCaptures extends GoState {
   countLibs(x, y) {
-    let stoneType = this.board.get(x, y);
-    if (stoneType !== "B" && stoneType !== "W")
+    if (!this.board.isStone(x, y))
       return 0;
-    let libs = 0;
-    const followStoneType = ([x, y]) => {
-      const piece = this.board.get(x, y);
-      libs += piece === ".";
-      return piece === stoneType;
+    const followBlack = ([x, y]) => {
+      libs += this.board.isEmpty(x, y);
+      return this.board.isBlack(x, y);
     }
-    DFS([x, y], xy4way, followStoneType);
+    const followWhite = ([x, y]) => {
+      libs += this.board.isEmpty(x, y);
+      return this.board.isWhite(x, y);
+    }
+    let libs = 0;
+    DFS([x, y], xy4way,
+      this.board.isBlack(x, y) ? followBlack : followWhite);
     return libs;
   }
 
@@ -18,29 +21,34 @@ class GoCaptures extends GoState {
   }
 
   eraseChain(x, y) {
-    const stoneType = this.board.get(x, y);
-    if (stoneType !== "B" && stoneType !== "W")
+    if (!this.board.isStone(x, y))
       return 0;
-    let caps = 0;
-    const followStoneType = ([x, y]) => {
-      const piece = this.board.get(x, y);
-      if (piece !== stoneType)
+    const followBlack = ([x, y]) => {
+      if (!this.board.isBlack(x, y))
         return false;
-      this.board.set(x, y, ".");
+      this.board.setEmpty(x, y);
       caps++;
       return true;
     }
-    DFS([x, y], xy4way, followStoneType);
+    const followWhite = ([x, y]) => {
+      if (!this.board.isWhite(x, y))
+        return false;
+      this.board.setEmpty(x, y);
+      caps++;
+      return true;
+    }
+    let caps = 0;
+    DFS([x, y], xy4way,
+      this.board.isBlack(x, y) ? followBlack : followWhite);
     return caps;
   }
 
   playMove(x, y) {
     const enemyType = this.nextToPlay();
-    this.board.set(x, y, this.toPlay);
+    this.setColour[this.toPlay](x, y);
     let caps = 0;
     for (let [i, j] of xy4way([x, y])) {
-      const piece = this.board.get(i, j);
-      if (piece === enemyType
+      if (this.isColour[enemyType](i, j)
         && this.isCapture(i, j)) {
         caps += this.eraseChain(i, j);
       }

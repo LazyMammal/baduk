@@ -1,19 +1,21 @@
 function scoreBoard(board) {
   const size = board.size;
-  const enclosed = new Board2D(size);
-  const stoneArr = new Board2D(size);
+  const enclosed = createNested(size, ".");
+  const stoneArr = createNested(size, ".");
   let tally;
   const followEmpty = ([x, y]) => {
-    const piece = board.get(x, y);
+    let piece = "#";
+    if (board.isBlack(x, y)) piece = "B";
+    if (board.isWhite(x, y)) piece = "W";
+    if (board.isEmpty(x, y)) piece = ".";
     tally[piece] = 1 + (tally[piece] ?? 0);
-    return piece === ".";
+    return board.isEmpty(x, y);
   }
   const empty = {};
   const stone = {};
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      const piece = board.get(x, y);
-      if (piece === ".") {
+      if (board.isEmpty(x, y)) {
         tally = {};
         DFS([x, y], xy4way, followEmpty);
         let result = "?";
@@ -23,11 +25,12 @@ function scoreBoard(board) {
         if (tally["B"] && !tally["W"]) {
           result = "b";
         }
-        stoneArr.set(x, y, result);
-        enclosed.set(x, y, result);
+        stoneArr[y][x] = result;
+        enclosed[y][x] = result;
         empty[result] = 1 + (empty[result] ?? 0);
       } else {
-        stoneArr.set(x, y, piece);
+        const piece = board.isBlack(x, y) ? "B" : "W";
+        stoneArr[y][x] = piece;
         stone[piece] = 1 + (stone[piece] ?? 0);
       }
     }
@@ -49,12 +52,12 @@ function score7x7(input) {
   let board = parse(input);
   let score = scoreBoard(board);
   return [
-    printBoard(score.Enclosed),
+    printNested(score.Enclosed),
     `Enclosed: b: ${score.empty["b"]}`,
     `          w: ${score.empty["w"]}`,
     `Stones:   B: ${score.stone["B"]}`,
     `          W: ${score.stone["W"]}`,
-    printBoard(score.Score),
+    printNested(score.Score),
     `B: ${score.B}`,
     `W: ${score.W}`,
     `?: ${score["?"]}`,

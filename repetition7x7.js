@@ -44,6 +44,8 @@ function repetition7x7(input, TYPE = GoRepeat) {
     state.history
   );
   playRandom(state);
-  markLegal(state);
-  return printState(state);
+  return [
+    markLegal(state),
+    `toPlay: ${state.toPlay}`
+  ].join("\n");
 }

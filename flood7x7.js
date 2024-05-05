@@ -43,21 +43,20 @@ function xy4way(pos) {
 }
 
 function flood7x7(input) {
-  const board = parse(input);
+  const board = parse(input, GoBoard2D);
   let black = 0;
   let libs = 0;
   let total = 0;
-  let visits = new Board2D(board.size, 0, 0);
-  const followStone = ([x, y]) => {
-    const piece = board.get(x, y);
-    const isStone = piece === "B";
+  let visits = createNested(board.size, 0);
+  const followBlack = ([x, y]) => {
+    const isStone = board.isBlack(x, y);
     black += isStone;
-    libs += piece === ".";
-    visits.set(x, y, visits.get(x, y) + 1);
+    libs += board.isEmpty(x, y);
+    visits[y][x]++;
     total++;
     return isStone;
   }
-  DFS([0, 0], xy4way, followStone);
+  DFS([0, 0], xy4way, followBlack);
   return [
     printBoard(visits),
     `Black stones:  ${black}`,
