@@ -428,7 +428,7 @@
     <section>
       <h2 id="MoveTests"><a href="#MoveTests">Move Tests</a></h2>
       <p>It would be a good idea to run another set of tests before coding any new features.
-        A starting game state will be given (board + toPlay).
+        A starting game state will be given (board + toPlay) followed by the expected outcome of each turn.
         The test will expect and require several moves played in a row with predictable outcomes.
       </p>
       <p>This type of test is called an <i>Integration Test</i> because several functions are executed at each step.
@@ -439,6 +439,11 @@
       </details>
       <p>Compared to Unit Tests there are only a few Move Tests.
         Due to the sub-steps of each test, all the operations of Game State are covered.</p>
+      <p>The tests are carefully designed to have at most one valid move on each turn.
+        For some turns there are no valid moves and the player must pass.
+        The limited moves are chosen in way that covers all the rules of Go.
+      </p>
+      
       <script src="move_tests.js" defer></script>
       <div run="move_tests">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
