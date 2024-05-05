@@ -33,7 +33,7 @@ function createGoban(id, size) {
     noCoords: false,
     widthPx: 320,
     background: "#e0aa52",
-    pixelRatio: window.devicePixelRatio,
+    /* pixelRatio: window.devicePixelRatio, */
   });
   gobo.render();
   return gobo;
