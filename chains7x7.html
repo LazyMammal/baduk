@@ -1,0 +1,38 @@
+    <section>
+      <h2 id="Metadata"><a href="#Metadata">Metadata</a></h2>
+      <p>At the moment we are naively recalculating Liberties each time we need them.
+        We can cache "Liberty Count" information for each chain of same-coloured stones.
+        We'll treat this as <i>Metadata</i> that is only invalidated when a stone is placed adjacent to a chain.
+      </p>
+      <details>
+        <summary>chains7x7.js</summary>
+        <pre><code preload-javascript data-url="chains7x7.js"></code></pre>
+      </details>
+      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
+      <script src="chains7x7.js" defer></script>
+      <div data-id="chains7x7" run="chains7x7">
+        <div>
+          <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
+            time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban clickable" update="copy2input" size="7" id="chains7x7_goban"></div>
+        <pre><summary>input/output</summary><code
+          output id="chains7x7"
+          preload-txt data-url="kohack7x7.txt"></code></pre>
+      </div>
+      <div style="clear: both"></div>
+      <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
+      <div run="rolloutReport_chains7x7" class="right">
+        <button start>Start</button>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div run="move_tests_chains7x7">
+        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div data-id="chains7x7" run="versus_tests_chains7x7">
+        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div style="clear: both"></div>
+    </section>

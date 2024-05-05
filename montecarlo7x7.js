@@ -1,4 +1,4 @@
-function doRollouts(input, wins, reps, maxReps, TYPE = GoEyes) {
+function doRollouts(input, wins, reps, maxReps, TYPE) {
   for (; reps < maxReps; reps++) {
     const state = inputState(input, TYPE);
     let pass = 0;

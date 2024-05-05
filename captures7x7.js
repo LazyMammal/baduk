@@ -2,7 +2,7 @@ class GoCaptures extends GoState {
   countLibs(x, y) {
     let stoneType = this.board.get(x, y);
     if (stoneType !== "B" && stoneType !== "W")
-      return false;
+      return 0;
     let libs = 0;
     const followStoneType = ([x, y]) => {
       const piece = this.board.get(x, y);
@@ -20,7 +20,7 @@ class GoCaptures extends GoState {
   eraseChain(x, y) {
     const stoneType = this.board.get(x, y);
     if (stoneType !== "B" && stoneType !== "W")
-      return false;
+      return 0;
     let caps = 0;
     const followStoneType = ([x, y]) => {
       const piece = this.board.get(x, y);
@@ -45,7 +45,7 @@ class GoCaptures extends GoState {
         caps += this.eraseChain(i, j);
       }
     }
-    this.toPlay = this.nextToPlay();
+    this.toPlay = enemyType;
     this.turn++;
     return caps;
   }

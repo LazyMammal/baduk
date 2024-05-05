@@ -6,7 +6,7 @@ class GoKoHack extends GoEyes_noRepeat {
   countStones(x, y) {
     let stoneType = this.board.get(x, y);
     if (stoneType !== "B" && stoneType !== "W")
-      return false;
+      return 0;
     let stones = 0;
     const followStoneType = ([x, y]) => {
       const piece = this.board.get(x, y);
@@ -43,11 +43,11 @@ class GoKoHack extends GoEyes_noRepeat {
   }
 }
 
-function move_tests_kohack() {
-  return move_tests(GoKoHack);
+function move_tests_kohack7x7(input) {
+  return move_tests(input, GoKoHack);
 }
 
-function rolloutReport_kohack(input, button, parent) {
+function rolloutReport_kohack7x7(input, button, parent) {
   montecarlo7x7(input, button, parent, GoKoHack);
 }
 
