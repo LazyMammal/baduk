@@ -40,6 +40,7 @@
         <a href="#Eyes">Eyes</a>
         <a href="#MonteCarlo">Monte Carlo</a>
         <a href="#MoveTests">Move Tests</a>
+        <a href="#RepetitionHack">Repetition Hack</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -449,6 +450,54 @@
         <pre><summary>output</summary><code output></code></pre>
       </div>
     </section>
+    <section>
+      <h2 id="RepetitionHack"><a href="#RepetitionHack">Repetition Hack</a></h2>
+      <p>Rollout policy is sometimes going to be different than normal Go rules.
+        It's important that Rollouts avoid infinite loops and other mishaps.
+        The rule for filling self-Eyes is one such example.
+      </p>
+      <p>The solutions for Super-Ko involve meticulous record keeping and history ledgers.
+        We can pick a different solution for Rollouts because both "players" will diligently follow the rule.
+      </p>
+      <p>The fundamental issue with Ko Fights is the <i>immediate retaking</i> of single stone captures.
+        We can leverage the stochastic random quality of Rollouts to enforce a sort of move re-ordering.
+        The rule will be "single stone captures can only happen on every third move".
+        This mechanically enforces the idea of "finding a Ko threat" before re-taking the Ko stone.
+      </p>
+      <p>The choice of "every third move" is to share the opportunity for re-taking evenly between players.
+        It's effective for multiple Ko fights at once because it's a complete ban on taking single stones.
+        It doesn't specify <i>where</i> the capture is located, after all.
+      </p>
+      <details>
+        <summary>kohack7x7.js</summary>
+        <pre><code preload-javascript data-url="kohack7x7.js"></code></pre>
+      </details>
+      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
+      <script src="eyes7x7norepeat.js" defer></script>
+      <script src="kohack7x7.js" defer></script>
+      <div data-id="kohack7x7" run="kohack7x7">
+        <div>
+          <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
+            time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban clickable" update="copy2input" size="7" id="kohack7x7_goban"></div>
+        <pre><summary>input/output</summary><code
+          output id="kohack7x7"
+          preload-txt data-url="kohack7x7.txt"></code></pre>
+      </div>
+      <div style="clear: both"></div>
+      <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
+      <div run="rolloutReport_kohack" class="right">
+        <button start>Start</button>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div run="move_tests_kohack">
+        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div style="clear: both"></div>
+    </section>
+
   </main>
   <footer>
     <p>by <a href="https://lazymammal.github.io/">LazyMammal</a></p>

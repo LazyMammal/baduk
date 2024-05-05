@@ -1,6 +1,6 @@
-function doRollouts(input, button, output, wins, reps, maxReps) {
+function doRollouts(input, wins, reps, maxReps, TYPE = GoEyes) {
   for (; reps < maxReps; reps++) {
-    const state = inputState(input, GoEyes);
+    const state = inputState(input, TYPE);
     let pass = 0;
     while (pass < 2) {
       pass = playRandom(state) ? 0 : pass + 1;
@@ -17,26 +17,31 @@ function doRollouts(input, button, output, wins, reps, maxReps) {
     `   White: ${wins[-1]}`,
     `    Ties: ${wins[0]}`,
     `    /sec: ${rps.toFixed(1)}`,
-    ` History: ${window.baduk.historyDepth}`,
     "\n"
   ];
+  return [reps, text];
+}
+
+function doRolloutReport(input, button, output, wins, reps, maxReps, TYPE) {
+  let text;
+  [reps, text] = doRollouts(input, wins, reps, maxReps, TYPE);
   output.innerText += text.join("\n");
   maxReps += 100;
   if (maxReps <= 300) {
     setTimeout(() => {
-      doRollouts(input, button, output, wins, reps, maxReps);
+      doRolloutReport(input, button, output, wins, reps, maxReps, TYPE);
     }, 1);
   } else {
     button.removeAttribute("disabled");
   }
 }
 
-function montecarlo7x7(input, button, parent) {
+function montecarlo7x7(input, button, parent, TYPE = GoEyes) {
   window.baduk.start = performance.now();
   let output = parent.querySelector("[output]");
   output.innerText = "";
   let wins = Object.fromEntries([[1, 0], [-1, 0], [0, 0]]);
   setTimeout(() => {
-    doRollouts(input, button, output, wins, 0, 100);
+    doRolloutReport(input, button, output, wins, 0, 100, TYPE);
   }, 1);
 }

@@ -21,28 +21,33 @@ class GoCaptures extends GoState {
     const stoneType = this.board.get(x, y);
     if (stoneType !== "B" && stoneType !== "W")
       return false;
+    let caps = 0;
     const followStoneType = ([x, y]) => {
       const piece = this.board.get(x, y);
       if (piece !== stoneType)
         return false;
       this.board.set(x, y, ".");
+      caps++;
       return true;
     }
     DFS([x, y], xy4way, followStoneType);
+    return caps;
   }
 
   playMove(x, y) {
     const enemyType = this.nextToPlay();
     this.board.set(x, y, this.toPlay);
+    let caps = 0;
     for (let [i, j] of xy4way([x, y])) {
       const piece = this.board.get(i, j);
       if (piece === enemyType
         && this.isCapture(i, j)) {
-        this.eraseChain(i, j);
+        caps += this.eraseChain(i, j);
       }
     }
     this.toPlay = this.nextToPlay();
     this.turn++;
+    return caps;
   }
 }
 

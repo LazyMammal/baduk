@@ -1,6 +1,5 @@
 window.baduk = { data: {}, bench: {}, gobo: {} };
 window.baduk.history = {};
-window.baduk.historyDepth = 0;
 
 var Gobo = window["gobo"].Gobo;
 var BLACK = 0, WHITE = 1, EMPTY = -1;
@@ -149,7 +148,7 @@ async function buttonSetup(e) {
   let run = parent.getAttribute("run");
   let url = parent.getAttribute("data-url");
   let id = parent.getAttribute("data-id");
-  let data;
+  let data = "";
   if (url) data = await cacheFetch(url);
   if (id) data = document.getElementById(id)?.innerText;
   return [parent, run, data];

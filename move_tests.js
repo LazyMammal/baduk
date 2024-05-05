@@ -78,7 +78,7 @@ const testList = [{
   ]],
 }]
 
-function move_tests(TYPE = GoEyes) {
+function move_tests(input, TYPE = GoEyes) {
   const output = [];
   for (let t = 0; t < testList.length; t++) {
     const test = testList[t];

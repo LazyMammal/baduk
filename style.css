@@ -117,8 +117,12 @@ pre summary {
 .goban, .right {
   clear: both;
   float: right;
-  margin: 1rem 0 0 .5rem;
   width: 340px;
+  margin-left: .5rem;
+}
+
+.goban {
+  margin-top: 1rem;
 }
 
 .goban.clickable {

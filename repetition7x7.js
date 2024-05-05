@@ -22,13 +22,6 @@ class GoRepeat extends GoLegal {
       return false;
     const stateHash = hash(state.board);
     const isRep = stateHash in this.history;
-    if (isRep) { // metrics
-      const turn = this.history[stateHash];
-      const diff = state.turn - turn;
-      if (diff > window.baduk.historyDepth) {
-        window.baduk.historyDepth = diff;
-      }
-    }
     return isRep;
   }
 
