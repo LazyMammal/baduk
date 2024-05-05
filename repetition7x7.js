@@ -1,10 +1,23 @@
 class GoRepeat extends GoLegal {
+  constructor(board, toPlay) {
+    super(board, toPlay);
+    addHistory(this.board, this.turn);
+  }
   isRepeat(board = this.board) {
-    return hash(board) in window.baduk.history;
+    const isRep = hash(board) in window.baduk.history;
+    if (isRep) {
+      const turn = window.baduk.history[hash(board)];
+      const diff = this.turn - turn;
+      const maxDiff = window.baduk.historyDepth ?? 0;
+      if (diff > maxDiff) {
+        window.baduk.historyDepth = diff;
+      }
+    }
+    return isRep;
   }
   playMove(x, y) {
     super.playMove(x, y);
-    incHistory(this.board);
+    addHistory(this.board, this.turn);
   }
 }
 
@@ -15,9 +28,8 @@ function hash(board) {
     .replaceAll(/[ \n]/g, "");
 }
 
-function incHistory(board) {
-  window.baduk.history[hash(board)] = 1
-    + (window.baduk.history[hash(board)] ?? 0);
+function addHistory(board, turn) {
+  window.baduk.history[hash(board)] = turn;
 }
 
 function repetition7x7(input) {

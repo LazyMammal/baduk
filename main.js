@@ -1,4 +1,6 @@
 window.baduk = { data: {}, bench: {}, gobo: {} };
+window.baduk.history = {};
+window.baduk.historyDepth = 0;
 
 var Gobo = window["gobo"].Gobo;
 var BLACK = 0, WHITE = 1, EMPTY = -1;

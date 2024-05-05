@@ -297,7 +297,7 @@
         <div>
           <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban" size="7" id="state7x7_goban"></div>
+        <div class="goban clickable" update="copy2input" size="7" id="state7x7_goban"></div>
         <pre><summary>input/output</summary><code output id="state7x7"></code></pre>
       </div>
       <div style="clear: both"></div>
@@ -321,7 +321,7 @@
         <div>
           <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban" size="7" id="captures7x7_goban"></div>
+        <div class="goban clickable" update="copy2input" size="7" id="captures7x7_goban"></div>
         <pre><summary>input/output</summary><code output id="captures7x7"></code></pre>
       </div>
       <div style="clear: both"></div>
@@ -343,7 +343,7 @@
         <div>
           <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban" size="7" id="legal7x7_goban"></div>
+        <div class="goban clickable" update="copy2input" size="7" id="legal7x7_goban"></div>
         <pre><summary>input/output</summary><code
           output id="legal7x7"
           preload-txt data-url="legal7x7.txt"></code></pre>
@@ -366,7 +366,7 @@
           <button run>Run</button> <button reset onclick="window.baduk.history = {}">Reset</button> <button
             time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban" size="7" id="repetition7x7_goban"></div>
+        <div class="goban clickable" update="copy2input" size="7" id="repetition7x7_goban"></div>
         <pre><summary>input/output</summary><code
           output id="repetition7x7"
           preload-txt data-url="repetition7x7.txt"></code></pre>
@@ -393,7 +393,7 @@
           <button run>Run</button> <button reset onclick="window.baduk.history = {}">Reset</button> <button
             time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban" size="7" id="eyes7x7_goban"></div>
+        <div class="goban clickable" update="copy2input" size="7" id="eyes7x7_goban"></div>
         <pre><summary>input/output</summary><code
           output id="eyes7x7"
           preload-txt data-url="eyes7x7.txt"></code></pre>
@@ -423,7 +423,24 @@
         <pre><summary>output</summary><code output></code></pre>
       </div>
       <div style="clear: both"></div>
-
+    </section>
+    <section>
+      <h2 id="MoveTests"><a href="#MoveTests">Move Tests</a></h2>
+      <p>It would be a good idea to run another set of tests before coding any new features.
+        A starting game state will be given (board + toPlay).
+        The test will expect and require several moves played in a row with predictable outcomes.
+      </p>
+      <p>This type of test is called an <i>Integration Test</i> because several functions are executed at each step.
+        The previous <i>Unit Tests</i> attempted to test each function separately.</p>
+      <details>
+        <summary>move_tests.js</summary>
+        <pre><code preload-javascript data-url="move_tests.js"></code></pre>
+      </details>
+      <script src="move_tests.js" defer></script>
+      <div run="move_tests">
+        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
     </section>
   </main>
   <footer>

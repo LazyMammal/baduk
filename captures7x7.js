@@ -42,6 +42,7 @@ class GoCaptures extends GoState {
       }
     }
     this.toPlay = this.nextToPlay();
+    this.turn++;
   }
 }
 

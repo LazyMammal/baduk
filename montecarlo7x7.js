@@ -10,16 +10,20 @@ function doRollouts(input, button, output, wins, reps, maxReps) {
     let win = _.clamp(score.B - score.W, -1, 1);
     wins[win] = 1 + (wins[win] ?? 0);
   }
+  let duration = performance.now() - window.baduk.start;
+  let rps = reps / duration * 1e3;
   const text = [
     `Rollouts: ${reps}`,
     `   Black: ${wins[1]}`,
     `   White: ${wins[-1]}`,
-    `   Ties:  ${wins[0]}`,
-    ""
+    `    Ties: ${wins[0]}`,
+    `    /sec: ${rps.toFixed(1)}`,
+    ` History: ${window.baduk.historyDepth}`,
+    "\n"
   ];
   output.innerText += text.join("\n");
-  maxReps *= 5;
-  if (maxReps <= 160) {
+  maxReps += 100;
+  if (maxReps <= 300) {
     setTimeout(() => {
       doRollouts(input, button, output, wins, reps, maxReps);
     }, 1);
@@ -29,10 +33,11 @@ function doRollouts(input, button, output, wins, reps, maxReps) {
 }
 
 function montecarlo7x7(input, button, parent) {
+  window.baduk.start = performance.now();
   let output = parent.querySelector("[output]");
   output.innerText = "";
   let wins = Object.fromEntries([[1, 0], [-1, 0], [0, 0]]);
   setTimeout(() => {
-    doRollouts(input, button, output, wins, 0, 5);
+    doRollouts(input, button, output, wins, 0, 100);
   }, 1);
 }

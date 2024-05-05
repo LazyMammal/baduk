@@ -1,9 +1,11 @@
 class GoState {
   board;
   toPlay;
+  turn;
   constructor(board, toPlay) {
     this.board = board;
     this.toPlay = toPlay;
+    this.turn = 0;
   }
 
   nextToPlay(toPlay = this.toPlay) {
@@ -35,6 +37,7 @@ class GoState {
     // TODO: check for captures
     // TODO: remove captured chains
     this.toPlay = this.nextToPlay();
+    this.turn++;
   }
 }
 

@@ -9,6 +9,7 @@ class GoLegal extends GoCaptures {
     const board = parse(printBoard(this.board, {
       addLabels: false
     }));
+    board.turn = this.turn;
     const state = new GoLegal(board, toPlay);
     state.playMove(x, y);
 
