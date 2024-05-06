@@ -43,6 +43,7 @@
         <a href="#RepetitionHack">Repetition Hack</a>
         <a href="#EarlyExit">Early Exit</a>
         <a href="#Containers">Containers</a>
+        <a href="#RulesLogic">Rules Logic</a>
       </nav>
     </aside>
     <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -558,6 +559,48 @@
         <pre><summary>output</summary><code output></code></pre>
       </div>
       <div run="move_tests_arrayboard7x7">
+        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div style="clear: both"></div>
+    </section>
+    <section>
+      <h2 id="RulesLogic"><a href="#RulesLogic">Rules Logic</a></h2>
+      <p>The gold standard for a legal move is:</p>
+      <ul>
+        <li>Location not already occupied.</li>
+        <li>New stone will have or share liberties after being placed.</li>
+        <li>Doesn't repeat a previous board position.</li>
+      </ul>
+      <p>So far we've been verifying the rules <i>post hoc</i> by actually simulating the move.
+        This approach is rigourous but has the notable drawback of needing to copy the board container.
+        It can be very costly to serialize the Game State only to throw it away afterwards.
+      </p>
+      <p>In this section we apply a "static analysis" of the board position.
+        We will try to reliably <i>predict</i> whether a move will be valid without actually simulating it.
+      </p>
+      <details>
+        <summary>valid7x7.js</summary>
+        <pre><code preload-javascript data-url="valid7x7.js"></code></pre>
+      </details>
+      <script src="valid7x7.js" defer></script>
+      <div data-id="valid7x7" run="valid7x7">
+        <div>
+          <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
+            time>Time</button> <mark hidden></mark>
+        </div>
+        <div class="goban clickable" update="copy2input" size="7" id="valid7x7_goban"></div>
+        <pre><summary>input/output</summary><code
+          output id="valid7x7"
+          preload-txt data-url="kohack7x7.txt"></code></pre>
+      </div>
+      <div style="clear: both"></div>
+      <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
+      <div run="rolloutReport_valid7x7" class="right">
+        <button start>Start</button>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <div run="move_tests_valid7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>

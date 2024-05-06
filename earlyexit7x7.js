@@ -23,7 +23,7 @@ class GoEarlyExit extends GoKoHack {
     return stones === 1;
   }
 
-  isCapture(x, y) {
+  libsLimit(x, y, limit = 0) {
     if (!this.board.isStone(x, y))
       return 0;
     let libs = 0;
@@ -36,13 +36,13 @@ class GoEarlyExit extends GoKoHack {
       return this.board.isWhite(x, y);
     }
     const earlyExit = () => {
-      return libs > 0; // found refutation
+      return libs > limit; // found refutation
     }
     DFS([x, y], xy4way,
       this.board.isBlack(x, y) ? followBlack : followWhite,
       earlyExit
     );
-    return !libs;
+    return libs <= limit;
   }
 }
 

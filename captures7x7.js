@@ -16,7 +16,7 @@ class GoCaptures extends GoState {
     return libs;
   }
 
-  isCapture(x, y) {
+  libsLimit(x, y) {
     return !this.countLibs(x, y);
   }
 
@@ -49,7 +49,7 @@ class GoCaptures extends GoState {
     let caps = 0;
     for (let [i, j] of xy4way([x, y])) {
       if (this.isColour(i, j, enemyType)
-        && this.isCapture(i, j)) {
+        && this.libsLimit(i, j)) {
         caps += this.eraseChain(i, j);
       }
     }

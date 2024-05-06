@@ -1,8 +1,9 @@
 function doRollouts(input, wins, reps, maxReps, STATE, BOARD) {
   for (; reps < maxReps; reps++) {
     const state = inputState(input, STATE, BOARD);
+    const maxTurns = 3 * Math.pow(state.board.size + 3, 2);
     let pass = 0;
-    while (pass < 2) {
+    for(let turn = 0; pass < 2 && turn < maxTurns; turn++) {
       pass = playRandom(state) ? 0 : pass + 1;
     }
     let score = scoreBoard(state.board);

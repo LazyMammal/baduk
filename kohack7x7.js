@@ -23,15 +23,17 @@ class GoKoHack extends GoEyes_noRepeat {
   }
 
   validToPlay(x, y) {
-    // check for empty spot
     if (!this.board.isEmpty(x, y)
       || this.isEye(x, y))
       return false;
+    return this.simValid(x, y);
+  }
 
+  simValid(x, y) {
     // simulate adding stone
-    const state = this.simClone();
-    let caps = state.playMove(x, y);
-    let libs = state.countLibs(x, y);
+    const sim = this.simClone();
+    let caps = sim.playMove(x, y);
+    let libs = sim.countLibs(x, y);
 
     if (!libs) // self-capture
       return false;
@@ -39,10 +41,9 @@ class GoKoHack extends GoEyes_noRepeat {
     if (libs === 1
       && caps === 1
       && this.turn % 3 !== 0 // every-3rd-turn Ko hack
-      && state.isSingleStone(x, y)) {
+      && sim.isSingleStone(x, y)) {
       return false;
     }
-
     return true;
   }
 }
