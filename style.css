@@ -1,13 +1,14 @@
 :root,
 ::backdrop {
   color-scheme: dark;
-  --goban: hsl(37, 70%, 60%); /* #e0aa52 */
+  --goban: hsl(37, 70%, 60%);
+  /* #e0aa52 */
   --red: hsl(6, 50%, 50%);
   --blue: hsl(203, 25%, 50%);
   --dark-blue: hsl(228, 50%, 15%);
   --green: hsl(94, 35%, 35%);
   --dark-green: hsl(94, 7%, 25%);
-  --bg: var(--dark-green); 
+  --bg: var(--dark-green);
   --accent-bg: var(--dark-blue);
   --marked-text: black;
   --marked: var(--green);
@@ -114,15 +115,18 @@ pre summary {
   cursor: auto;
 }
 
-.goban, .right {
-  clear: both;
-  float: right;
-  width: 340px;
-  margin-left: .5rem;
+div:has(div.goban),
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
 }
 
+pre,
+.flex div,
+div:has(div.goban) div,
 .goban {
-  margin-top: 1rem;
+  flex: min-content;
 }
 
 .goban.clickable {
@@ -131,4 +135,17 @@ pre summary {
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+div.full {
+  width: 100%;
+  flex: none !important;
+}
+
+section {
+  padding: unset;
+}
+
+section+section {
+  padding: 0 0 2rem 0;
 }

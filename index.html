@@ -299,11 +299,13 @@
       </p>
       <script src="state7x7.js" defer></script>
       <div data-id="state7x7" run="state7x7">
-        <div>
+        <div class="full">
           <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban clickable" update="copy2input" size="7" id="state7x7_goban"></div>
-        <pre><summary>input/output</summary><code output id="state7x7"></code></pre>
+        <div>
+          <pre><summary>input/output</summary><code output id="state7x7"></code></pre>
+          <div class="goban clickable" update="copy2input" size="7" id="state7x7_goban"></div>
+        </div>
       </div>
       <div style="clear: both"></div>
     </section>
@@ -323,11 +325,13 @@
       </p>
       <script src="captures7x7.js" defer></script>
       <div data-id="captures7x7" run="captures7x7">
-        <div>
+        <div class="full">
           <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban clickable" update="copy2input" size="7" id="captures7x7_goban"></div>
-        <pre><summary>input/output</summary><code output id="captures7x7"></code></pre>
+        <div>
+          <pre><summary>input/output</summary><code output id="captures7x7"></code></pre>
+          <div class="goban clickable" update="copy2input" size="7" id="captures7x7_goban"></div>
+        </div>
       </div>
       <div style="clear: both"></div>
     </section>
@@ -345,13 +349,15 @@
       <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
       <script src="legal7x7.js" defer></script>
       <div data-id="legal7x7" run="legal7x7">
-        <div>
+        <div class="full">
           <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban clickable" update="copy2input" size="7" id="legal7x7_goban"></div>
-        <pre><summary>input/output</summary><code
+        <div>
+          <pre><summary>input/output</summary><code
           output id="legal7x7"
           preload-txt data-url="legal7x7.txt"></code></pre>
+          <div class="goban clickable" update="copy2input" size="7" id="legal7x7_goban"></div>
+        </div>
       </div>
       <div style="clear: both"></div>
     </section>
@@ -367,14 +373,16 @@
       <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
       <script src="repetition7x7.js" defer></script>
       <div data-id="repetition7x7" run="repetition7x7">
-        <div>
+        <div class="full">
           <button run>Run</button> <button reset onclick="window.baduk.history = {}">Reset</button> <button
             time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban clickable" update="copy2input" size="7" id="repetition7x7_goban"></div>
-        <pre><summary>input/output</summary><code
-          output id="repetition7x7"
-          preload-txt data-url="repetition7x7.txt"></code></pre>
+        <div>
+          <pre><summary>input/output</summary><code
+            output id="repetition7x7"
+            preload-txt data-url="repetition7x7.txt"></code></pre>
+          <div class="goban clickable" update="copy2input" size="7" id="repetition7x7_goban"></div>
+        </div>
       </div>
       <div style="clear: both"></div>
     </section>
@@ -394,14 +402,16 @@
       <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
       <script src="eyes7x7.js" defer></script>
       <div data-id="eyes7x7" run="eyes7x7">
-        <div>
+        <div class="full">
           <button run>Run</button> <button reset onclick="window.baduk.history = {}">Reset</button> <button
             time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban clickable" update="copy2input" size="7" id="eyes7x7_goban"></div>
-        <pre><summary>input/output</summary><code
-          output id="eyes7x7"
-          preload-txt data-url="eyes7x7.txt"></code></pre>
+        <div>
+          <pre><summary>input/output</summary><code
+            output id="eyes7x7"
+            preload-txt data-url="eyes7x7.txt"></code></pre>
+          <div class="goban clickable" update="copy2input" size="7" id="eyes7x7_goban"></div>
+        </div>
       </div>
       <div style="clear: both"></div>
     </section>
@@ -419,13 +429,15 @@
       <script src="montecarlo7x7.js" defer></script>
       <div data-id="montecarlo7x7" run="montecarlo7x7">
         <div>
-          <button start>Start</button> <button reset>Reset</button>
-        </div>
-        <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban" draggable="false"></div>
-        <pre class="right"><summary>input</summary><code
+          <pre><summary>input</summary><code
             id="montecarlo7x7"
             preload-txt data-url="montecarlo7x7.txt"></code></pre>
-        <pre><summary>output</summary><code output></code></pre>
+          <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban" draggable="false"></div>
+        </div>
+        <div class="full">
+          <button start>Start</button> <button reset>Reset</button>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
       </div>
       <div style="clear: both"></div>
     </section>
@@ -479,26 +491,28 @@
       <script src="eyes7x7norepeat.js" defer></script>
       <script src="kohack7x7.js" defer></script>
       <div data-id="kohack7x7" run="kohack7x7">
-        <div>
+        <div class="full">
           <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
             time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban clickable" update="copy2input" size="7" id="kohack7x7_goban"></div>
-        <pre><summary>input/output</summary><code
+        <div>
+          <pre><summary>input/output</summary><code
           output id="kohack7x7"
           preload-txt data-url="kohack7x7.txt"></code></pre>
+          <div class="goban clickable" update="copy2input" size="7" id="kohack7x7_goban"></div>
+        </div>
       </div>
-      <div style="clear: both"></div>
       <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
-      <div run="rolloutReport_kohack7x7" class="right">
-        <button start>Start</button>
-        <pre><summary>output</summary><code output></code></pre>
+      <div class="flex">
+        <div run="move_tests_kohack7x7">
+          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+        <div run="rolloutReport_kohack7x7">
+          <button start>Start</button>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
       </div>
-      <div run="move_tests_kohack7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><summary>output</summary><code output></code></pre>
-      </div>
-      <div style="clear: both"></div>
     </section>
     <section>
       <h2 id="EarlyExit"><a href="#EarlyExit">Early Exit</a></h2>
@@ -516,26 +530,28 @@
       <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
       <script src="earlyexit7x7.js" defer></script>
       <div data-id="earlyexit7x7" run="earlyexit7x7">
-        <div>
+        <div class="full">
           <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
             time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban clickable" update="copy2input" size="7" id="earlyexit7x7_goban"></div>
-        <pre><summary>input/output</summary><code
+        <div>
+          <pre><summary>input/output</summary><code
           output id="earlyexit7x7"
           preload-txt data-url="kohack7x7.txt"></code></pre>
+          <div class="goban clickable" update="copy2input" size="7" id="earlyexit7x7_goban"></div>
+        </div>
       </div>
-      <div style="clear: both"></div>
       <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
-      <div run="rolloutReport_earlyexit7x7" class="right">
-        <button start>Start</button>
-        <pre><summary>output</summary><code output></code></pre>
+      <div class="flex">
+        <div run="move_tests_earlyexit7x7">
+          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+        <div run="rolloutReport_earlyexit7x7">
+          <button start>Start</button>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
       </div>
-      <div run="move_tests_earlyexit7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><summary>output</summary><code output></code></pre>
-      </div>
-      <div style="clear: both"></div>
     </section>
     <section>
       <h2 id="Containers"><a href="#Containers">Containers</a></h2>
@@ -552,17 +568,17 @@
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
-      <div style="clear: both"></div>
       <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
-      <div run="rolloutReport_arrayboard7x7" class="right">
-        <button start>Start</button>
-        <pre><summary>output</summary><code output></code></pre>
+      <div class="flex">
+        <div run="move_tests_arrayboard7x7">
+          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+        <div run="rolloutReport_arrayboard7x7">
+          <button start>Start</button>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
       </div>
-      <div run="move_tests_arrayboard7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><summary>output</summary><code output></code></pre>
-      </div>
-      <div style="clear: both"></div>
     </section>
     <section>
       <h2 id="RulesLogic"><a href="#RulesLogic">Rules Logic</a></h2>
@@ -585,26 +601,28 @@
       </details>
       <script src="valid7x7.js" defer></script>
       <div data-id="valid7x7" run="valid7x7">
-        <div>
+        <div class="full">
           <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
             time>Time</button> <mark hidden></mark>
         </div>
-        <div class="goban clickable" update="copy2input" size="7" id="valid7x7_goban"></div>
-        <pre><summary>input/output</summary><code
+        <div>
+          <pre><summary>input/output</summary><code
           output id="valid7x7"
           preload-txt data-url="kohack7x7.txt"></code></pre>
+          <div class="goban clickable" update="copy2input" size="7" id="valid7x7_goban"></div>
+        </div>
       </div>
-      <div style="clear: both"></div>
       <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
-      <div run="rolloutReport_valid7x7" class="right">
-        <button start>Start</button>
-        <pre><summary>output</summary><code output></code></pre>
+      <div class="flex">
+        <div run="move_tests_valid7x7">
+          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+        <div run="rolloutReport_valid7x7">
+          <button start>Start</button>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
       </div>
-      <div run="move_tests_valid7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><summary>output</summary><code output></code></pre>
-      </div>
-      <div style="clear: both"></div>
     </section>
 
   </main>
