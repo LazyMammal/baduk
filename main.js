@@ -175,14 +175,24 @@ async function buttonSetup(e) {
   return [parent, run, data];
 }
 
-async function runButton(e) {
-  let [parent, run, data] = await buttonSetup(e);
+async function runButton(elem) {
+  let [parent, run, data] = await buttonSetup(elem);
   let goban = parent.querySelector(".goban")?.getAttribute("id");
   let output = parent.querySelector("[output]");
   let text = window[run](data);
   output.innerText = "";
   output.insertAdjacentHTML("afterbegin", text);
   if (goban) updateGoban(goban, text);
+}
+
+async function resetButton(elem) {
+  let parent = findParent(elem);
+  let output = parent.querySelector("[output]");
+  output.innerText = "";
+  if (output.hasAttribute("preload-txt")) await preloadTxt(output);
+  await buttonSetup(elem);
+  let goban = parent.querySelector(".goban")?.getAttribute("id");
+  if (goban) updateGoban(goban, output?.innerText);
 }
 
 async function startButton(elem) {
@@ -205,16 +215,9 @@ Array.from(document.querySelectorAll("button[start]"))
   });
 
 Array.from(document.querySelectorAll("button[reset]"))
-  .forEach((e) => {
-    e.addEventListener("click", async () => {
-      let parent = findParent(e);
-      let output = parent.querySelector("[output]");
-      output.innerText = "";
-      if (output.hasAttribute("preload-txt")) await preloadTxt(output);
-      await buttonSetup(e);
-      let goban = parent.querySelector(".goban")?.getAttribute("id");
-      if (goban) updateGoban(goban, output?.innerText);
-    });
+  .forEach((elem) => {
+    elem.addEventListener("click", async () => resetButton(elem));
+    setTimeout(() => resetButton(elem), 1);
   });
 
 Array.from(document.querySelectorAll("button[time]"))
