@@ -1,3 +1,11 @@
+const GO_EMPTY = 0;
+const GO_BLACK = 1;
+const GO_WHITE = 2;
+const GO_STONE = 3;
+const GO_OOB = 4;
+const GO_CHARS = [".", "B", "W", "?", "#"];
+const GO_CODES = { ".": 0, "B": 1, "W": 2, "?": 3, "#": 4 };
+
 class GoBoard2D {
   /* 
   GoBoard2D
@@ -7,21 +15,9 @@ class GoBoard2D {
   */
   _size;
   _data;
-  _empty;
-  _oob;
-  _black;
-  _white;
-  constructor(size,
-    empty = ".",
-    oob = "#",
-    black = "B",
-    white = "W") {
+  constructor(size) {
     this._size = size;
     this._data = {}; // not an array!
-    this._empty = empty;
-    this._oob = oob;
-    this._black = black;
-    this._white = white;
   }
   get size() {
     return this._size;
@@ -32,28 +28,24 @@ class GoBoard2D {
     return x >= 0 && x < this._size
       && y >= 0 && y < this._size;
   }
-  _get(x, y) {
-    if (this._xyValid(x, y))
-      return this._data[this._key(x, y)] ?? this._empty;
-    return this._oob;
-  }
-  _set(x, y, val) {
+  setCode(x, y, val) {
     if (this._xyValid(x, y))
       this._data[this._key(x, y)] = val;
   }
-  getColour = (x, y) => this._get(x, y);
-  isOOB = (x, y) => this._get(x, y) === this._oob;
-  isEmpty = (x, y) => this._get(x, y) === this._empty;
-  isBlack = (x, y) => this._get(x, y) === this._black;
-  isWhite = (x, y) => this._get(x, y) === this._white;
-  isStone = (x, y) => {
-    const piece = this._get(x, y);
-    return piece === this._black || piece === this._white;
+  getCode(x, y) {
+    if (this._xyValid(x, y))
+      return this._data[this._key(x, y)] ?? GO_EMPTY;
+    return GO_OOB;
   }
-  setEmpty(x, y) { this._set(x, y, this._empty) }
-  setBlack(x, y) { this._set(x, y, this._black) }
-  setWhite(x, y) { this._set(x, y, this._white) }
-
+  getColour = (x, y) => GO_CHARS[this.getCode(x, y)];
+  isEmpty = (x, y) => this.getCode(x, y) === GO_EMPTY;
+  isBlack = (x, y) => this.getCode(x, y) === GO_BLACK;
+  isWhite = (x, y) => this.getCode(x, y) === GO_WHITE;
+  isStone = (x, y) => this.getCode(x, y) & GO_STONE;
+  isOOB = (x, y) => this.getCode(x, y) === GO_OOB;
+  setEmpty(x, y) { this.setCode(x, y, GO_EMPTY) }
+  setBlack(x, y) { this.setCode(x, y, GO_BLACK) }
+  setWhite(x, y) { this.setCode(x, y, GO_WHITE) }
 }
 
 function parse(input, BOARD = GoBoard2D) {
