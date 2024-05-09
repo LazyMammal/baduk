@@ -633,12 +633,10 @@
         <summary>tree7x7.js</summary>
         <pre><code preload-javascript data-url="tree7x7.js"></code></pre>
       </details>
-      <script src="tree7x7.js" defer></script>
-      <div run="tree7x7">
-        <div class="full">
-          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        </div>
-        <div>
+      <div class="flex">
+        <script src="tree7x7.js" defer></script>
+        <div run="tree7x7">
+          <button start>Start</button>
           <pre><summary>output</summary><code output></code></pre>
         </div>
       </div>
@@ -655,14 +653,13 @@
         <summary>mcts7x7.js</summary>
         <pre><code preload-javascript data-url="mcts7x7.js"></code></pre>
       </details>
-      <p>The output array <i>should show</i> the average value (wins/visits*100) for each move.
-        Due to performance bottlenecks only some of the moves are being calculated.
+      <p>The output array shows <i>number of visits</i> to each root action.
+        Due to performance bottlenecks only some moves are being calculated.
       </p>
       <script src="mcts7x7.js" defer></script>
       <div data-id="mcts7x7" run="mcts7x7">
         <div class="full">
-          <button run>Run</button> <button reset>Reset</button> <button
-            time>Time</button> <mark hidden></mark>
+          <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
         </div>
         <div>
           <div class="goban clickable" update="copy2input" size="7" id="mcts7x7_goban"></div>

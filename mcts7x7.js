@@ -1,4 +1,4 @@
-class GoMCTS extends GoEarlyExit {
+class GoMCTS extends GoValid {
   doRollout() {
     const player = this.toPlay;
     const enemy = this.nextToPlay();
@@ -17,11 +17,11 @@ class GoMCTS extends GoEarlyExit {
   }
 }
 
-function rootValues(size, root) {
+function rootVisits(size, root) {
   const valueArr = createNested(size, 0);
   for (let child of root.children) {
     let [x, y] = child.action;
-    valueArr[y][x] = Math.round(child.value * 100);
+    valueArr[y][x] = child.visits;
   }
   return valueArr;
 }
@@ -34,8 +34,15 @@ function mcts7x7(input,
   let clean = cleanInput(input);
   let state = inputState(clean, STATE, BOARD);
   const root = new NODE('root');
-  tree_search(root, state, 10);
-  console.log(root);
-  return printNested(rootValues(state.board.size, root));
-
+  const t0 = performance.now();
+  let rollouts = tree_search(root, state, 49);
+  const T = performance.now() - t0;
+  return [
+    printNested(rootVisits(state.board.size, root)),
+    `root value ${root.value.toFixed(6)}`,
+    `visits ${root.visits}`,
+    `${(root.visits / T * 1e3).toFixed(2)} visits/s`,
+    `rollouts ${rollouts}`,
+    `${(rollouts / T * 1e3).toFixed(2)} rollouts/s`
+  ].join("\n");
 }
