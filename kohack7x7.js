@@ -49,7 +49,7 @@ class GoKoHack extends GoEyes_noRepeat {
 }
 
 function move_tests_kohack7x7(input, options) {
-  return move_tests(input, GoKoHack);
+  return move_tests(input, options, GoKoHack);
 }
 
 function rolloutReport_kohack7x7(input, options, button, parent) {

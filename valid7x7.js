@@ -84,7 +84,7 @@ class GoValid extends GoEarlyExit {
 }
 
 function move_tests_valid7x7(input, options) {
-  return move_tests(input, GoValid, GoBoard2D);
+  return move_tests(input, options, GoValid, GoBoard2D);
 }
 
 function rolloutReport_valid7x7(input, options, button, parent) {

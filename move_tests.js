@@ -78,7 +78,7 @@ const testList = [{
   ]],
 }]
 
-function move_tests(input, STATE = GoEyes, BOARD = GoBoard2D) {
+function move_tests(input, options, STATE = GoEyes, BOARD = GoBoard2D) {
   const output = [];
   for (let t = 0; t < testList.length; t++) {
     const test = testList[t];
