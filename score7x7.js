@@ -31,8 +31,6 @@ function scoreBoard(board, enclosed, stoneArr) {
     }
   }
   return {
-    Enclosed: enclosed,
-    Score: stoneArr,
     empty: empty,
     stone: stone,
     B: (empty["b"] ?? 0)

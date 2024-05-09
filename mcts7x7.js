@@ -22,11 +22,11 @@ class GoMCTS extends GoValid {
   }
 }
 
-function rootVisits(size, root) {
+function printRootArray(size, root, callback = () => 0) {
   const valueArr = createNested(size, 0);
   for (let child of root.children) {
     let [x, y] = child.action;
-    valueArr[y][x] = child.visits;
+    valueArr[y][x] = callback(child);
   }
   return valueArr;
 }
@@ -38,12 +38,18 @@ function mcts7x7(input,
 ) {
   let clean = cleanInput(input);
   let state = inputState(clean, STATE, BOARD);
+  const size = state.board.size;
   const root = new NODE('root');
   const t0 = performance.now();
-  let rollouts = tree_search(root, state, 49);
+  let rollouts = tree_search(root, state, 1500);
   const T = performance.now() - t0;
+  const visitsArr = printRootArray(size, root, (node) => node.visits);
+  const valueArr = printRootArray(size, root, (node) => node.value.toFixed(2));
   return [
-    printNested(rootVisits(state.board.size, root)),
+    `Visits:`,
+    printPadded(visitsArr, true, 3),
+    `Value:`,
+    printPadded(valueArr, true, 3),
     `root value ${root.value.toFixed(6)}`,
     `visits ${root.visits}`,
     `${(root.visits / T * 1e3).toFixed(2)} visits/s`,

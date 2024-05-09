@@ -30,7 +30,7 @@ function testPrint(test) {
   for(let [label, data] of test) {
     if(Array.isArray(data)) {
       res.push(label);
-      res.push(printBoard(parse(data)));
+      res.push(printNested(data, false));
     } else {
       res.push(`${label} = ${data}`);
     }

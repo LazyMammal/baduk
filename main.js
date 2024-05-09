@@ -34,6 +34,14 @@ function printNested(nested, flip = true) {
   return array.join("\n").trim();
 }
 
+function printPadded(nested, flip = true, pad = 1) {
+  let array = nested.map(row => row
+    .map(col => `${col}`.padStart(pad, " "))
+    .join(" "));
+  if (flip) array.reverse();
+  return array.join("\n");
+}
+
 Array.from(document.querySelectorAll(".goban"))
   .forEach((elem) => {
     let id = elem.getAttribute("id");

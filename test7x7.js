@@ -3,11 +3,13 @@ const badge = (success) => success ?
 
 function createLookup(data) {
   const board = parse(data);
-  const score = scoreBoard(board);
+  const enclosed = createNested(board.size, ".");
+  const stoneArr = createNested(board.size, ".");
+  let score = scoreBoard(board, enclosed, stoneArr);
   return Object.assign(score, {
-    Enclosed: printNested(score.Enclosed),
-    Score: printNested(score.Score),
-    'LibertyCount': printNested(buildLibs(board)),
+    Enclosed: printNested(enclosed, false),
+    Score: printNested(stoneArr, false),
+    'LibertyCount': printNested(buildLibs(board), false),
   });
 }
 
