@@ -42,7 +42,7 @@ function xy4way(pos) {
   ];
 }
 
-function flood7x7(input, BOARD = GoBoard2D) {
+function flood7x7(input, options, BOARD = GoBoard2D) {
   const board = parse(input, BOARD);
   let black = 0;
   let libs = 0;

@@ -41,7 +41,7 @@ function scoreBoard(board, enclosed, stoneArr) {
   }
 }
 
-function score7x7(input) {
+function score7x7(input, options) {
   let board = parse(input);
   const size = board.size;
   const enclosed = createNested(size, ".");

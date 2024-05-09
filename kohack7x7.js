@@ -48,15 +48,15 @@ class GoKoHack extends GoEyes_noRepeat {
   }
 }
 
-function move_tests_kohack7x7(input) {
+function move_tests_kohack7x7(input, options) {
   return move_tests(input, GoKoHack);
 }
 
-function rolloutReport_kohack7x7(input, button, parent) {
-  montecarlo7x7(input, button, parent, GoKoHack);
+function rolloutReport_kohack7x7(input, options, button, parent) {
+  montecarlo7x7(input, options, button, parent, GoKoHack);
 }
 
-function kohack7x7(input, STATE = GoKoHack, BOARD = GoBoard2D) {
+function kohack7x7(input, options, STATE = GoKoHack, BOARD = GoBoard2D) {
   let clean = cleanInput(input);
   let state = inputState(clean, STATE, BOARD);
   state.turn = window.baduk.turn ?? 0; // global variable

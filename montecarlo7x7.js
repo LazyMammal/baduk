@@ -37,7 +37,7 @@ function doRolloutReport(input, button, output, wins, reps, maxReps, STATE, BOAR
   }
 }
 
-function montecarlo7x7(input, button, parent, STATE = GoEyes, BOARD = GoBoard2D) {
+function montecarlo7x7(input, options, button, parent, STATE = GoEyes, BOARD = GoBoard2D) {
   window.baduk.start = performance.now();
   let output = parent.querySelector("[output]");
   output.innerText = "";

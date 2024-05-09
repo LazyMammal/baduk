@@ -68,7 +68,7 @@ function playRandom(state) {
   }
 }
 
-function state7x7(input, STATE = GoState, BOARD = GoBoard2D) {
+function state7x7(input, options, STATE = GoState, BOARD = GoBoard2D) {
   const state = inputState(input, STATE, BOARD);
   playRandom(state);
   return [

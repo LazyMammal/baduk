@@ -46,14 +46,14 @@ class GoEarlyExit extends GoKoHack {
   }
 }
 
-function move_tests_earlyexit7x7(input) {
+function move_tests_earlyexit7x7(input, options) {
   return move_tests(input, GoEarlyExit);
 }
 
-function rolloutReport_earlyexit7x7(input, button, parent) {
-  montecarlo7x7(input, button, parent, GoEarlyExit);
+function rolloutReport_earlyexit7x7(input, options, button, parent) {
+  montecarlo7x7(input, options, button, parent, GoEarlyExit);
 }
 
-function earlyexit7x7(input) {
-  return kohack7x7(input, GoEarlyExit);
+function earlyexit7x7(input, options) {
+  return kohack7x7(input, options, GoEarlyExit);
 }

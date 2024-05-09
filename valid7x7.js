@@ -83,14 +83,14 @@ class GoValid extends GoEarlyExit {
   }
 }
 
-function move_tests_valid7x7(input) {
+function move_tests_valid7x7(input, options) {
   return move_tests(input, GoValid, GoBoard2D);
 }
 
-function rolloutReport_valid7x7(input, button, parent) {
-  montecarlo7x7(input, button, parent, GoValid, GoBoard2D);
+function rolloutReport_valid7x7(input, options, button, parent) {
+  montecarlo7x7(input, options, button, parent, GoValid, GoBoard2D);
 }
 
-function valid7x7(input) {
-  return kohack7x7(input, GoValid, GoBoard2D);
+function valid7x7(input, options) {
+  return kohack7x7(input, options, GoValid, GoBoard2D);
 }

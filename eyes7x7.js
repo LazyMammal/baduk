@@ -22,6 +22,6 @@ class GoEyes extends GoRepeat {
   }
 }
 
-function eyes7x7(input) {
-  return repetition7x7(input, GoEyes);
+function eyes7x7(input, options) {
+  return repetition7x7(input, options, GoEyes);
 }

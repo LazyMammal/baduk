@@ -13,7 +13,7 @@ function createLookup(data) {
   });
 }
 
-function test7x7(input, callback = createLookup) {
+function test7x7(input, options, callback = createLookup) {
   let res = [];
   let test = parseTest(getTokens(input));
   let [label, caseData] = test[0]; // testcase data

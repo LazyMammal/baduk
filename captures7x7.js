@@ -59,6 +59,6 @@ class GoCaptures extends GoState {
   }
 }
 
-function captures7x7(input) {
-  return state7x7(input, GoCaptures);
+function captures7x7(input, options) {
+  return state7x7(input, options, GoCaptures);
 }

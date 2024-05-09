@@ -31,33 +31,41 @@ function printRootArray(size, root, callback = () => 0) {
   return valueArr;
 }
 
-function mcts7x7(input,
+function mcts7x7(input, options,
   STATE = GoMCTS,
   BOARD = GoBoard2D,
   NODE = UCTNode
 ) {
+  const runtime = Number(options.time ?? 10);
+  window.baduk.EX = Number(options.explore ?? 1.0);
   let clean = cleanInput(input);
   let state = inputState(clean, STATE, BOARD);
   const size = state.board.size;
   const root = new NODE('root');
   const t0 = performance.now();
-  const endT = t0 + 10e3;
-  let rollouts = 0;
-  while(performance.now() < endT) {
-    rollouts += tree_search(root, state, 1e3);
+  const endT = t0 + runtime * 1e3;
+  let nodes = 0;
+  while (performance.now() < endT) {
+    let searchBoard = state.simClone();
+    nodes += tree_search(root, searchBoard, 100);
   }
   const dT = performance.now() - t0;
   const visitsArr = printRootArray(size, root, (node) => node.visits);
-  const valueArr = printRootArray(size, root, (node) => node.value.toFixed(2));
+  const valueArr = printRootArray(size, root, (node) => node.value
+    .toFixed(3)
+    .replace(/\b0./, ".")
+  );
   return [
     `Visits:`,
     printPadded(visitsArr, true, 3),
     `Value:`,
-    printPadded(valueArr, true, 3),
+    printPadded(valueArr, true, 5),
     `root value ${root.value.toFixed(6)}`,
     `visits ${root.visits}`,
     `${(root.visits / dT * 1e3).toFixed(2)} visits/s`,
-    `rollouts ${rollouts}`,
-    `${(rollouts / dT * 1e3).toFixed(2)} rollouts/s`
+    `nodes ${nodes}`,
+    `${(nodes / dT * 1e3).toFixed(2)} nodes/s`,
+    `seconds ${runtime}`,
+    `explore ${window.baduk.EX}`,
   ].join("\n");
 }

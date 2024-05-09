@@ -1,3 +1,5 @@
+window.baduk.EX = 1.0;
+
 class UCTNode {
   action;
   children;
@@ -30,7 +32,7 @@ class UCTNode {
   selectChild() { // argmax( children, key:ucb )
     if (!this.hasChild())
       return null;
-    const LogN = Math.log(this._visits);
+    const LogN = Math.log(this._visits) * window.baduk.EX;
     let bestChild = null;
     let bestUCB = -Infinity;
     for (let child of this.children) {
@@ -48,7 +50,7 @@ class UCTNode {
 }
 
 function tree_search(root, state, reps = 1) {
-  let rollouts = 0;
+  let nodes = 0;
   for (let x = 0; x < reps; x++) {
     let node = root;
     const path = [node];
@@ -63,18 +65,18 @@ function tree_search(root, state, reps = 1) {
     if (!node.hasChild()) {
       for (let action of state.moveList()) {
         node.addChild(action);
+        nodes++;
       }
       traverse();
     }
     let reward = state.doRollout();
-    rollouts++;
     while (path.length) { // backprop
       node = path.pop();
       node.addReward(reward);
       reward = -reward;
     }
   }
-  return rollouts;
+  return nodes;
 }
 
 function doTreeSearch(reps, NODE, SEARCH) {
@@ -85,14 +87,14 @@ function doTreeSearch(reps, NODE, SEARCH) {
     doRollout: () => 2 * Math.random() - 1,
   };
   const t0 = performance.now();
-  let rollouts = SEARCH(root, state, reps);
+  let nodes = SEARCH(root, state, reps);
   const T = performance.now() - t0;
   const res = [
     `value ${root.value.toFixed(12)}`,
     `visits ${root.visits} `
     + `${(root.visits / T * 1e3).toFixed(2)} visits/s`,
-    `rollouts ${rollouts} `
-    + `${(rollouts / T * 1e3).toFixed(2)} rollout/s`,
+    `nodes ${nodes} `
+    + `${(nodes / T * 1e3).toFixed(2)} nodes/s`,
     "\n"
   ];
   return [T < 5e3, T > 500 ? res : []];
@@ -113,7 +115,7 @@ function doReport(input, button, output, reps, NODE, SEARCH) {
   }
 }
 
-function tree7x7(input, button, parent,
+function tree7x7(input, options, button, parent,
   NODE = UCTNode,
   SEARCH = tree_search
 ) {

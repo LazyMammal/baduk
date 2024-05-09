@@ -36,7 +36,7 @@ function hash(board) {
     .replaceAll(/[ \n]/g, "");
 }
 
-function repetition7x7(input, STATE = GoRepeat, BOARD = GoBoard2D) {
+function repetition7x7(input, options, STATE = GoRepeat, BOARD = GoBoard2D) {
   const clean = cleanInput(input);
   const state = inputState(clean, STATE, BOARD);
   state.history = Object.assign(

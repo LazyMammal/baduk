@@ -24,7 +24,7 @@ function buildLibs(board) {
   return libCount;
 }
 
-function liberty7x7(input) {
+function liberty7x7(input, options) {
   const board = parse(input);
   const libCount = buildLibs(board);
   return printNested(libCount);

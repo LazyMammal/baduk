@@ -658,11 +658,17 @@
       <script src="mcts7x7.js" defer></script>
       <div data-id="mcts7x7" run="mcts7x7">
         <div class="full">
-          <button run>Run</button> <button reset>Reset</button> <span><i>(10 second run-time)</i></span>
+          <button run>Run</button>
+          <span options>
+            <label>Seconds <input name="time" value="1" size="1"></label>
+            <label>Explore <input name="explore" value="1.0e0" size="1"></label>
+          </span>
         </div>
         <div>
           <div class="goban clickable" update="copy2input" size="7" id="mcts7x7_goban"></div>
-          <pre><summary>input</summary><code id="mcts7x7"></code></pre>
+          <div>
+            <summary>input</summary> <textarea cols="12" rows="9" id="mcts7x7"></textarea> <br> <button copy>Copy</button>
+          </div>
           <pre><summary>output</summary><code output></code></pre>
         </div>
       </div>

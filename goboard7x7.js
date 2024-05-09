@@ -101,6 +101,6 @@ function printBoard(board, {
   return res.join("\n");
 }
 
-function goboard7x7(input) {
+function goboard7x7(input, options) {
   return printBoard(parse(input, GoBoard2D));
 }

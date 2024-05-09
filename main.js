@@ -48,10 +48,30 @@ Array.from(document.querySelectorAll(".goban"))
     let size = Number(elem.getAttribute("size")) ?? 7;
     let gobo = createGoban(id, size);
     elem.append(gobo.canvas);
+    const update = elem.getAttribute("update");
     if (elem.classList.contains("clickable")) {
-      elem.addEventListener("click",
-        (event) => clickGoban(event, elem, id, size, gobo)
-      );
+      if (update) {
+        elem.addEventListener("click",
+          (event) => {
+            clickGoban(event, elem, id, size, gobo);
+            window[update](event, elem, id, size, gobo);
+          }
+        );
+        let parent = findParent(elem);
+        let dataId = parent.getAttribute("data-id");
+        let input = document.getElementById(dataId);
+        if (input.tagName == "TEXTAREA") {
+          input.addEventListener("change",
+            (event) => {
+              updateGoban(id, parent);
+            }
+          );
+        }
+      } else {
+        elem.addEventListener("click",
+          (event) => clickGoban(event, elem, id, size, gobo)
+        );
+      }
     }
   });
 
@@ -80,10 +100,6 @@ function clickGoban(event, elem, id, size, gobo) {
     let stone = gobo.getStoneColorAt(x, y);
     gobo.setStoneAt(x, y, stone > 0 ? -1 : stone + 1);
     gobo.render();
-    const update = elem.getAttribute("update");
-    if (update) {
-      window[update](event, elem, id, size, gobo);
-    }
   }
 }
 
@@ -100,14 +116,20 @@ function copy2input(event, elem, id, size, gobo) {
       }
     }
     let text = printNested(board);
-    document.getElementById(input_id).innerText = text;
+    let input = document.getElementById(input_id);
+    if (input.tagName == "TEXTAREA") {
+      input.value = text;
+    } else {
+      input.innerText = text;
+    }
   }
 }
 
 function updateGoban(id, parent) {
   const dataId = parent.getAttribute("data-id");
-  const input = document.getElementById(dataId)?.innerText;
-  const board = input ? parseNested(input) : null;
+  const input = document.getElementById(dataId);
+  const text = input?.innerText || input?.value;
+  const board = text ? parseNested(text) : null;
   const gobo = window.baduk.gobo[id];
   const size = document.getElementById(id).getAttribute("size");
   for (let y = 0; y < size; y++) {
@@ -166,30 +188,34 @@ Array.from(document.querySelectorAll("[preload-javascript]"))
     <pre><summary>output</summary><code output></code></pre>
   </div>
 */
-function findParent(e) {
-  let parent = e.parentElement;
+function findParent(elem) {
+  let parent = elem.parentElement;
   while (parent && !parent.hasAttribute("run")) {
     parent = parent.parentElement;
   }
   return parent;
 }
 
-async function buttonSetup(e) {
-  let parent = findParent(e);
+async function buttonSetup(elem) {
+  let parent = findParent(elem);
   let run = parent.getAttribute("run");
   let url = parent.getAttribute("data-url");
-  let id = parent.getAttribute("data-id");
+  let dataId = parent.getAttribute("data-id");
+  let options = {};
+  Array.from(parent.querySelectorAll("[options] input")).forEach(elem => {
+    options[elem.name] = elem.value;
+  })
   let data = "";
   if (url) data = await cacheFetch(url);
-  if (id) data = document.getElementById(id)?.innerText;
-  return [parent, run, data];
+  if (dataId) data = document.getElementById(dataId)?.innerText;
+  return [parent, run, data, options];
 }
 
 async function runButton(elem) {
-  let [parent, run, data] = await buttonSetup(elem);
+  let [parent, run, data, options] = await buttonSetup(elem);
   let goban = parent.querySelector(".goban")?.getAttribute("id");
   let output = parent.querySelector("[output]");
-  let text = window[run](data);
+  let text = window[run](data, options);
   output.innerText = "";
   output.insertAdjacentHTML("afterbegin", text);
   if (goban) updateGoban(goban, parent);
@@ -206,17 +232,17 @@ async function resetButton(elem) {
 }
 
 async function startButton(elem) {
-  let [parent, run, data] = await buttonSetup(elem);
+  let [parent, run, data, options] = await buttonSetup(elem);
   elem.setAttribute("disabled", true);
   setTimeout(
-    () => { window[run](data, elem, parent) },
+    () => { window[run](data, options, elem, parent) },
     100
   );
 }
 
 Array.from(document.querySelectorAll("button[run]"))
-  .forEach((e) => {
-    e.addEventListener("click", async () => runButton(e));
+  .forEach((elem) => {
+    elem.addEventListener("click", async () => runButton(elem));
   });
 
 Array.from(document.querySelectorAll("button[start]"))
@@ -231,22 +257,30 @@ Array.from(document.querySelectorAll("button[reset]"))
   });
 
 Array.from(document.querySelectorAll("button[time]"))
-  .forEach((e) => {
-    e.addEventListener("click", async () => {
-      let [parent, run, data] = await buttonSetup(e);
+  .forEach((elem) => {
+    elem.addEventListener("click", async () => {
+      let [parent, run, data, options] = await buttonSetup(elem);
       let result = parent.querySelector("mark");
       result.classList.add("loading");
       result.innerText = "...";
       result.removeAttribute("hidden");
-      e.setAttribute("disabled", true);
+      elem.setAttribute("disabled", true);
       new Benchmark(() => {
         window[run](data)
       }, {
         "onComplete": (evt) => {
           result.innerText = `${evt.currentTarget}`;
           result.classList.remove("loading");
-          e.removeAttribute("disabled");
+          elem.removeAttribute("disabled");
         },
       }).run({ "async": true });
     });
   });
+
+Array.from(document.querySelectorAll("button[copy]"))
+.forEach((elem) => {
+  elem.addEventListener("click", async () => {
+    let input = elem.parentElement.querySelector("textarea");
+    await navigator.clipboard.writeText(input.value);
+  });
+});

@@ -36,14 +36,29 @@ mark {
   color: var(--marked-text);
 }
 
-code {
+code,
+textarea {
   background-color: var(--accent-bg);
   border-radius: var(--standard-border-radius);
   padding: .15em;
+  font-family: var(--mono-font);
+  color: var(--code);
 }
 
 input[type=checkbox]:checked:after {
   background-color: var(--input-bg);
+}
+
+input {
+  background-color: var(--accent-bg);
+  color: var(--code);
+  min-width: fit-content;
+}
+
+
+
+label {
+  display: inline;
 }
 
 li {
