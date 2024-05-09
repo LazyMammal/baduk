@@ -30,14 +30,18 @@ function scoreBoard(board, enclosed, stoneArr) {
       }
     }
   }
+  const B = (empty["b"] ?? 0) + (stone["B"] ?? 0);
+  const W = (empty["w"] ?? 0) + (stone["W"] ?? 0);
+  const S = empty["?"] ?? 0;
   return {
     empty: empty,
     stone: stone,
-    B: (empty["b"] ?? 0)
-      + (stone["B"] ?? 0),
-    W: (empty["w"] ?? 0)
-      + (stone["W"] ?? 0),
-    "?": empty["?"] ?? 0,
+    B: B,
+    W: W,
+    "?": S,
+    GO_BLACK: B,
+    GO_WHITE: W,
+    GO_STONE: S,
   }
 }
 

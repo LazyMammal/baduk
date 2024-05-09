@@ -52,7 +52,10 @@ function inputState(input, STATE = GoState, BOARD = GoBoard2D) {
   // retrieve current game state from input
   const board = input ? parse(input, BOARD) : new BOARD(7);
   const lines = input.split("\n").slice(board.size);
-  const toPlay = lines.length ? lines[0].slice(-1) : "B";
+  let toPlay = "B";
+  if(lines.length && lines[0].startsWith("toPlay")) {
+    toPlay = lines[0].slice(-1) === "B" ? "B" : "W";
+  }
   return new STATE(board, toPlay);
 }
 

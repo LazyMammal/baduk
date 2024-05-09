@@ -16,8 +16,8 @@ class GoValid extends GoEarlyExit {
         caps += this.eraseChain(i, j);
       }
     }
-    [this.playerCode, this.enemyCode]
-      = [this.enemyCode, this.playerCode];
+    this.playerCode ^= GO_STONE;
+    this.enemyCode ^= GO_STONE;
     this.toPlay = GO_CHARS[this.playerCode];
     this.turn++;
     return caps;
