@@ -17,24 +17,22 @@ class GoBoard2D {
   _data;
   constructor(size) {
     this._size = size;
-    this._data = {}; // not an array!
+    this._data = createNested(size, GO_EMPTY);
   }
   get size() {
     return this._size;
   }
-  _key = (x, y) => `${x}|${y}`;
-
   _xyValid(x, y) {
     return x >= 0 && x < this._size
       && y >= 0 && y < this._size;
   }
   setCode(x, y, val) {
     if (this._xyValid(x, y))
-      this._data[this._key(x, y)] = val;
+      this._data[y][x] = val;
   }
   getCode(x, y) {
     if (this._xyValid(x, y))
-      return this._data[this._key(x, y)] ?? GO_EMPTY;
+      return this._data[y][x];
     return GO_OOB;
   }
   getColour = (x, y) => GO_CHARS[this.getCode(x, y)];
