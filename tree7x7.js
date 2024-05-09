@@ -15,7 +15,9 @@ class UCTNode {
   get visits() { return this._visits }
   get value() { return this._sumRewards / this._visits }
 
-  hasChild = () => this.children.length;
+  hasChild() {
+    return this.children.length;
+  }
 
   addChild(action) {
     let child = new this.constructor(action);

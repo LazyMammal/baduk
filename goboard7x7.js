@@ -35,12 +35,12 @@ class GoBoard2D {
       return this._data[y][x];
     return GO_OOB;
   }
-  getColour = (x, y) => GO_CHARS[this.getCode(x, y)];
-  isEmpty = (x, y) => this.getCode(x, y) === GO_EMPTY;
-  isBlack = (x, y) => this.getCode(x, y) === GO_BLACK;
-  isWhite = (x, y) => this.getCode(x, y) === GO_WHITE;
-  isStone = (x, y) => this.getCode(x, y) & GO_STONE;
-  isOOB = (x, y) => this.getCode(x, y) === GO_OOB;
+  getColour(x, y) { return GO_CHARS[this.getCode(x, y)] }
+  isEmpty(x, y) { return this.getCode(x, y) === GO_EMPTY }
+  isBlack(x, y) { return this.getCode(x, y) === GO_BLACK }
+  isWhite(x, y) { return this.getCode(x, y) === GO_WHITE }
+  isStone(x, y) { return this.getCode(x, y) & GO_STONE }
+  isOOB(x, y) { return this.getCode(x, y) === GO_OOB }
   setEmpty(x, y) { this.setCode(x, y, GO_EMPTY) }
   setBlack(x, y) { this.setCode(x, y, GO_BLACK) }
   setWhite(x, y) { this.setCode(x, y, GO_WHITE) }
