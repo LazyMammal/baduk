@@ -1,14 +1,21 @@
-class TreeNode {
+class UCTNode {
   action;
   depth;
   parent;
   children;
+  _visits;
+  _sumRewards;
   constructor(action) {
     this.action = action;
     this.depth = 0;
     this.parent = null;
     this.children = [];
+    this._visits = 0;
+    this._sumRewards = 0;
   }
+
+  get visits() { return this._visits }
+  get value() { return this._sumRewards / this._visits }
 
   addChild(action) {
     let child = new this.constructor(action);
@@ -17,27 +24,12 @@ class TreeNode {
     this.children.push(child);
     return child;
   }
-}
-
-class UCTNode extends TreeNode {
-  _visits;
-  _sumRewards;
-  constructor() {
-    super();
-    this._visits = 0;
-    this._sumRewards = 0;
-  }
 
   addReward(reward = 0, visits = 1) {
-    /* 
-      - rewards & visits always update together
-    */
+    // rewards & visits always update together
     this._visits += visits;
     this._sumRewards += reward;
   }
-
-  get visits() { return this._visits }
-  get value() { return this._sumRewards / this._visits }
 
   selectChild() { // argmax( children, key:ucb )
     if (!this.children.length) return null;
@@ -70,33 +62,38 @@ function tree_search(root, state, reps = 50e3) {
       node = node.selectChild();
       state.play(node.action);
     }
-    if (node) {
+    if (node) { // expand all child actions
       let rewardSum = 0;
       let visitSum = 0;
       for (let action of state.actions()) {
-        node.addChild(action);
-        let sim = state.sim(node.action);
-        const reward = sim.reward();
-        node.addReward(reward);
+        let child = node.addChild(action);
+        let sim = state.sim(node.action); // fork
+        const reward = sim.reward();   // rollout
+        child.addReward(reward);
         rewardSum += reward;
         visitSum++;
       }
-      while (node) { // backprop
-        node.addReward(rewardSum, visitSum);
-        node = node.parent;
+      if (visitSum) {
+        while (node) { // backprop
+          rewardSum = -rewardSum;
+          node.addReward(rewardSum, visitSum);
+          node = node.parent;
+        }
+      } else {
+        // TODO: terminal node
       }
     }
   }
 }
 
 function tree7x7(input, NODE = UCTNode) {
-  let res = [];
+  let res = ['Mock data test.'];
   const root = new NODE('root');
   const state = {
     actions: () => _.range(10).map(c => `child:${c}`),
     play: () => true,
     sim: () => state,
-    reward: () => Math.random(),
+    reward: () => 2 * Math.random() - 1,
   };
   tree_search(root, state);
   res.push(`[root] visits ${root.visits} value ${root.value} `);
