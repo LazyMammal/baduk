@@ -149,3 +149,10 @@ section {
 section+section {
   padding: 0 0 2rem 0;
 }
+
+.top {
+  position: relative;
+  top: -1.5em;
+  text-align: right;
+  float: right;
+}

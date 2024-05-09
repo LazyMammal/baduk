@@ -22,41 +22,46 @@
     <p>Experiments in Baduk/Game of Go/Weiqi using JavaScript</p>
   </header>
   <main>
-    <aside>
-      <nav>
-        <a href="#Introduction">Introduction</a>
-        <a href="#Rules">Rules of the Game</a>
-        <a href="#TheVisionAhead">The Vision Ahead</a>
-        <a href="#TheFirstStep">The First Step</a>
-        <a href="#FloodFill">Flood Fill</a>
-        <a href="#LibertyCount">Liberty Count</a>
-        <a href="#Scoring">Scoring</a>
-        <a href="#UnitTests">Unit Tests</a>
-        <a href="#Rollouts">Rollouts</a>
-        <a href="#GameState">Game State</a>
-        <a href="#Captures">Captures</a>
-        <a href="#LegalMoves">Legal Moves</a>
-        <a href="#Repetition">Repetition</a>
-        <a href="#Eyes">Eyes</a>
-        <a href="#MonteCarlo">Monte Carlo</a>
-        <a href="#MoveTests">Move Tests</a>
-        <a href="#RepetitionHack">Repetition Hack</a>
-        <a href="#EarlyExit">Early Exit</a>
-        <a href="#Containers">Containers</a>
-        <a href="#RulesLogic">Rules Logic</a>
-      </nav>
-    </aside>
-    <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
-    <p>This page intends to demonstrate a series of small steps that all together will reach a more distant goal.</p>
-    <p>Writing a large program can be a daunting task. Even if the end goal is clearly envisioned, the steps to get
-      there might be only somewhat understood in advance. Many times the path forward must be discovered one step at a
-      time.</p>
-    <p>I have the goal of writing a <i>reasonably</i> performing Monte Carlo Tree Search (MCTS) bot for playing the Game
-      of Go. I'm going to write it all in JavaScript.</p>
-    <p>In order to avoid burnout along the way, I will be dividing up the large size task into many small steps. Each of
-      the sections below will focus on one of those small steps.</p>
-    <p>This page is a <i>living document</i> and will be updated as I write more sections ...</p>
     <section>
+      <aside>
+        <nav>
+          <a href="#Introduction">Introduction</a>
+          <a href="#Rules">Rules of the Game</a>
+          <a href="#TheVisionAhead">The Vision Ahead</a>
+          <a href="#TheFirstStep">The First Step</a>
+          <a href="#FloodFill">Flood Fill</a>
+          <a href="#LibertyCount">Liberty Count</a>
+          <a href="#Scoring">Scoring</a>
+          <a href="#UnitTests">Unit Tests</a>
+          <a href="#Rollouts">Rollouts</a>
+          <a href="#GameState">Game State</a>
+          <a href="#Captures">Captures</a>
+          <a href="#LegalMoves">Legal Moves</a>
+          <a href="#Repetition">Repetition</a>
+          <a href="#Eyes">Eyes</a>
+          <a href="#MonteCarlo">Monte Carlo</a>
+          <a href="#MoveTests">Move Tests</a>
+          <a href="#RepetitionHack">Repetition Hack</a>
+          <a href="#EarlyExit">Early Exit</a>
+          <a href="#Containers">Containers</a>
+          <a href="#RulesLogic">Rules Logic</a>
+          <a href="#TreeSearch">Tree Search</a>
+        </nav>
+      </aside>
+      <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
+      <p>This page intends to demonstrate a series of small steps that all together will reach a more distant goal.</p>
+      <p>Writing a large program can be a daunting task. Even if the end goal is clearly envisioned, the steps to get
+        there might be only somewhat understood in advance. Many times the path forward must be discovered one step at a
+        time.</p>
+      <p>I have the goal of writing a <i>reasonably</i> performing Monte Carlo Tree Search (MCTS) bot for playing the
+        Game of Go.
+        I'm going to write it all in JavaScript.</p>
+      <p>In order to avoid burnout along the way, I will be dividing up the large size task into many small steps.
+        Each of the sections below will focus on one of those small steps.</p>
+      <p>This page is a <i>living document</i> and will be updated as I write more sections ...</p>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="Rules"><a href="#Rules">Rules of the Game</a></h2>
       <p>Here's a quick refresher on the rules of Go:</p>
       <ul>
@@ -93,6 +98,7 @@
       </ul>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="TheVisionAhead"><a href="#TheVisionAhead">The Vision Ahead</a></h2>
       <p>I want to pick a medium sized goal to directly plan towards.
         I know that an MCTS bot will need to enact the <i>rules of the game</i> in order to perform automated Rollouts.
@@ -113,6 +119,7 @@
         this file.</p>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="TheFirstStep"><a href="#TheFirstStep">The First Step</a></h2>
       <p>Before we tackle <code>liberty_score.txt</code> let's start with something less complicated.
         The first step is reading a text file with an example position from a 7x7 board.
@@ -135,6 +142,7 @@
       </div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="FloodFill"><a href="#FloodFill">Flood Fill</a></h2>
       <p>Now that we feel comfortable <i>parsing</i> the text board we can look ahead to processing the board for more
         details.</p>
@@ -177,6 +185,7 @@
       </div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="LibertyCount"><a href="#LibertyCount">Liberty Count</a></h2>
       <p>Liberties are an essential attribute in playing Go.
         To perform a capture you need to know a chain has zero liberties.
@@ -194,6 +203,7 @@
       </div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="Scoring"><a href="#Scoring">Scoring</a></h2>
       <p>Scoring is very similar to Counting Liberties with these differences:</p>
       <ul>
@@ -217,6 +227,7 @@
       </div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="UnitTests"><a href="#UnitTests">Unit Tests</a></h2>
       <p>We have enough code now to solve all the unit tests in <code>liberty_score.txt</code>.
         But we still need to extract the tests from the text file and verify the outputs.</p>
@@ -262,6 +273,7 @@
       </div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="Rollouts"><a href="#Rollouts">Rollouts</a></h2>
       <p>The purpose of a Rollout is to simulate an entire game quickly and randomly.
         Upon completion the board state will be scored as a Win or a Loss.
@@ -285,6 +297,7 @@
       </ul>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="GameState"><a href="#GameState">Game State</a></h2>
       <p>Game State is the information we need to handle each player turn.
         We need to know what stones are on the board, where we can play and whose turn it is.
@@ -310,6 +323,7 @@
       <div style="clear: both"></div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="Captures"><a href="#Captures">Captures</a></h2>
       <p>To handle captures we need to be able to count liberties.
         Whenever we place a stone we will check the four adjacent chains.
@@ -336,6 +350,7 @@
       <div style="clear: both"></div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="LegalMoves"><a href="#LegalMoves">Legal Moves</a></h2>
       <p>The easiest way to check if a move is allowed under the rules is simply to try it.
         We will simulate the desired move, process any captures and then count the remaining liberties.
@@ -362,6 +377,7 @@
       <div style="clear: both"></div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="Repetition"><a href="#Repetition">Repetition</a></h2>
       <p>We will mark moves that repeat any previous board position as invalid.
       </p>
@@ -387,6 +403,7 @@
       <div style="clear: both"></div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="Eyes"><a href="#Eyes">Eyes</a></h2>
       <p>Rollout policies can go beyond official rules.
         We want to encourage <i>stability</i> and <i>efficiency</i> by preventing some unwanted moves.
@@ -416,6 +433,7 @@
       <div style="clear: both"></div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="MonteCarlo"><a href="#MonteCarlo">Monte Carlo</a></h2>
       <p>Monte Carlo methods rely on collecting statistics from many Rollouts.
         Let's collect win/loss results with Black to play first.
@@ -432,7 +450,7 @@
           <pre><summary>input</summary><code
             id="montecarlo7x7"
             preload-txt data-url="montecarlo7x7.txt"></code></pre>
-            <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban" draggable="false"></div>
+          <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban" draggable="false"></div>
         </div>
         <div class="full">
           <button start>Start</button> <button reset>Reset</button>
@@ -442,6 +460,7 @@
       <div style="clear: both"></div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="MoveTests"><a href="#MoveTests">Move Tests</a></h2>
       <p>It would be a good idea to run another set of tests before coding any new features.
         A starting game state will be given (board + toPlay) followed by the expected outcome of each turn.
@@ -466,6 +485,7 @@
       </div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="RepetitionHack"><a href="#RepetitionHack">Repetition Hack</a></h2>
       <p>Rollout policy is sometimes going to be different than normal Go rules.
         It's important that Rollouts avoid infinite loops and other mishaps.
@@ -515,6 +535,7 @@
       </div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="EarlyExit"><a href="#EarlyExit">Early Exit</a></h2>
       <p>So far we have been using the FLood Fill (aka DFS) routine to count things.
         It works well but we haven't used all of it's abilities yet.
@@ -554,6 +575,7 @@
       </div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="Containers"><a href="#Containers">Containers</a></h2>
       <p>Originally we used a very flexible object container for the underlying <code>Board2D</code>.
         Let's find out what happens if we upgrade that to a nested array.
@@ -581,6 +603,7 @@
       </div>
     </section>
     <section>
+      <div class="top"><a href="#top">top</a></div>
       <h2 id="RulesLogic"><a href="#RulesLogic">Rules Logic</a></h2>
       <p>The gold standard for a legal move is:</p>
       <ul>
@@ -624,7 +647,6 @@
         </div>
       </div>
     </section>
-
   </main>
   <footer>
     <p>by <a href="https://lazymammal.github.io/">LazyMammal</a></p>
