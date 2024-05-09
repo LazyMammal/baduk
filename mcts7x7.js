@@ -41,8 +41,12 @@ function mcts7x7(input,
   const size = state.board.size;
   const root = new NODE('root');
   const t0 = performance.now();
-  let rollouts = tree_search(root, state, 1500);
-  const T = performance.now() - t0;
+  const endT = t0 + 10e3;
+  let rollouts = 0;
+  while(performance.now() < endT) {
+    rollouts += tree_search(root, state, 1e3);
+  }
+  const dT = performance.now() - t0;
   const visitsArr = printRootArray(size, root, (node) => node.visits);
   const valueArr = printRootArray(size, root, (node) => node.value.toFixed(2));
   return [
@@ -52,8 +56,8 @@ function mcts7x7(input,
     printPadded(valueArr, true, 3),
     `root value ${root.value.toFixed(6)}`,
     `visits ${root.visits}`,
-    `${(root.visits / T * 1e3).toFixed(2)} visits/s`,
+    `${(root.visits / dT * 1e3).toFixed(2)} visits/s`,
     `rollouts ${rollouts}`,
-    `${(rollouts / T * 1e3).toFixed(2)} rollouts/s`
+    `${(rollouts / dT * 1e3).toFixed(2)} rollouts/s`
   ].join("\n");
 }
