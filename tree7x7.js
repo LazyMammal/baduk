@@ -13,7 +13,7 @@ class UCTNode {
   get visits() { return this._visits }
   get value() { return this._sumRewards / this._visits }
 
-  hasChild = () => children.length;
+  hasChild = () => this.children.length;
 
   addChild(action) {
     let child = new this.constructor(action);
@@ -28,7 +28,8 @@ class UCTNode {
   }
 
   selectChild() { // argmax( children, key:ucb )
-    if (!this.hasChild()) return null;
+    if (!this.hasChild())
+      return null;
     const LogN = Math.log(this._visits);
     let bestChild = null;
     let bestUCB = -Infinity;
@@ -48,29 +49,23 @@ class UCTNode {
 
 function tree_search(root, state, reps = 1) {
   let rollouts = 0;
-  if (!root.hasChild()) {
-    for (let action of state.moveList()) {
-      root.addChild(action);
-    }
-  }
-  const traverse = () => {
-    while (node.hasChild()) {
-      node = node.selectChild();
-      state.playMove(node.action);
-      path.push(node);
-    }
-  }
   for (let x = 0; x < reps; x++) {
     let node = root;
     const path = [node];
-    traverse();
-    if (node.visits) {
+    while (node.hasChild()) {
+      let child = node.selectChild();
+      if (!child)
+        break;
+      node = child;
+      state.replayMove(node.action);
+      path.push(node);
+    }
+    if (!node.hasChild()) {
       for (let action of state.moveList()) {
         node.addChild(action);
       }
-      traverse();
     }
-    let reward = node.doRollout();
+    let reward = state.doRollout();
     rollouts++;
     while (path.length) { // backprop
       node = path.pop();
@@ -85,8 +80,7 @@ function doTreeSearch(reps, NODE, SEARCH) {
   const root = new NODE(0);
   const state = {
     moveList: () => _.range(15),
-    playMove: () => { },
-    simClone: () => state,
+    replayMove: () => { },
     doRollout: () => 2 * Math.random() - 1,
   };
   const t0 = performance.now();
@@ -110,11 +104,9 @@ function doTreeSearchReport(input, button, output, reps, NODE, SEARCH) {
     output.innerText += text;
   if (flag) {
     reps *= 2;
-    if (reps < 1e6) {
-      setTimeout(() => {
-        doTreeSearchReport(input, button, output, reps, NODE, SEARCH)
-      }, 1);
-    }
+    setTimeout(() => {
+      doTreeSearchReport(input, button, output, reps, NODE, SEARCH)
+    }, 1);
   } else {
     button.removeAttribute("disabled");
   }

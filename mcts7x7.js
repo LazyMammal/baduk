@@ -11,6 +11,11 @@ class GoMCTS extends GoValid {
     return score[player] > score[enemy] + komi;
   }
 
+  replayMove(action) {
+    let [x, y] = action;
+    this.playMove(x, y);
+  }
+
   simClone() {
     const board = parse(printBoard(this.board, { addLabels: false }));
     return new this.constructor(board, this.toPlay, this.turn);
