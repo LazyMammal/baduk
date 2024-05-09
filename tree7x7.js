@@ -13,6 +13,8 @@ class UCTNode {
   get visits() { return this._visits }
   get value() { return this._sumRewards / this._visits }
 
+  hasChild = () => children.length;
+
   addChild(action) {
     let child = new this.constructor(action);
     this.children.push(child);
@@ -26,7 +28,7 @@ class UCTNode {
   }
 
   selectChild() { // argmax( children, key:ucb )
-    if (!this.children.length) return null;
+    if (!this.hasChild()) return null;
     const LogN = Math.log(this._visits);
     let bestChild = null;
     let bestUCB = -Infinity;
@@ -46,42 +48,34 @@ class UCTNode {
 
 function tree_search(root, state, reps = 1) {
   let rollouts = 0;
-  if (!root.children.length) {
+  if (!root.hasChild()) {
     for (let action of state.moveList()) {
       root.addChild(action);
+    }
+  }
+  const traverse = () => {
+    while (node.hasChild()) {
+      node = node.selectChild();
+      state.playMove(node.action);
+      path.push(node);
     }
   }
   for (let x = 0; x < reps; x++) {
     let node = root;
     const path = [node];
-    while (node.children.length) {
-      node = node.selectChild();
-      state.playMove(node.action);
-      path.push(node);
-    }
-    if (node) { // expand all child actions
-      let rewardSum = 0;
-      let visitSum = 0;
+    traverse();
+    if (node.visits) {
       for (let action of state.moveList()) {
-        let child = node.addChild(action);
-        let sim = state.simClone();
-        sim.playMove(action);
-        const reward = sim.doRollout();
-        rollouts++;
-        child.addReward(reward);
-        rewardSum += reward;
-        visitSum++;
+        node.addChild(action);
       }
-      rewardSum /= visitSum;
-      if (visitSum) {
-        while (path.length) { // backprop
-          const pNode = path.pop();
-          rewardSum = -rewardSum;
-          pNode.addReward(rewardSum);
-        }
-      } else {
-        // TODO: terminal node
-      }
+      traverse();
+    }
+    let reward = node.doRollout();
+    rollouts++;
+    while (path.length) { // backprop
+      node = path.pop();
+      node.addReward(reward);
+      reward = -reward;
     }
   }
   return rollouts;
