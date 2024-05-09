@@ -17,8 +17,7 @@ class GoMCTS extends GoValid {
   }
 
   simClone() {
-    const board = parse(printBoard(this.board, { addLabels: false }));
-    return new this.constructor(board, this.toPlay, this.turn);
+    return _.cloneDeep(this);
   }
 }
 
@@ -46,8 +45,7 @@ function mcts7x7(input, options,
   const endT = t0 + runtime * 1e3;
   let nodes = 0;
   while (performance.now() < endT) {
-    let searchBoard = state.simClone();
-    nodes += tree_search(root, searchBoard, 100);
+    nodes += tree_search(root, state, 100);
   }
   const dT = performance.now() - t0;
   const visitsArr = printRootArray(size, root, (node) => node.visits);
@@ -61,10 +59,10 @@ function mcts7x7(input, options,
     `Value:`,
     printPadded(valueArr, true, 5),
     `root value ${root.value.toFixed(6)}`,
-    `visits ${root.visits}`,
-    `${(root.visits / dT * 1e3).toFixed(2)} visits/s`,
-    `nodes ${nodes}`,
-    `${(nodes / dT * 1e3).toFixed(2)} nodes/s`,
+    `visit ${root.visits} `
+    + `${(root.visits / dT * 1e3).toFixed(2)} visits/s`,
+    `nodes ${nodes} `
+    + `${(nodes / dT * 1e3).toFixed(2)} nodes/s`,
     `seconds ${runtime}`,
     `explore ${window.baduk.EX}`,
   ].join("\n");

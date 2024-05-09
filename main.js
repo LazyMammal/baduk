@@ -206,8 +206,11 @@ async function buttonSetup(elem) {
     options[elem.name] = elem.value;
   })
   let data = "";
-  if (url) data = await cacheFetch(url);
-  if (dataId) data = document.getElementById(dataId)?.innerText;
+  if (dataId) {
+    const elem = document.getElementById(dataId);
+    data = elem?.value ?? elem?.innerText;
+  }
+  else if (url) data = await cacheFetch(url);
   return [parent, run, data, options];
 }
 

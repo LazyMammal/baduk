@@ -49,7 +49,8 @@ class UCTNode {
   }
 }
 
-function tree_search(root, state, reps = 1) {
+function tree_search(root, gamestate, reps = 1) {
+  const state = gamestate.simClone();
   let nodes = 0;
   for (let x = 0; x < reps; x++) {
     let node = root;
@@ -85,6 +86,7 @@ function doTreeSearch(reps, NODE, SEARCH) {
     moveList: () => _.range(15),
     replayMove: () => { },
     doRollout: () => 2 * Math.random() - 1,
+    simClone: () => state,
   };
   const t0 = performance.now();
   let nodes = SEARCH(root, state, reps);
