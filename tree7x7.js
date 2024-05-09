@@ -97,7 +97,7 @@ function doTreeSearch(reps, NODE, SEARCH) {
   return [T < 5e3, T > 500 ? res : []];
 }
 
-function doTreeSearchReport(input, button, output, reps, NODE, SEARCH) {
+function doReport(input, button, output, reps, NODE, SEARCH) {
   let [flag, res] = doTreeSearch(reps, NODE, SEARCH);
   let text = res.join("\n");
   if (text.length)
@@ -105,17 +105,20 @@ function doTreeSearchReport(input, button, output, reps, NODE, SEARCH) {
   if (flag) {
     reps *= 2;
     setTimeout(() => {
-      doTreeSearchReport(input, button, output, reps, NODE, SEARCH)
+      doReport(input, button, output, reps, NODE, SEARCH)
     }, 1);
   } else {
     button.removeAttribute("disabled");
   }
 }
 
-function tree7x7(input, button, parent, NODE = UCTNode, SEARCH = tree_search) {
+function tree7x7(input, button, parent,
+  NODE = UCTNode,
+  SEARCH = tree_search
+) {
   let output = parent.querySelector("[output]");
   output.innerText = "Mock data test.\n\n";
   setTimeout(() => {
-    doTreeSearchReport(input, button, output, 1, NODE, SEARCH)
+    doReport(input, button, output, 1, NODE, SEARCH)
   }, 1);
 }
