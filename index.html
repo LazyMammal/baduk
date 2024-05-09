@@ -46,6 +46,7 @@
           <a href="#Containers">Containers</a>
           <a href="#RulesLogic">Rules Logic</a>
           <a href="#TreeSearch">Tree Search</a>
+          <a href="#MCTS">MCTS</a>
         </nav>
       </aside>
       <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
@@ -650,7 +651,13 @@
     <section>
       <div class="top"><a href="#top">top</a></div>
       <h2 id="TreeSearch"><a href="#TreeSearch">Tree Search</a></h2>
-      <p>...</p>
+      <p>Here we define a tree node class and Upper Confidence Bound (UCB) formula.
+        We need to traverse from a <i>root node</i> all the way to a <i>leaf node</i>.
+        At each tier in the tree the child node with the highest UCB score is selected.
+      </p>
+      <p>Each node encodes an action to replay in the game state.
+        At the leaf node we assign a reward value which is then shared with all the actions selected in the tree.
+      </p>
       <details>
         <summary>tree7x7.js</summary>
         <pre><code preload-javascript data-url="tree7x7.js"></code></pre>
@@ -664,6 +671,32 @@
           <pre><summary>output</summary><code output></code></pre>
         </div>
       </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="MCTS"><a href="#MCTS">MCTS</a></h2>
+      <p>Monte Carlo Tree Search (MCTS) is the combination of UCB Tree Search and Rollouts.
+        Rollouts will be used to stochastically estimate the reward function.
+        At every leaf node the game state is played to completion in a Rollout.
+        Many small samples by Rollouts combine together to build statistical probabilities.
+      </p>
+      <details>
+        <summary>mcts7x7.js</summary>
+        <pre><code preload-javascript data-url="mcts7x7.js"></code></pre>
+      </details>
+      <script src="mcts7x7.js" defer></script>
+      <div data-id="mcts7x7" run="mcts7x7">
+        <div class="full">
+          <button run>Run</button> <button reset>Reset</button> <button
+            time>Time</button> <mark hidden></mark>
+        </div>
+        <div>
+          <div class="goban clickable" update="copy2input" size="7" id="mcts7x7_goban"></div>
+          <pre><summary>input</summary><code id="mcts7x7"></code></pre>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+      </div>
+    </section>
   </main>
   <footer>
     <p>by <a href="https://lazymammal.github.io/">LazyMammal</a></p>

@@ -1,7 +1,5 @@
-function scoreBoard(board) {
+function scoreBoard(board, enclosed, stoneArr) {
   const size = board.size;
-  const enclosed = createNested(size, ".");
-  const stoneArr = createNested(size, ".");
   let tally;
   const followEmpty = ([x, y]) => {
     let piece = board.getColour(x, y);
@@ -22,12 +20,12 @@ function scoreBoard(board) {
         if (tally["B"] && !tally["W"]) {
           result = "b";
         }
-        stoneArr[y][x] = result;
-        enclosed[y][x] = result;
+        if (stoneArr) stoneArr[y][x] = result;
+        if (enclosed) enclosed[y][x] = result;
         empty[result] = 1 + (empty[result] ?? 0);
       } else {
         const piece = board.getColour(x, y);
-        stoneArr[y][x] = piece;
+        if (stoneArr) stoneArr[y][x] = piece;
         stone[piece] = 1 + (stone[piece] ?? 0);
       }
     }
@@ -47,7 +45,10 @@ function scoreBoard(board) {
 
 function score7x7(input) {
   let board = parse(input);
-  let score = scoreBoard(board);
+  const size = board.size;
+  const enclosed = createNested(size, ".");
+  const stoneArr = createNested(size, ".");
+  let score = scoreBoard(board, enclosed, stoneArr);
   return [
     printNested(score.Enclosed),
     `Enclosed: b: ${score.empty["b"]}`,

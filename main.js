@@ -96,7 +96,9 @@ function copy2input(event, elem, id, size, gobo) {
   }
 }
 
-function updateGoban(id, input) {
+function updateGoban(id, parent) {
+  const dataId = parent.getAttribute("data-id");
+  const input = document.getElementById(dataId)?.innerText;
   const board = input ? parseNested(input) : null;
   const gobo = window.baduk.gobo[id];
   const size = document.getElementById(id).getAttribute("size");
@@ -182,7 +184,7 @@ async function runButton(elem) {
   let text = window[run](data);
   output.innerText = "";
   output.insertAdjacentHTML("afterbegin", text);
-  if (goban) updateGoban(goban, text);
+  if (goban) updateGoban(goban, parent);
 }
 
 async function resetButton(elem) {
@@ -192,7 +194,7 @@ async function resetButton(elem) {
   if (output.hasAttribute("preload-txt")) await preloadTxt(output);
   await buttonSetup(elem);
   let goban = parent.querySelector(".goban")?.getAttribute("id");
-  if (goban) updateGoban(goban, output?.innerText);
+  if (goban) updateGoban(goban, parent);
 }
 
 async function startButton(elem) {

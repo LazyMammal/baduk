@@ -52,7 +52,7 @@ class UCTNode {
 
 function tree_search(root, state, reps = 50e3) {
   if (!root.children.length) {
-    for (let action of state.actions()) {
+    for (let action of state.moveList()) {
       root.addChild(action);
     }
   }
@@ -60,15 +60,16 @@ function tree_search(root, state, reps = 50e3) {
     let node = root;
     while (node.children.length) {
       node = node.selectChild();
-      state.play(node.action);
+      state.playMove(...node.action);
     }
     if (node) { // expand all child actions
       let rewardSum = 0;
       let visitSum = 0;
-      for (let action of state.actions()) {
+      for (let action of state.moveList()) {
         let child = node.addChild(action);
-        let sim = state.sim(node.action); // fork
-        const reward = sim.reward();   // rollout
+        let sim = state.simClone();
+        sim.playMove(...action);
+        const reward = sim.doRollout();
         child.addReward(reward);
         rewardSum += reward;
         visitSum++;
@@ -90,10 +91,10 @@ function tree7x7(input, NODE = UCTNode) {
   let res = ['Mock data test.'];
   const root = new NODE('root');
   const state = {
-    actions: () => _.range(10).map(c => `child:${c}`),
-    play: () => true,
-    sim: () => state,
-    reward: () => 2 * Math.random() - 1,
+    moveList: () => _.range(10).map(c => `child:${c}`),
+    playMove: () => { },
+    simClone: () => state,
+    doRollout: () => 2 * Math.random() - 1,
   };
   tree_search(root, state);
   res.push(`[root] visits ${root.visits} value ${root.value} `);
