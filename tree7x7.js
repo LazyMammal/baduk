@@ -52,18 +52,19 @@ function tree_search(root, state, reps = 1) {
   for (let x = 0; x < reps; x++) {
     let node = root;
     const path = [node];
-    while (node.hasChild()) {
-      let child = node.selectChild();
-      if (!child)
-        break;
-      node = child;
-      state.replayMove(node.action);
-      path.push(node);
-    }
+    const traverse = () => {
+      while (node.hasChild()) {
+        node = node.selectChild();
+        state.replayMove(node.action);
+        path.push(node);
+      }
+    };
+    traverse();
     if (!node.hasChild()) {
       for (let action of state.moveList()) {
         node.addChild(action);
       }
+      traverse();
     }
     let reward = state.doRollout();
     rollouts++;
