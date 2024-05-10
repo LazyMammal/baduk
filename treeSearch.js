@@ -2,9 +2,9 @@ window.baduk.EX = 1.0;
 
 class UCTNode {
   action;
-  children;
   _visits;
   _sumRewards;
+  children;
   constructor(action) {
     this.action = action;
     this.children = [];
@@ -131,7 +131,7 @@ function stepReport(input, button, output, reps) {
   }
 }
 
-function tree7x7(input, options, button, parent) {
+function treeMock(input, options, button, parent) {
   let output = parent.querySelector("[output]");
   output.innerText = "Mock data test.\n\n";
   setTimeout(() => {

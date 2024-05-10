@@ -630,13 +630,31 @@
         At the leaf node we assign a reward value which is then shared with all the actions selected in the tree.
       </p>
       <details>
-        <summary>tree7x7.js</summary>
-        <pre><code preload-javascript data-url="tree7x7.js"></code></pre>
+        <summary>treeSearch.js</summary>
+        <pre><code preload-javascript data-url="treeSearch.js"></code></pre>
       </details>
       <div class="flex">
-        <script src="tree7x7.js" defer></script>
-        <div run="tree7x7">
+        <script src="treeSearch.js" defer></script>
+        <div run="treeMock">
           <button start>Start</button>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="Traverse"><a href="#Traverse">Traverse</a></h2>
+      <p>"Traverse" is the sub-routine that descends the tree from root to leaf.
+        Let's take a closer look.
+      </p>
+      <details>
+        <summary>traverseMock.js</summary>
+        <pre><code preload-javascript data-url="traverseMock.js"></code></pre>
+      </details>
+      <div class="flex">
+        <script src="traverseMock.js" defer></script>
+        <div run="traverseMock">
+          <button run>Run</button>
           <pre><summary>output</summary><code output></code></pre>
         </div>
       </div>
@@ -667,7 +685,8 @@
         <div>
           <div class="goban clickable" update="copy2input" size="7" id="mcts7x7_goban"></div>
           <div>
-            <summary>input</summary> <textarea cols="12" rows="9" id="mcts7x7"></textarea> <br> <button copy>Copy</button>
+            <summary>input</summary> <textarea cols="12" rows="9" id="mcts7x7"></textarea> <br> <button
+              copy>Copy</button>
           </div>
           <pre><summary>output</summary><code output></code></pre>
         </div>
