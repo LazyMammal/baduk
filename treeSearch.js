@@ -2,18 +2,17 @@ window.baduk.EX = 1.0;
 
 class UCTNode {
   action;
-  _visits;
-  _sumRewards;
+  visits;
+  reward;
   children;
   constructor(action) {
     this.action = action;
     this.children = [];
-    this._visits = 0;
-    this._sumRewards = 0;
+    this.visits = 0;
+    this.reward = 0;
   }
 
-  get visits() { return this._visits }
-  get value() { return this._sumRewards / this._visits }
+  get value() { return this.reward / this.visits }
 
   hasChild() {
     return this.children.length;
@@ -27,21 +26,21 @@ class UCTNode {
 
   addReward(reward = 0) {
     // rewards & visits always update together
-    this._sumRewards += reward;
-    this._visits++;
+    this.reward += reward;
+    this.visits++;
   }
 
   selectChild() { // argmax( children, key:ucb )
     if (!this.hasChild())
       return null;
-    const LogN = Math.log(this._visits) * window.baduk.EX;
+    const LogN = Math.log(this.visits) * window.baduk.EX;
     let bestChild = null;
     let bestUCB = -Infinity;
     for (let child of this.children) {
-      if (!child._visits)
+      if (!child.visits)
         return child;
-      const ucb = child._sumRewards / child._visits
-        + Math.sqrt(LogN / child._visits);
+      const ucb = child.value
+        + Math.sqrt(LogN / child.visits);
       if (ucb > bestUCB) {
         bestChild = child;
         bestUCB = ucb;
