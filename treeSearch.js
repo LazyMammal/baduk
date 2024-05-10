@@ -84,11 +84,10 @@ function searchCore(root, state) {
   return nodes;
 }
 
-function treeSearch(root, gamestate, reps = 1) {
-  const state = gamestate.simClone();
+function treeSearch(root, state, reps = 1) {
   let nodes = 0;
   for (let x = 0; x < reps; x++) {
-    nodes += searchCore(root, state);
+    nodes += searchCore(root, state.simClone());
   }
   return nodes;
 }
