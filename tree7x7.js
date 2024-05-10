@@ -51,39 +51,51 @@ class UCTNode {
   }
 }
 
-function tree_search(root, gamestate, reps = 1) {
+function traverseTree(node, state, path) {
+  while (node.hasChild()) {
+    node = node.selectChild();
+    state.replayMove(node.action);
+    path.push(node);
+  }
+  return node;
+}
+
+function backprop(path, reward) {
+  while (path.length) {
+    let node = path.pop();
+    node.addReward(reward);
+    reward = -reward;
+  }
+}
+
+function searchCore(root, state) {
+  let nodes = 0;
+  let node = root;
+  const path = [node];
+  node = traverseTree(node, state, path);
+  if (!node.hasChild()) {
+    for (let action of state.moveList()) {
+      node.addChild(action);
+      nodes++;
+    }
+    node = traverseTree(node, state, path);
+  }
+  let reward = state.doRollout();
+  backprop(path, reward);
+  return nodes;
+}
+
+function treeSearch(root, gamestate, reps = 1) {
   const state = gamestate.simClone();
   let nodes = 0;
   for (let x = 0; x < reps; x++) {
-    let node = root;
-    const path = [node];
-    const traverse = () => {
-      while (node.hasChild()) {
-        node = node.selectChild();
-        state.replayMove(node.action);
-        path.push(node);
-      }
-    };
-    traverse();
-    if (!node.hasChild()) {
-      for (let action of state.moveList()) {
-        node.addChild(action);
-        nodes++;
-      }
-      traverse();
-    }
-    let reward = state.doRollout();
-    while (path.length) { // backprop
-      node = path.pop();
-      node.addReward(reward);
-      reward = -reward;
-    }
+    nodes += searchCore(root, state);
   }
   return nodes;
 }
 
-function doTreeSearch(reps, NODE, SEARCH) {
-  const root = new NODE(0);
+function mockSearch(reps) {
+  const root = new UCTNode(0);
   const state = {
     moveList: () => _.range(15),
     replayMove: () => { },
@@ -91,7 +103,7 @@ function doTreeSearch(reps, NODE, SEARCH) {
     simClone: () => state,
   };
   const t0 = performance.now();
-  let nodes = SEARCH(root, state, reps);
+  let nodes = treeSearch(root, state, reps);
   const T = performance.now() - t0;
   const res = [
     `value ${root.value.toFixed(12)}`,
@@ -104,28 +116,25 @@ function doTreeSearch(reps, NODE, SEARCH) {
   return [T < 1e3, T > 350 ? res : []];
 }
 
-function doReport(input, button, output, reps, NODE, SEARCH) {
-  let [flag, res] = doTreeSearch(reps, NODE, SEARCH);
+function stepReport(input, button, output, reps) {
+  let [flag, res] = mockSearch(reps);
   let text = res.join("\n");
   if (text.length)
     output.innerText += text;
   if (flag) {
     reps *= 2;
     setTimeout(() => {
-      doReport(input, button, output, reps, NODE, SEARCH)
+      stepReport(input, button, output, reps)
     }, 1);
   } else {
     button.removeAttribute("disabled");
   }
 }
 
-function tree7x7(input, options, button, parent,
-  NODE = UCTNode,
-  SEARCH = tree_search
-) {
+function tree7x7(input, options, button, parent) {
   let output = parent.querySelector("[output]");
   output.innerText = "Mock data test.\n\n";
   setTimeout(() => {
-    doReport(input, button, output, 1, NODE, SEARCH)
+    stepReport(input, button, output, 1)
   }, 1);
 }
