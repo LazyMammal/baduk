@@ -55,7 +55,7 @@ function mcts7x7(input, options,
   const endT = t0 + runtime * 1e3;
   let nodes = 0;
   while (performance.now() < endT) {
-    nodes += tree_search(root, state, 100);
+    nodes += treeSearch(root, state, 100);
   }
   const dT = performance.now() - t0;
   const visitsArr = printRootArray(size, root, (node) => node.visits);
