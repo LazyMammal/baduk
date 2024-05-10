@@ -58,7 +58,6 @@ function mcts7x7(input, options,
     nodes += tree_search(root, state, 100);
   }
   const dT = performance.now() - t0;
-  console.log(root);
   const visitsArr = printRootArray(size, root, (node) => node.visits);
   const valueArr = printRootArray(size, root, (node) => `${node.value}`
     .replace(/^0./, ".")

@@ -101,7 +101,7 @@ function doTreeSearch(reps, NODE, SEARCH) {
     + `${(nodes / T * 1e3).toFixed(2)} nodes/s`,
     "\n"
   ];
-  return [T < 5e3, T > 500 ? res : []];
+  return [T < 1e3, T > 350 ? res : []];
 }
 
 function doReport(input, button, output, reps, NODE, SEARCH) {
