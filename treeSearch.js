@@ -1,4 +1,4 @@
-window.baduk.EX = 1.0;
+window.baduk.EX = 2.0;
 
 class UCTNode {
   action;
@@ -33,14 +33,14 @@ class UCTNode {
   selectChild() { // argmax( children, key:ucb )
     if (!this.hasChild())
       return null;
-    const LogN = Math.log(this.visits) * window.baduk.EX;
+    const LogN = Math.log(this.visits);
     let bestChild = null;
     let bestUCB = -Infinity;
     for (let child of this.children) {
       if (!child.visits)
         return child;
-      const ucb = child.value
-        + Math.sqrt(LogN / child.visits);
+      const ucb = child.value + window.baduk.EX
+        * Math.sqrt(LogN / child.visits);
       if (ucb > bestUCB) {
         bestChild = child;
         bestUCB = ucb;
