@@ -1,6 +1,7 @@
 importScripts(
   "goutil.js",
   "goboard.js",
+  "goshuffle.js",
   "gostate.js"
 );
 
@@ -44,7 +45,8 @@ function test1() {
       state.board[pos] = GO_WHITE;
   }
   console.log(printBoard(state.board, size));
-  console.log(state);
+  const shuffle = new ShuffleRings(size);
+  console.log(shuffle.getMoveOrder());
 }
 test1();
 
