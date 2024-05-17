@@ -16,10 +16,9 @@ class ShuffleRings {
   addPatch(size) {
     const half = Math.floor(size / 2);
     const tengen = xy2pos(half, half, size);
-    let r = 2;
     const patch = patch3x3(tengen, size);
     const patchShuffles = [];
-    const numPatch = primes[r++];
+    const numPatch = primes[2];
     for (let i = 0; i < numPatch; i++) {
       patchShuffles.push(_.shuffle(patch));
     }
@@ -28,6 +27,7 @@ class ShuffleRings {
   }
 
   addRings(size) {
+    let r = 3;
     const half = Math.floor(size / 2);
     for (let n = half - 2; n >= 0; n--) {
       const nth = nthLine(n, size);
