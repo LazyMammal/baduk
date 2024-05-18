@@ -6,17 +6,18 @@ const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43];
 class ShuffleRings {
   rings;
   select;
-  constructor(size) {
+  constructor(board) {
     this.rings = [];
     this.select = [];
-    this.addPatch(size);
-    this.addRings(size);
+    this.addPatch(board);
+    this.addRings(board);
   }
 
-  addPatch(size) {
+  addPatch(board) {
+    const size = board.size;
     const half = Math.floor(size / 2);
-    const tengen = xy2pos(half, half, size);
-    const patch = patch3x3(tengen, size);
+    const tengen = board.xy2pos(half, half);
+    const patch = board.patch3x3(tengen);
     const patchShuffles = [];
     const numPatch = primes[2];
     for (let i = 0; i < numPatch; i++) {
@@ -26,11 +27,12 @@ class ShuffleRings {
     this.select.push(0);
   }
 
-  addRings(size) {
+  addRings(board) {
+    const size = board.size;
     let r = 3;
     const half = Math.floor(size / 2);
     for (let n = half - 2; n >= 0; n--) {
-      const nth = nthLine(n, size);
+      const nth = board.nthLine(n);
       const nthShuffles = [];
       const numNth = primes[r++];
       for (let i = 0; i < numNth; i++) {
