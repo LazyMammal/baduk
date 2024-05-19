@@ -1,4 +1,4 @@
-class GoBoard2D {
+class GoBoardPos {
   size;
   board;
   constructor(size, board = null) {

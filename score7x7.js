@@ -52,12 +52,12 @@ function score7x7(input, options) {
   const stoneArr = createNested(size, ".");
   let score = scoreBoard(board, enclosed, stoneArr);
   return [
-    printNested(score.Enclosed),
+    printNested(enclosed),
     `Enclosed: b: ${score.empty["b"]}`,
     `          w: ${score.empty["w"]}`,
     `Stones:   B: ${score.stone["B"]}`,
     `          W: ${score.stone["W"]}`,
-    printNested(score.Score),
+    printNested(stoneArr),
     `B: ${score.B}`,
     `W: ${score.W}`,
     `?: ${score["?"]}`,

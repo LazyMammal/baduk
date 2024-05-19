@@ -52,13 +52,14 @@ function flood7x7(input, options, BOARD = GoBoard2D) {
     const isStone = board.isBlack(x, y);
     black += isStone;
     libs += board.isEmpty(x, y);
-    visits[y][x]++;
+    if(board._xyValid(x, y))
+      visits[y][x]++;
     total++;
     return isStone;
   }
   DFS([0, 0], xy4way, followBlack);
   return [
-    printBoard(visits),
+    printNested(visits),
     `Black stones:  ${black}`,
     `Liberty count: ${libs}`,
     `Total visits:  ${total}`,

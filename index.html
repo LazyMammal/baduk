@@ -104,26 +104,23 @@
       <p>I want to pick a medium sized goal to directly plan towards.
         I know that an MCTS bot will need to enact the <i>rules of the game</i> in order to perform automated Rollouts.
         It will also need a way to score a <b>finished game</b> for counting Rollout wins and losses.</p>
-      <p>The file <code>liberty_score.txt</code> contains my vision for the minimum abilities a computer would need to
+      <p>The file <code>liberty_score.js</code> contains my vision for the minimum abilities a computer would need to
         enforce the rules of Go.</p>
       <ol>
         <li><mark>Count Liberties</mark></li>
         <li><mark>Score a Finished Board</mark></li>
       </ol>
       <details>
-        <summary>liberty_score.txt</summary>
-        <pre><code preload-txt data-url="liberty_score.txt"></code></pre>
+        <summary>liberty_score.js</summary>
+        <pre><code preload-javascript data-url="liberty_score.js"></code></pre>
       </details>
-      <p>The text file is written so a human can read it. It's also carefully formatted so it can be read into a
-        script and parsed into a set of Unit Tests.</p>
-      <p>The next section will start on the path to loading, parsing and <i>eventually</i> executing the Unit Tests in
-        this file.</p>
+      <p>The test file is written to be easy to read and process.</p>
     </section>
     <section>
       <div class="top"><a href="#top">top</a></div>
       <h2 id="TheFirstStep"><a href="#TheFirstStep">The First Step</a></h2>
-      <p>Before we tackle <code>liberty_score.txt</code> let's start with something less complicated.
-        The first step is reading a text file with an example position from a 7x7 board.
+      <p>Before we tackle <code>liberty_score.js</code> let's start with something less complicated.
+        The first step is reading a test file with an example position from a 7x7 board.
         It will be easier to parse because it only has a single board and has no extra headers, comments, or trailing
         whitespace.
         The overall structure of <code>board7x7.txt</code> is as simple as we can make it while still being a meaningful
@@ -230,45 +227,19 @@
     <section>
       <div class="top"><a href="#top">top</a></div>
       <h2 id="UnitTests"><a href="#UnitTests">Unit Tests</a></h2>
-      <p>We have enough code now to solve all the unit tests in <code>liberty_score.txt</code>.
-        But we still need to extract the tests from the text file and verify the outputs.</p>
-      <details>
-        <summary>liberty_score.txt</summary>
-        <pre><code preload-txt data-url="liberty_score.txt"></code></pre>
-      </details>
-      <p>Let's start by extracting the input/output boards:</p>
-      <ul>
-        <li><mark>Liberty Count</mark>
-          <ul>
-            <li>1 input board</li>
-            <li>1 output board</li>
-          </ul>
-        </li>
-        <li><mark>Enclosed Score</mark>
-          <ul>
-            <li>1 input board</li>
-            <li>2 output boards</li>
-            <li><code>key:val</code> pairs</li>
-          </ul>
-        </li>
-      </ul>
-      <details>
-        <summary>extract_tests.js</summary>
-        <pre><code preload-javascript data-url="extract_tests.js"></code></pre>
-      </details>
-      <script src="extract_tests.js" defer></script>
-      <div data-url="liberty_score.txt" run="extract_tests">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><summary>output</summary><code output></code></pre>
-      </div>
-      <p>We now have the full extraction of the Unit Tests.
+      <p>We have enough code now to solve all the unit tests in <code>liberty_score.js</code>.
         With tests in hand we can verify the correctness of our previous functions.</p>
+      <details>
+        <summary>liberty_score.js</summary>
+        <pre><code preload-javascript data-url="liberty_score.js"></code></pre>
+      </details>
+      <script src="liberty_score.js" defer></script>
       <details>
         <summary>test7x7.js</summary>
         <pre><code preload-javascript data-url="test7x7.js"></code></pre>
       </details>
       <script src="test7x7.js" defer></script>
-      <div data-url="liberty_score.txt" run="test7x7">
+      <div data-url="liberty_score.js" run="test7x7">
         <button run>Run</button> <button time>Time</button> <mark hidden></mark>
         <pre><summary>output</summary><code output></code></pre>
       </div>
