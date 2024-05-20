@@ -1,4 +1,4 @@
-const testList = [{
+const moveScoreTest = [{
   name: "Self-Capture",
   input: [
     "B B B .", // setup
@@ -80,8 +80,8 @@ const testList = [{
 
 function move_tests(input, options, STATE = GoEyes, BOARD = GoBoard2D) {
   const output = [];
-  for (let t = 0; t < testList.length; t++) {
-    const test = testList[t];
+  for (let t = 0; t < moveScoreTest.length; t++) {
+    const test = moveScoreTest[t];
     const res = [];
     const state = inputState(test.input.join("\n"), STATE, BOARD);
     let passTurn = 0;
@@ -107,7 +107,7 @@ function move_tests(input, options, STATE = GoEyes, BOARD = GoBoard2D) {
     }
     const msg = [
       badge(!res.length),
-      `Test ${t + 1}/${testList.length}:`,
+      `Test ${t + 1}/${moveScoreTest.length}:`,
       test.name,
     ].join(" ");
     res.unshift(msg);

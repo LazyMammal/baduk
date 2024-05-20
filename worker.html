@@ -9,9 +9,9 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/an-old-hope.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/benchmark@2.1.4/benchmark.min.js" defer></script>
+  <script src="lodash.min.js" defer></script>
   <script src="gobo.js" defer></script>
+  <script src="fork_handler.js" defer></script>
   <script src="main.js" defer></script>
   <title>Baduk JS - Step By Step</title>
 </head>
@@ -22,6 +22,174 @@
     <p>Experiments in Baduk/Game of Go/Weiqi using JavaScript</p>
   </header>
   <main>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="TheFirstStep"><a href="#TheFirstStep">The First Step</a></h2>
+      <p>Before we tackle <code>liberty_score.js</code> let's start with something less complicated.
+        The first step is reading a test file with an example position from a 7x7 board.
+        It will be easier to parse because it only has a single board and has no extra headers, comments, or trailing
+        whitespace.
+        The overall structure of <code>board7x7.txt</code> is as simple as we can make it while still being a meaningful
+        first step.
+      </p>
+      <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
+      <p>We can add coordinate labels for both axes while we're parsing the board.
+        Let's also restore the whitespace between the columns.</p>
+      <details>
+        <summary>worker/goutil.js</summary>
+        <pre><code preload-javascript data-url="worker/goutil.js"></code></pre>
+      </details>
+      <details>
+        <summary>worker/goboard2d.js</summary>
+        <pre><code preload-javascript data-url="worker/goboard2d.js"></code></pre>
+      </details>
+      <div data-url="board7x7.txt" run="worker/TheFirstStep.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="FloodFill"><a href="#FloodFill">Flood Fill</a></h2>
+      <p>Now that we feel comfortable <i>parsing</i> the text board we can look ahead to processing the board for more
+        details.</p>
+      <p>To reach our medium goal we need to "count liberties" and "score the game". Scoring the game further relies on
+        identifying "enclosed empty spots" and which stone colour they "belong to".</p>
+      <ol>
+        <li><mark>Count Liberties</mark>
+          <ul>
+            <li>Follow a chain of same-colour stones.</li>
+            <li>Count all the adjacent empty spots.</li>
+          </ul>
+        </li>
+        <li><mark>Enclosed Empty Spots</mark>
+          <ul>
+            <li>Follow a chain of empty spots.</li>
+            <li>Identify the adjacent stone colours.</li>
+          </ul>
+        </li>
+      </ol>
+      <p>Both of these abilities rely on an even smaller ability. We need to be able to follow "chains" of
+        same-type pieces on the board. I know from experience that trying to do this task by "scanning" is possible
+        but very time consuming. The efficient approach here is to use Flood Fill (aka DFS, Depth First Search)</p>
+      <p>The scenario in <code>flood7x7.txt</code> challenges us to handle several issues.</p>
+      <ul>
+        <li>Follow the chain of stones through several branching points.</li>
+        <li>Avoid an infinite loop following the circular path of stones.</li>
+        <li>Avoid re-counting adjacent empty spots from multiple angles.</li>
+      </ul>
+      <pre><summary>flood7x7.txt</summary><code preload-txt data-url="flood7x7.txt"></code></pre>
+      <p>Let's count the number stones in the black chain and the number of liberties it's touching.
+        We'll also show the number of <i>visits</i> at each location of the board during our Flood Fill.</p>
+      <details>
+        <summary>worker/goflood.js</summary>
+        <pre><code preload-javascript data-url="worker/goflood.js"></code></pre>
+      </details>
+      <div data-url="flood7x7.txt" run="worker/FloodFill.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="LibertyCount"><a href="#LibertyCount">Liberty Count</a></h2>
+      <p>Liberties are an essential attribute in playing Go.
+        To perform a capture you need to know a chain has zero liberties.
+        It's impossible to enforce the <a href="#Rules">Rules of the Game</a> without the ability to count liberties.
+        To count liberties for the whole board we only need to run Flood Fill for each stone.</p>
+      <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
+      <details>
+        <summary>worker/golibs.js</summary>
+        <pre><code preload-javascript data-url="worker/golibs.js"></code></pre>
+      </details>
+      <div data-url="board7x7.txt" run="worker/LibertyCount.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="Scoring"><a href="#Scoring">Scoring</a></h2>
+      <p>Scoring is very similar to Counting Liberties with these differences:</p>
+      <ul>
+        <li>Follow empty spots instead of stones.</li>
+        <li>Identify the <i>types</i> of adjacent stones instead of summing them up.</li>
+      </ul>
+      <div>
+        <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
+      </div>
+      <p>We'll need to scan the board for stones but not follow them,
+        and follow empty spots as we find them.
+      </p>
+      <details>
+        <summary>worker/goscore.js</summary>
+        <pre><code preload-javascript data-url="worker/goscore.js"></code></pre>
+      </details>
+      <div data-url="board7x7.txt" run="worker/Scoring.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="UnitTests"><a href="#UnitTests">Unit Tests</a></h2>
+      <p>We have enough code now to solve all the unit tests in <code>liberty_score.js</code>.
+        With tests in hand we can verify the correctness of our previous functions.</p>
+        <details>
+          <summary>worker/test_liberty_score.js</summary>
+          <pre><code preload-javascript data-url="worker/test_liberty_score.js"></code></pre>
+        </details>
+        <div data-url="board7x7.txt" run="worker/UnitTests.js">
+          <div class="full">
+            <button fork="fork_run">Run</button>
+            <button fork="fork_time">Time</button>
+            <span options>
+              <input type="hidden" name="worker" value="goutil.js">
+              <input type="hidden" name="worker" value="goboard2d.js">
+              <input type="hidden" name="worker" value="goflood.js">
+              <input type="hidden" name="worker" value="golibs.js">
+              <input type="hidden" name="worker" value="goscore.js">
+              <input type="hidden" name="worker" value="test_liberty_score.js">
+              <input type="hidden" name="worker" value="gotest1.js">
+            </span>
+          </div>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+    </section>
     <section>
       <h2 id="Worker"><a href="#Worker">Worker</a></h2>
       <p>...</p>
@@ -34,25 +202,29 @@
         <pre><code preload-javascript data-url="worker/goboard.js"></code></pre>
       </details>
       <details>
+        <summary>worker/goshuffle.js</summary>
+        <pre><code preload-javascript data-url="worker/goshuffle.js"></code></pre>
+      </details>
+      <details>
         <summary>worker/gostate.js</summary>
         <pre><code preload-javascript data-url="worker/gostate.js"></code></pre>
       </details>
       <details>
-        <summary>worker/handler.js</summary>
-        <pre><code preload-javascript data-url="worker/handler.js"></code></pre>
-      </details>
-      <details>
         <summary>worker/worker.js</summary>
-        <pre><code preload-javascript data-url="worker/worker.js"></code></pre>
+        <pre><code preload-javascript data-url="worker/mcts.js"></code></pre>
       </details>
       <p>...</p>
-      <script src="worker/handler.js" defer></script>
-      <div data-id="worker7x7" run="worker7x7">
+      <div data-id="worker7x7" run="worker/mcts.js">
         <div class="full">
-          <button worker>Worker</button>
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button>
           <span options>
             <label>Seconds <input name="time" value="1" size="2"></label>
             <label>Explore <input name="explore" value="2.0" size="5"></label>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard.js">
+            <input type="hidden" name="worker" value="goshuffle.js">
+            <input type="hidden" name="worker" value="gostate.js">
           </span>
         </div>
         <div>

@@ -22,7 +22,7 @@ class GoState {
 function parse(text) {
   const nested = Array.isArray(text) ? text : text2nested(text);
   const size = nested[0].length;
-  const board = new GoBoard2D(size);
+  const board = new GoBoardPos(size);
   board.loadNested(nested);
   return new GoState(size, board);
 }

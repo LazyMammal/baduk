@@ -45,6 +45,7 @@ class GoBoardPos {
   firstPos() {
     return this.xy2pos(0, 0);
   }
+
   lastPos() {
     const L = this.size - 1;
     return this.xy2pos(L, L);

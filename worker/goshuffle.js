@@ -1,5 +1,5 @@
 if (self["_"] === undefined) {
-  importScripts("https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js");
+  importScripts("lodash.min.js");
 }
 const primes = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43];
 

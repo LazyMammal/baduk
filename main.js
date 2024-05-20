@@ -198,12 +198,14 @@ function findParent(elem) {
 
 async function buttonSetup(elem) {
   let parent = findParent(elem);
+  let fork = elem.getAttribute("fork");
   let run = parent.getAttribute("run");
   let url = parent.getAttribute("data-url");
   let dataId = parent.getAttribute("data-id");
   let options = {};
   Array.from(parent.querySelectorAll("[options] input")).forEach(elem => {
-    options[elem.name] = elem.value;
+    options[elem.name] ??= [];
+    options[elem.name].push(elem.value);
   })
   let data = "";
   if (dataId) {
@@ -211,11 +213,31 @@ async function buttonSetup(elem) {
     data = elem?.value ?? elem?.innerText;
   }
   else if (url) data = await cacheFetch(url);
-  return [parent, run, data, options];
+  return {
+    parent: parent,
+    fork: fork,
+    run: run,
+    data: data,
+    options: options,
+  };
+}
+
+async function forkButton(elem) {
+  const { parent, fork, run, data, options } = await buttonSetup(elem);
+  const goban = parent.querySelector(".goban")?.getAttribute("id");
+  const output = parent.querySelector("[output]");
+  const callback = (result) => {
+    output.innerText = "";
+    output.insertAdjacentHTML("afterbegin", result);
+    if (goban) updateGoban(goban, parent);
+    elem.removeAttribute("disabled");
+  }
+  elem.setAttribute("disabled", true);
+  window[fork](data, run, callback, options);
 }
 
 async function runButton(elem) {
-  let [parent, run, data, options] = await buttonSetup(elem);
+  let { parent, run, data, options } = await buttonSetup(elem);
   let goban = parent.querySelector(".goban")?.getAttribute("id");
   let output = parent.querySelector("[output]");
   let text = window[run](data, options);
@@ -235,13 +257,18 @@ async function resetButton(elem) {
 }
 
 async function startButton(elem) {
-  let [parent, run, data, options] = await buttonSetup(elem);
+  let { parent, run, data, options } = await buttonSetup(elem);
   elem.setAttribute("disabled", true);
   setTimeout(
     () => { window[run](data, options, elem, parent) },
     100
   );
 }
+
+Array.from(document.querySelectorAll("button[fork]"))
+  .forEach((elem) => {
+    elem.addEventListener("click", async () => forkButton(elem));
+  });
 
 Array.from(document.querySelectorAll("button[run]"))
   .forEach((elem) => {
@@ -262,7 +289,7 @@ Array.from(document.querySelectorAll("button[reset]"))
 Array.from(document.querySelectorAll("button[time]"))
   .forEach((elem) => {
     elem.addEventListener("click", async () => {
-      let [parent, run, data, options] = await buttonSetup(elem);
+      let { parent, run, data, options } = await buttonSetup(elem);
       let result = parent.querySelector("mark");
       result.classList.add("loading");
       result.innerText = "...";
@@ -281,9 +308,9 @@ Array.from(document.querySelectorAll("button[time]"))
   });
 
 Array.from(document.querySelectorAll("button[copy]"))
-.forEach((elem) => {
-  elem.addEventListener("click", async () => {
-    let input = elem.parentElement.querySelector("textarea");
-    await navigator.clipboard.writeText(input.value);
+  .forEach((elem) => {
+    elem.addEventListener("click", async () => {
+      let input = elem.parentElement.querySelector("textarea");
+      await navigator.clipboard.writeText(input.value);
+    });
   });
-});
