@@ -31,7 +31,7 @@ class GoBoard2D {
   loadNested(nested) {
     for (let y = 0; y < nested.length && y < this.size; y++) {
       for (let x = 0; x < nested[y].length && x < this.size; x++) {
-        this.board[y][x] = GO_CODES[nested[y][x]];
+        this.board[y][x] = GO_CODES[nested[y][x]] ?? GO_EMPTY;
       }
     }
   }

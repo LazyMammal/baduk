@@ -29,6 +29,19 @@ function text2nested(text, flip = true) {
   return array;
 }
 
+function parseProps(text) {
+  text = text.replaceAll(" ", "").trim();
+  if (!text.length) return {};
+  const lines = text.split("\n");
+  const extra = lines.slice(lines[0].length);
+  if (!extra.length) return {};
+  return Object.fromEntries(
+    extra.map(line => line.split(":")
+      .map(field => field.trim())
+    )
+  );
+}
+
 function createNested(size, fill) {
   return Array(size).fill(0)
     .map(() => Array(size).fill(fill));

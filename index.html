@@ -333,9 +333,11 @@
         <summary>gostate2d.js</summary>
         <pre><code preload-javascript data-url="worker/gostate2d.js"></code></pre>
       </details>
+      <p>Prohibited moves are marked with <mark warn="">⛛</mark></p>
       <div data-id="rollouts7x7" run="worker/Rollouts.js">
         <div class="full">
           <button fork="fork_run">Play</button>
+          <button reset>Reset</button>
           <button fork="fork_time">Time</button> <mark hidden></mark>
           <span options>
             <input type="hidden" name="worker" value="goutil.js">
@@ -346,6 +348,7 @@
             <input type="hidden" name="worker" value="test_liberty_score.js">
             <input type="hidden" name="worker" value="gotest1.js">
             <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="goplay.js">
           </span>
         </div>
         <div>

@@ -68,7 +68,7 @@ Array.from(document.querySelectorAll(".goban"))
         let parent = findParent(elem);
         let dataId = parent.getAttribute("data-id");
         let input = document.getElementById(dataId);
-        if (input.tagName == "TEXTAREA") {
+        if (input.tagName === "TEXTAREA") {
           input.addEventListener("change",
             (event) => {
               updateGoban(id, parent);
@@ -111,6 +111,14 @@ function clickGoban(event, elem, id, size, gobo) {
   }
 }
 
+function updateTextbox(elem, text) {
+  if (elem.tagName === "TEXTAREA") {
+    elem.value = text;
+  } else {
+    elem.innerText = text;
+  }
+}
+
 function copy2input(event, elem, id, size, gobo) {
   let parent = findParent(elem);
   let input_id = parent.getAttribute("data-id");
@@ -125,11 +133,7 @@ function copy2input(event, elem, id, size, gobo) {
     }
     let text = printNested(board);
     let input = document.getElementById(input_id);
-    if (input.tagName == "TEXTAREA") {
-      input.value = text;
-    } else {
-      input.innerText = text;
-    }
+    updateTextbox(input, text);
   }
 }
 

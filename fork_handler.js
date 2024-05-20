@@ -8,8 +8,12 @@ Array.from(document.querySelectorAll("button[fork]"))
 async function fork_run(elem) {
   const fork = await setupFork(elem);
   const callback = (result) => {
-    fork.output.innerText = "";
-    fork.output.insertAdjacentHTML("afterbegin", result);
+    if(fork.output.tagName === "TEXTAREA") {
+      fork.output.value = result;
+    } else {
+      fork.output.innerText = "";
+      fork.output.insertAdjacentHTML("afterbegin", result);
+    }
     if (fork.goban) updateGoban(fork.goban, fork.parent);
     elem.removeAttribute("disabled");
   }
@@ -90,3 +94,19 @@ async function getData(parent) {
   else if (url) data = await cacheFetch(url);
   return data;
 }
+
+async function resetButton(elem) {
+  const parent = findParent(elem);
+  const output = parent.querySelector("[output]");
+  const goban = parent.querySelector(".goban")?.getAttribute("id");
+  updateTextbox(output, "");
+  if (output.hasAttribute("preload-txt"))
+    await preloadTxt(output);
+  if (goban)
+    updateGoban(goban, parent);
+}
+
+Array.from(document.querySelectorAll("button[reset]"))
+  .forEach((elem) => {
+    elem.addEventListener("click", async () => resetButton(elem));
+  });

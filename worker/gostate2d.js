@@ -176,3 +176,21 @@ class GoState {
     }
   }
 }
+
+function markLegal(state) {
+  const moves = state.moveList();
+  return markInverse(state, moves);
+}
+
+function markInverse(state, moves) {
+  const warn = "V";
+  const board = text2nested(
+    state.board.printBoard({ addLabels: false })
+      .replaceAll(".", warn)
+  );
+  for (let [x, y] of moves) {
+    if (board[y][x] === warn)
+      board[y][x] = ".";
+  }
+  return printNested(board);
+}
