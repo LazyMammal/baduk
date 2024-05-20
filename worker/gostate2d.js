@@ -1,4 +1,4 @@
-class GoValidCombined {
+class GoState {
   board;
   turn;
   playerCode;
@@ -162,5 +162,17 @@ class GoValidCombined {
       || enemyCount > 1)
       return true; // false eye (diagonal)
     return false; // probably an eye!
+  }
+
+  playRandom() {
+    const moves = this.moveList();
+    if (moves.length) {
+      let [x, y] = _.sample(moves); // random
+      this.playMove(x, y);
+      return true;
+    } else {
+      this.playMove(-1, -1);
+      return false;
+    }
   }
 }

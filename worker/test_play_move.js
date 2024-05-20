@@ -1,11 +1,11 @@
-const moveScoreTest = [{
+const testPlayMove = [{
   name: "Self-Capture",
+  toPlay: "B",
   input: [
     "B B B .", // setup
     "W W W B", // no B moves (self-capture)
     "W . W B",
     ". W W B",
-    "toPlay: B"
   ],
   boards: [[
     "B B B .", // B pass
@@ -20,11 +20,11 @@ const moveScoreTest = [{
   ]],
 }, {
   name: "Capture",
+  toPlay: "W",
   input: [
     "W W W", // setup
     "W . W", // no W moves (eyes|legal)
     "W W W",
-    "toPlay: W",
   ],
   boards: [[
     "W W W", // W pass
@@ -37,13 +37,13 @@ const moveScoreTest = [{
   ]],
 }, {
   name: "Repetition",
+  toPlay: "B",
   input: [
     ". B W . W", // setup
     "B B B W W", // B:D5 is only move
     ". B W W .",
     "B B B W W",
     ". B W W .",
-    "toPlay: B",
   ],
   boards: [[
     ". B . B W", // B plays D5
@@ -77,41 +77,3 @@ const moveScoreTest = [{
     ". B W W ."
   ]],
 }]
-
-function move_tests(input, options, STATE = GoEyes, BOARD = GoBoard2D) {
-  const output = [];
-  for (let t = 0; t < moveScoreTest.length; t++) {
-    const test = moveScoreTest[t];
-    const res = [];
-    const state = inputState(test.input.join("\n"), STATE, BOARD);
-    let passTurn = 0;
-    for (let b = 0; b < test.boards.length; b++) {
-      const expected = test.boards[b].join("\n");
-      if (passTurn >= 2) {
-        res.push(`Test ${t + 1}.${b + 1}:`
-          + ` Game finished before expected.`);
-      }
-      passTurn = playRandom(state) ? 0 : passTurn + 1;
-      const actual = printBoard(state.board,
-        { addLabels: false });
-      const testPass =
-        `${actual}`.trim() == `${expected}`.trim();
-      if (!testPass) {
-        res.push([
-          `Test ${t + 1}.${b + 1}:`,
-          `${actual}`,
-          `!=`,
-          `${expected}`
-        ].join("\n"));
-      }
-    }
-    const msg = [
-      badge(!res.length),
-      `Test ${t + 1}/${moveScoreTest.length}:`,
-      test.name,
-    ].join(" ");
-    res.unshift(msg);
-    output.push(res.join("\n"));
-  }
-  return output.join("\n");
-}

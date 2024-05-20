@@ -1,4 +1,3 @@
-
 function createLookup(data) {
   const board = parseBoard2D(data.join("\n"));
   const enclosed = createNested(board.size, ".");
@@ -11,10 +10,10 @@ function createLookup(data) {
   });
 }
 
-function unitTests(input) {
+function unitTests() {
   let res = [];
-  let lookup = createLookup(libertyScoreTest["Board"]); // run
-  let test = Object.entries(libertyScoreTest);
+  let lookup = createLookup(testLibertyScore["Board"]); // run
+  let test = Object.entries(testLibertyScore);
   for (let t = 0; t < test.length; t++) {
     let [label, data] = test[t];
     if(label === "Board")

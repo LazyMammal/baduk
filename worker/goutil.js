@@ -1,3 +1,5 @@
+importScripts("lodash.min.js"); // _.shuffle(), _.sample()
+
 const GO_EMPTY = 0;
 const GO_BLACK = 1;
 const GO_WHITE = 2;

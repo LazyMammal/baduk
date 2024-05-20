@@ -1,4 +1,4 @@
-const libertyScoreTest = {
+const testLibertyScore = {
   "Board": [
     "B . B . . B .",
     ". B . B . B .",

@@ -10,9 +10,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/an-old-hope.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
   <script src="lodash.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/benchmark@2.1.4/benchmark.min.js" defer></script>
   <script src="gobo.js" defer></script>
   <script src="main.js" defer></script>
+  <script src="fork_handler.js" defer></script>
   <title>Baduk JS - Step By Step</title>
 </head>
 
@@ -111,8 +111,8 @@
         <li><mark>Score a Finished Board</mark></li>
       </ol>
       <details>
-        <summary>liberty_score.js</summary>
-        <pre><code preload-javascript data-url="liberty_score.js"></code></pre>
+        <summary>test_liberty_score.js</summary>
+        <pre><code preload-javascript data-url="worker/test_liberty_score.js"></code></pre>
       </details>
       <p>The test file is written to be easy to read and process.</p>
     </section>
@@ -130,12 +130,22 @@
       <p>We can add coordinate labels for both axes while we're parsing the board.
         Let's also restore the whitespace between the columns.</p>
       <details>
-        <summary>goboard7x7.js</summary>
-        <pre><code preload-javascript data-url="goboard7x7.js"></code></pre>
+        <summary>goutil.js</summary>
+        <pre><code preload-javascript data-url="worker/goutil.js"></code></pre>
       </details>
-      <script src="goboard7x7.js" defer></script>
-      <div data-url="board7x7.txt" run="goboard7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+      <details>
+        <summary>goboard2d.js</summary>
+        <pre><code preload-javascript data-url="worker/goboard2d.js"></code></pre>
+      </details>
+      <div data-url="board7x7.txt" run="worker/TheFirstStep.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+          </span>
+        </div>
         <pre><summary>output</summary><code output></code></pre>
       </div>
     </section>
@@ -173,12 +183,19 @@
       <p>Let's count the number stones in the black chain and the number of liberties it's touching.
         We'll also show the number of <i>visits</i> at each location of the board during our Flood Fill.</p>
       <details>
-        <summary>flood7x7.js</summary>
-        <pre><code preload-javascript data-url="flood7x7.js"></code></pre>
+        <summary>goflood.js</summary>
+        <pre><code preload-javascript data-url="worker/goflood.js"></code></pre>
       </details>
-      <script src="flood7x7.js" defer></script>
-      <div data-url="flood7x7.txt" run="flood7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+      <div data-url="flood7x7.txt" run="worker/FloodFill.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+          </span>
+        </div>
         <pre><summary>output</summary><code output></code></pre>
       </div>
     </section>
@@ -191,12 +208,20 @@
         To count liberties for the whole board we only need to run Flood Fill for each stone.</p>
       <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
       <details>
-        <summary>liberty7x7.js</summary>
-        <pre><code preload-javascript data-url="liberty7x7.js"></code></pre>
+        <summary>golibs.js</summary>
+        <pre><code preload-javascript data-url="worker/golibs.js"></code></pre>
       </details>
-      <script src="liberty7x7.js" defer></script>
-      <div data-url="board7x7.txt" run="liberty7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+      <div data-url="board7x7.txt" run="worker/LibertyCount.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+          </span>
+        </div>
         <pre><summary>output</summary><code output></code></pre>
       </div>
     </section>
@@ -215,12 +240,21 @@
         and follow empty spots as we find them.
       </p>
       <details>
-        <summary>score7x7.js</summary>
-        <pre><code preload-javascript data-url="score7x7.js"></code></pre>
+        <summary>goscore.js</summary>
+        <pre><code preload-javascript data-url="worker/goscore.js"></code></pre>
       </details>
-      <script src="score7x7.js" defer></script>
-      <div data-url="board7x7.txt" run="score7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+      <div data-url="board7x7.txt" run="worker/Scoring.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+          </span>
+        </div>
         <pre><summary>output</summary><code output></code></pre>
       </div>
     </section>
@@ -230,17 +264,23 @@
       <p>We have enough code now to solve all the unit tests in <code>liberty_score.js</code>.
         With tests in hand we can verify the correctness of our previous functions.</p>
       <details>
-        <summary>liberty_score.js</summary>
-        <pre><code preload-javascript data-url="liberty_score.js"></code></pre>
+        <summary>test_liberty_score.js</summary>
+        <pre><code preload-javascript data-url="worker/test_liberty_score.js"></code></pre>
       </details>
-      <script src="liberty_score.js" defer></script>
-      <details>
-        <summary>test7x7.js</summary>
-        <pre><code preload-javascript data-url="test7x7.js"></code></pre>
-      </details>
-      <script src="test7x7.js" defer></script>
-      <div data-url="liberty_score.js" run="test7x7">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
+      <div data-url="board7x7.txt" run="worker/UnitTests.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="test_liberty_score.js">
+            <input type="hidden" name="worker" value="gotest1.js">
+          </span>
+        </div>
         <pre><summary>output</summary><code output></code></pre>
       </div>
     </section>
@@ -257,152 +297,102 @@
         In the event of captures the player that needs to pass may change hands several times.</p>
       <p>Key abilities needed for Rollouts:</p>
       <ul>
-        <li><mark>Game State</mark><br>
-          The location of stones on the board and which player is to take action.
+        <li><mark>Game State</mark>
+          <p>The location of stones on the board and which player is to take action.
+            We need enough information to support the analysis functions described below.
+          </p>
         </li>
-        <li><mark>Captures</mark><br>
-          Remove chains captured during the turn.
+        <li><mark>Captures</mark>
+          <p>To handle captures we need to be able to count liberties.
+            Whenever we place a stone we will check the four adjacent chains.
+            If any of the opponent chains have zero liberties they are removed according to the rules.
+          </p>
         </li>
-        <li><mark>Legal Moves</mark><br>
-          Check if a given location is valid for each player under the rules.
+        <li><mark>Legal Moves</mark>
+          <p>Check if a given location is valid for each player under the rules.
+            We will simulate or analyze the desired move.
+            A move is legal if, after any captures, the newly placed stone will have at least one liberty.
+          </p>
+        </li>
+        <li><mark>Eyes</mark>
+          <p>Rollout policies can go beyond official rules.
+            We want to encourage <i>stability</i> and <i>efficiency</i> by preventing some unwanted moves.
+            Random moves that fill in same-colour eyes are chaotic and drastically extend Rollouts.
+          </p>
+        </li>
+        <li><mark>Repetition</mark>
+          <p>In order to finalize and score a Rollout we must avoid infinite loops.
+            The fundamental issue with Ko Fights is the <i>immediate retaking</i> of single stone captures.
+            We can leverage the stochastic random quality of Rollouts to enforce a sort of move re-ordering.
+            The rule will be "Ko-like captures (single stones) can only happen on every third move".
+            This will mechanically enforce the idea of "finding a Ko threat" before re-taking the Ko stone.
+          </p>
         </li>
       </ul>
+      <details>
+        <summary>gostate2d.js</summary>
+        <pre><code preload-javascript data-url="worker/gostate2d.js"></code></pre>
+      </details>
+      <div data-id="rollouts7x7" run="worker/Rollouts.js">
+        <div class="full">
+          <button fork="fork_run">Play</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="test_liberty_score.js">
+            <input type="hidden" name="worker" value="gotest1.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+          </span>
+        </div>
+        <div>
+          <div class="goban clickable" update="copy2input" size="7" id="rollouts7x7_goban"></div>
+          <div>
+            <summary>input/output</summary> <textarea output cols="12" rows="9" id="rollouts7x7"></textarea>
+            <br> <button copy>Copy</button>
+          </div>
+        </div>
+      </div>
     </section>
     <section>
       <div class="top"><a href="#top">top</a></div>
-      <h2 id="GameState"><a href="#GameState">Game State</a></h2>
-      <p>Game State is the information we need to handle each player turn.
-        We need to know what stones are on the board, where we can play and whose turn it is.
-        After the player takes action we also need to <i>update the game state</i> according to the rules.
+      <h2 id="MoveTests"><a href="#MoveTests">Move Tests</a></h2>
+      <p>It would be a good idea to run another set of tests before coding any new features.
+        A starting game state will be given (board + toPlay) followed by the expected outcome of each turn.
+        The test will expect and require several moves played in a row with predictable outcomes.
       </p>
+      <p>This type of test is called an <i>Integration Test</i> because several functions are executed at each step.
+        The previous <i>Unit Tests</i> attempted to test each function separately.</p>
       <details>
-        <summary>state7x7.js</summary>
-        <pre><code preload-javascript data-url="state7x7.js"></code></pre>
+        <summary>test_play_move.js</summary>
+        <pre><code preload-javascript data-url="worker/test_play_move.js"></code></pre>
       </details>
-      <p>Each click of the <code>[Run]</code> button will add another stone and end the turn.
-        The result is a rather peculier "game of Go" because we are not enforcing all the rules yet.
+      <p>Compared to Unit Tests there are only a few Move Tests.
+        Due to the sub-steps of each test, all the operations of Game State are covered.</p>
+      <p>The tests are carefully designed to have at most one valid move on each turn.
+        For some turns there are no valid moves and the player must pass.
+        The limited moves are chosen in way that covers all rules and Rollout policies.
       </p>
-      <script src="state7x7.js" defer></script>
-      <div data-id="state7x7" run="state7x7">
+      <div data-id="rollouts7x7" run="worker/MoveTests.js">
         <div class="full">
-          <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
+          <button fork="fork_run">Run</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="test_liberty_score.js">
+            <input type="hidden" name="worker" value="gotest1.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="test_play_move.js">
+            <input type="hidden" name="worker" value="gotest2.js">
+          </span>
         </div>
-        <div>
-          <div class="goban clickable" update="copy2input" size="7" id="state7x7_goban"></div>
-          <pre><summary>input/output</summary><code output id="state7x7"></code></pre>
-        </div>
-      </div>
-      <div style="clear: both"></div>
-    </section>
-    <section>
-      <div class="top"><a href="#top">top</a></div>
-      <h2 id="Captures"><a href="#Captures">Captures</a></h2>
-      <p>To handle captures we need to be able to count liberties.
-        Whenever we place a stone we will check the four adjacent chains.
-        If any of the opponent chains have zero liberties they are removed according to the rules.
-      </p>
-      <p></p>
-      <details>
-        <summary>captures7x7.js</summary>
-        <pre><code preload-javascript data-url="captures7x7.js"></code></pre>
-      </details>
-      <p>It's starting to look more like a real game of Go.
-        The "illegal" moves are now quite obvious.
-      </p>
-      <script src="captures7x7.js" defer></script>
-      <div data-id="captures7x7" run="captures7x7">
-        <div class="full">
-          <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
-        </div>
-        <div>
-          <div class="goban clickable" update="copy2input" size="7" id="captures7x7_goban"></div>
-          <pre><summary>input/output</summary><code output id="captures7x7"></code></pre>
-        </div>
-      </div>
-      <div style="clear: both"></div>
-    </section>
-    <section>
-      <div class="top"><a href="#top">top</a></div>
-      <h2 id="LegalMoves"><a href="#LegalMoves">Legal Moves</a></h2>
-      <p>The easiest way to check if a move is allowed under the rules is simply to try it.
-        We will simulate the desired move, process any captures and then count the remaining liberties.
-        If the new stone has at least one liberty then the spot is valid for play by that colour.
-      </p>
-      <p></p>
-      <details>
-        <summary>legal7x7.js</summary>
-        <pre><code preload-javascript data-url="legal7x7.js"></code></pre>
-      </details>
-      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
-      <script src="legal7x7.js" defer></script>
-      <div data-id="legal7x7" run="legal7x7">
-        <div class="full">
-          <button run>Run</button> <button reset>Reset</button> <button time>Time</button> <mark hidden></mark>
-        </div>
-        <div>
-          <div class="goban clickable" update="copy2input" size="7" id="legal7x7_goban"></div>
-          <pre><summary>input/output</summary><code
-          output id="legal7x7"
-          preload-txt data-url="legal7x7.txt"></code></pre>
-        </div>
-      </div>
-      <div style="clear: both"></div>
-    </section>
-    <section>
-      <div class="top"><a href="#top">top</a></div>
-      <h2 id="Repetition"><a href="#Repetition">Repetition</a></h2>
-      <p>We will mark moves that repeat any previous board position as invalid.
-      </p>
-      <p></p>
-      <details>
-        <summary>repetition7x7.js</summary>
-        <pre><code preload-javascript data-url="repetition7x7.js"></code></pre>
-      </details>
-      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
-      <script src="repetition7x7.js" defer></script>
-      <div data-id="repetition7x7" run="repetition7x7">
-        <div class="full">
-          <button run>Run</button> <button reset onclick="window.baduk.history = {}">Reset</button> <button
-            time>Time</button> <mark hidden></mark>
-        </div>
-        <div>
-          <div class="goban clickable" update="copy2input" size="7" id="repetition7x7_goban"></div>
-          <pre><summary>input/output</summary><code
-            output id="repetition7x7"
-            preload-txt data-url="repetition7x7.txt"></code></pre>
-        </div>
-      </div>
-      <div style="clear: both"></div>
-    </section>
-    <section>
-      <div class="top"><a href="#top">top</a></div>
-      <h2 id="Eyes"><a href="#Eyes">Eyes</a></h2>
-      <p>Rollout policies can go beyond official rules.
-        We want to encourage <i>stability</i> and <i>efficiency</i> by preventing some unwanted moves.
-        Random moves that fill in same-colour eyes are chaotic and drastically extend Rollouts.
-      </p>
-      <p>We will do a quick test to identify Eyes vs False-eyes.
-        Notice how the game naturally comes to an end when both players run out of moves.
-      </p>
-      <details>
-        <summary>eyes7x7.js</summary>
-        <pre><code preload-javascript data-url="eyes7x7.js"></code></pre>
-      </details>
-      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
-      <script src="eyes7x7.js" defer></script>
-      <div data-id="eyes7x7" run="eyes7x7">
-        <div class="full">
-          <button run>Run</button> <button reset onclick="window.baduk.history = {}">Reset</button> <button
-            time>Time</button> <mark hidden></mark>
-        </div>
-        <div>
-          <div class="goban clickable" update="copy2input" size="7" id="eyes7x7_goban"></div>
-          <pre><summary>input/output</summary><code
-            output id="eyes7x7"
-            preload-txt data-url="eyes7x7.txt"></code></pre>
-        </div>
-      </div>
-      <div style="clear: both"></div>
+        <pre><summary>output</summary><code output></code></pre>
     </section>
     <section>
       <div class="top"><a href="#top">top</a></div>
@@ -430,166 +420,6 @@
         </div>
       </div>
       <div style="clear: both"></div>
-    </section>
-    <section>
-      <div class="top"><a href="#top">top</a></div>
-      <h2 id="MoveTests"><a href="#MoveTests">Move Tests</a></h2>
-      <p>It would be a good idea to run another set of tests before coding any new features.
-        A starting game state will be given (board + toPlay) followed by the expected outcome of each turn.
-        The test will expect and require several moves played in a row with predictable outcomes.
-      </p>
-      <p>This type of test is called an <i>Integration Test</i> because several functions are executed at each step.
-        The previous <i>Unit Tests</i> attempted to test each function separately.</p>
-      <details>
-        <summary>move_tests.js</summary>
-        <pre><code preload-javascript data-url="move_tests.js"></code></pre>
-      </details>
-      <p>Compared to Unit Tests there are only a few Move Tests.
-        Due to the sub-steps of each test, all the operations of Game State are covered.</p>
-      <p>The tests are carefully designed to have at most one valid move on each turn.
-        For some turns there are no valid moves and the player must pass.
-        The limited moves are chosen in way that covers all the rules of Go.
-      </p>
-      <script src="move_tests.js" defer></script>
-      <div run="move_tests">
-        <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-        <pre><summary>output</summary><code output></code></pre>
-      </div>
-    </section>
-    <section>
-      <div class="top"><a href="#top">top</a></div>
-      <h2 id="RepetitionHack"><a href="#RepetitionHack">Repetition Hack</a></h2>
-      <p>Rollout policy is sometimes going to be different than normal Go rules.
-        It's important that Rollouts avoid infinite loops and other mishaps.
-        The rule for filling self-Eyes is one such example.
-      </p>
-      <p>The solutions for Super-Ko involve meticulous record keeping and history ledgers.
-        We can pick a different solution for Rollouts because both "players" will diligently follow the rule.
-      </p>
-      <p>The fundamental issue with Ko Fights is the <i>immediate retaking</i> of single stone captures.
-        We can leverage the stochastic random quality of Rollouts to enforce a sort of move re-ordering.
-        The rule will be "Ko-like captures (single stones) can only happen on every third move".
-        This mechanically enforces the idea of "finding a Ko threat" before re-taking the Ko stone.
-      </p>
-      <p>The choice of "every third move" is to share the opportunity for re-taking evenly between players.
-        It's effective for multiple Ko fights at once because it's a complete ban on taking single stones.
-        It doesn't specify <i>where</i> the capture is located, after all.
-      </p>
-      <details>
-        <summary>kohack7x7.js</summary>
-        <pre><code preload-javascript data-url="kohack7x7.js"></code></pre>
-      </details>
-      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
-      <script src="eyes7x7norepeat.js" defer></script>
-      <script src="kohack7x7.js" defer></script>
-      <div data-id="kohack7x7" run="kohack7x7">
-        <div class="full">
-          <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
-            time>Time</button> <mark hidden></mark>
-        </div>
-        <div>
-          <div class="goban clickable" update="copy2input" size="7" id="kohack7x7_goban"></div>
-          <pre><summary>input/output</summary><code
-          output id="kohack7x7"
-          preload-txt data-url="kohack7x7.txt"></code></pre>
-        </div>
-      </div>
-      <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
-      <div class="flex">
-        <div run="move_tests_kohack7x7">
-          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-          <pre><summary>output</summary><code output></code></pre>
-        </div>
-        <div run="rolloutReport_kohack7x7">
-          <button start>Start</button>
-          <pre><summary>output</summary><code output></code></pre>
-        </div>
-      </div>
-    </section>
-    <section>
-      <div class="top"><a href="#top">top</a></div>
-      <h2 id="EarlyExit"><a href="#EarlyExit">Early Exit</a></h2>
-      <p>So far we have been using the FLood Fill (aka DFS) routine to count things.
-        It works well but we haven't used all of it's abilities yet.
-      </p>
-      <p>In some cases we don't need to know the full count.
-        It's enough if the count exceeds a specified limit.
-        Once the limit is reached we can halt the branching search.
-      </p>
-      <details>
-        <summary>earlyexit7x7.js</summary>
-        <pre><code preload-javascript data-url="earlyexit7x7.js"></code></pre>
-      </details>
-      <p>Prohibited moves are marked with <mark warn>&#x26DB;</mark></p>
-      <script src="earlyexit7x7.js" defer></script>
-      <div data-id="earlyexit7x7" run="earlyexit7x7">
-        <div class="full">
-          <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
-            time>Time</button> <mark hidden></mark>
-        </div>
-        <div>
-          <div class="goban clickable" update="copy2input" size="7" id="earlyexit7x7_goban"></div>
-          <pre><summary>input/output</summary><code
-          output id="earlyexit7x7"
-          preload-txt data-url="kohack7x7.txt"></code></pre>
-        </div>
-      </div>
-      <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
-      <div class="flex">
-        <div run="move_tests_earlyexit7x7">
-          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-          <pre><summary>output</summary><code output></code></pre>
-        </div>
-        <div run="rolloutReport_earlyexit7x7">
-          <button start>Start</button>
-          <pre><summary>output</summary><code output></code></pre>
-        </div>
-      </div>
-    </section>
-    <section>
-      <div class="top"><a href="#top">top</a></div>
-      <h2 id="RulesLogic"><a href="#RulesLogic">Rules Logic</a></h2>
-      <p>The gold standard for a legal move is:</p>
-      <ul>
-        <li>Location not already occupied.</li>
-        <li>New stone will have or share liberties after being placed.</li>
-        <li>Doesn't repeat a previous board position.</li>
-      </ul>
-      <p>So far we've been verifying the rules <i>post hoc</i> by actually simulating the move.
-        This approach is rigourous but has the notable drawback of needing to copy the board container.
-        It can be very costly to serialize the Game State only to throw it away afterwards.
-      </p>
-      <p>In this section we apply a "static analysis" of the board position.
-        We will try to reliably <i>predict</i> whether a move will be valid without actually simulating it.
-      </p>
-      <details>
-        <summary>valid7x7.js</summary>
-        <pre><code preload-javascript data-url="valid7x7.js"></code></pre>
-      </details>
-      <script src="valid7x7.js" defer></script>
-      <div data-id="valid7x7" run="valid7x7">
-        <div class="full">
-          <button run>Run</button> <button reset onclick="window.baduk.turn = 0">Reset</button> <button
-            time>Time</button> <mark hidden></mark>
-        </div>
-        <div>
-          <div class="goban clickable" update="copy2input" size="7" id="valid7x7_goban"></div>
-          <pre><summary>input/output</summary><code
-          output id="valid7x7"
-          preload-txt data-url="kohack7x7.txt"></code></pre>
-        </div>
-      </div>
-      <p>Let's quickly check it with <i>Move Tests</i> and <i>Monte Carlo</i>.</p>
-      <div class="flex">
-        <div run="move_tests_valid7x7">
-          <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-          <pre><summary>output</summary><code output></code></pre>
-        </div>
-        <div run="rolloutReport_valid7x7">
-          <button start>Start</button>
-          <pre><summary>output</summary><code output></code></pre>
-        </div>
-      </div>
     </section>
     <section>
       <div class="top"><a href="#top">top</a></div>
@@ -659,6 +489,53 @@
           <div>
             <summary>input</summary> <textarea cols="12" rows="9" id="mcts7x7"></textarea> <br> <button
               copy>Copy</button>
+          </div>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2 id="Worker"><a href="#Worker">Worker</a></h2>
+      <p>...</p>
+      <details>
+        <summary>goutil.js</summary>
+        <pre><code preload-javascript data-url="worker/goutil.js"></code></pre>
+      </details>
+      <details>
+        <summary>goboard.js</summary>
+        <pre><code preload-javascript data-url="worker/goboard.js"></code></pre>
+      </details>
+      <details>
+        <summary>goshuffle.js</summary>
+        <pre><code preload-javascript data-url="worker/goshuffle.js"></code></pre>
+      </details>
+      <details>
+        <summary>gostate.js</summary>
+        <pre><code preload-javascript data-url="worker/gostate.js"></code></pre>
+      </details>
+      <details>
+        <summary>worker.js</summary>
+        <pre><code preload-javascript data-url="worker/mcts.js"></code></pre>
+      </details>
+      <p>...</p>
+      <div data-id="worker7x7" run="worker/mcts.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <label>Seconds <input name="time" value="1" size="2"></label>
+            <label>Explore <input name="explore" value="2.0" size="5"></label>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard.js">
+            <input type="hidden" name="worker" value="goshuffle.js">
+            <input type="hidden" name="worker" value="gostate.js">
+          </span>
+        </div>
+        <div>
+          <div class="goban clickable" update="copy2input" size="7" id="worker7x7_goban"></div>
+          <div>
+            <summary>input</summary> <textarea cols="12" rows="9" id="worker7x7"></textarea>
+            <br> <button copy>Copy</button>
           </div>
           <pre><summary>output</summary><code output></code></pre>
         </div>
