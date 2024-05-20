@@ -55,8 +55,6 @@ input {
   min-width: fit-content;
 }
 
-
-
 label {
   display: inline;
 }
@@ -115,7 +113,7 @@ main h6 a:hover {
 }
 
 .loading {
-  animation: fadeIn 1s infinite alternate;
+  animation: fadeIn .75s infinite alternate;
 }
 
 details pre {

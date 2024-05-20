@@ -42,6 +42,14 @@ function printPadded(nested, flip = true, pad = 1) {
   return array.join("\n");
 }
 
+function findParent(elem) {
+  let parent = elem.parentElement;
+  while (parent && !parent.hasAttribute("run")) {
+    parent = parent.parentElement;
+  }
+  return parent;
+}
+
 Array.from(document.querySelectorAll(".goban"))
   .forEach((elem) => {
     let id = elem.getAttribute("id");
@@ -161,150 +169,25 @@ async function cacheFetch(url) {
   return null;
 }
 
-async function preloadTxt(e) {
-  let url = e.getAttribute("data-url");
+async function preloadTxt(elem) {
+  let url = elem.getAttribute("data-url");
   let data = await cacheFetch(url);
   if (data !== null) {
-    e.innerText = data;
+    elem.innerText = data;
   }
 }
 
 Array.from(document.querySelectorAll("[preload-txt]")).forEach(preloadTxt);
 
 Array.from(document.querySelectorAll("[preload-javascript]"))
-  .forEach(async (e) => {
-    let url = e.getAttribute("data-url");
+  .forEach(async (elem) => {
+    let url = elem.getAttribute("data-url");
     let data = await cacheFetch(url);
     if (data !== null) {
-      e.insertAdjacentHTML("afterbegin",
+      elem.insertAdjacentHTML("afterbegin",
         hljs.highlight(data, { language: "javascript" }).value
       );
     }
-  });
-/*
-  <script src="board7x7.js" defer></script>
-  <div data="board7x7.txt" run="board7x7">
-    <button run>Run</button> <button time>Time</button> <mark hidden></mark>
-    <pre><summary>output</summary><code output></code></pre>
-  </div>
-*/
-function findParent(elem) {
-  let parent = elem.parentElement;
-  while (parent && !parent.hasAttribute("run")) {
-    parent = parent.parentElement;
-  }
-  return parent;
-}
-
-async function buttonSetup(elem) {
-  let parent = findParent(elem);
-  let fork = elem.getAttribute("fork");
-  let run = parent.getAttribute("run");
-  let url = parent.getAttribute("data-url");
-  let dataId = parent.getAttribute("data-id");
-  let options = {};
-  Array.from(parent.querySelectorAll("[options] input")).forEach(elem => {
-    options[elem.name] ??= [];
-    options[elem.name].push(elem.value);
-  })
-  let data = "";
-  if (dataId) {
-    const elem = document.getElementById(dataId);
-    data = elem?.value ?? elem?.innerText;
-  }
-  else if (url) data = await cacheFetch(url);
-  return {
-    parent: parent,
-    fork: fork,
-    run: run,
-    data: data,
-    options: options,
-  };
-}
-
-async function forkButton(elem) {
-  const { parent, fork, run, data, options } = await buttonSetup(elem);
-  const goban = parent.querySelector(".goban")?.getAttribute("id");
-  const output = parent.querySelector("[output]");
-  const callback = (result) => {
-    output.innerText = "";
-    output.insertAdjacentHTML("afterbegin", result);
-    if (goban) updateGoban(goban, parent);
-    elem.removeAttribute("disabled");
-  }
-  elem.setAttribute("disabled", true);
-  window[fork](data, run, callback, options);
-}
-
-async function runButton(elem) {
-  let { parent, run, data, options } = await buttonSetup(elem);
-  let goban = parent.querySelector(".goban")?.getAttribute("id");
-  let output = parent.querySelector("[output]");
-  let text = window[run](data, options);
-  output.innerText = "";
-  output.insertAdjacentHTML("afterbegin", text);
-  if (goban) updateGoban(goban, parent);
-}
-
-async function resetButton(elem) {
-  let parent = findParent(elem);
-  let output = parent.querySelector("[output]");
-  output.innerText = "";
-  if (output.hasAttribute("preload-txt")) await preloadTxt(output);
-  await buttonSetup(elem);
-  let goban = parent.querySelector(".goban")?.getAttribute("id");
-  if (goban) updateGoban(goban, parent);
-}
-
-async function startButton(elem) {
-  let { parent, run, data, options } = await buttonSetup(elem);
-  elem.setAttribute("disabled", true);
-  setTimeout(
-    () => { window[run](data, options, elem, parent) },
-    100
-  );
-}
-
-Array.from(document.querySelectorAll("button[fork]"))
-  .forEach((elem) => {
-    elem.addEventListener("click", async () => forkButton(elem));
-  });
-
-Array.from(document.querySelectorAll("button[run]"))
-  .forEach((elem) => {
-    elem.addEventListener("click", async () => runButton(elem));
-  });
-
-Array.from(document.querySelectorAll("button[start]"))
-  .forEach((elem) => {
-    elem.addEventListener("click", async () => startButton(elem));
-  });
-
-Array.from(document.querySelectorAll("button[reset]"))
-  .forEach((elem) => {
-    elem.addEventListener("click", async () => resetButton(elem));
-    setTimeout(() => resetButton(elem), 1);
-  });
-
-Array.from(document.querySelectorAll("button[time]"))
-  .forEach((elem) => {
-    elem.addEventListener("click", async () => {
-      let { parent, run, data, options } = await buttonSetup(elem);
-      let result = parent.querySelector("mark");
-      result.classList.add("loading");
-      result.innerText = "...";
-      result.removeAttribute("hidden");
-      elem.setAttribute("disabled", true);
-      new Benchmark(() => {
-        window[run](data)
-      }, {
-        "onComplete": (evt) => {
-          result.innerText = `${evt.currentTarget}`;
-          result.classList.remove("loading");
-          elem.removeAttribute("disabled");
-        },
-      }).run({ "async": true });
-    });
   });
 
 Array.from(document.querySelectorAll("button[copy]"))
