@@ -92,6 +92,7 @@ function treeSearch(root, state, reps = 1) {
 }
 
 function treeMock() {
+  self.EX = 2.0;
   const root = new UCTNode(0);
   const state = {
     moveList: () => _.range(15),
@@ -118,6 +119,7 @@ function treeMock() {
 function traverseMock() {
   let nodes = 0;
   const label = (num) => `node${num}`;
+  self.EX = 2.0;
   const root = new UCTNode(label(nodes++));
   const state = {
     moveList: () => [label(nodes++), label(nodes++)],
