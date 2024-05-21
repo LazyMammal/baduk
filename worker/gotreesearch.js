@@ -1,15 +1,15 @@
-window.baduk.EX = 2.0;
-
 class UCTNode {
   action;
   visits;
   reward;
   children;
-  constructor(action) {
+  EX;
+  constructor(action, EX = 2.0) {
     this.action = action;
     this.children = [];
     this.visits = 0;
     this.reward = 0;
+    this.EX = EX;
   }
 
   get value() { return this.reward / this.visits }
@@ -33,14 +33,15 @@ class UCTNode {
   selectChild() { // argmax( children, key:ucb )
     if (!this.hasChild())
       return null;
-    const LogN = Math.log(this.visits);
+    const EXlogN = this.EX * this.EX
+      * Math.log(this.visits);
     let bestChild = null;
     let bestUCB = -Infinity;
     for (let child of this.children) {
       if (!child.visits)
         return child;
-      const ucb = child.value + window.baduk.EX
-        * Math.sqrt(LogN / child.visits);
+      const ucb = child.value +
+        Math.sqrt(EXlogN / child.visits);
       if (ucb > bestUCB) {
         bestChild = child;
         bestUCB = ucb;
@@ -92,7 +93,7 @@ function treeSearch(root, state, reps = 1) {
   return nodes;
 }
 
-function mockSearch(reps) {
+function treeMock() {
   const root = new UCTNode(0);
   const state = {
     moveList: () => _.range(15),
@@ -101,38 +102,36 @@ function mockSearch(reps) {
     simClone: () => state,
   };
   const t0 = performance.now();
-  let nodes = treeSearch(root, state, reps);
-  const T = performance.now() - t0;
-  const res = [
-    `value ${root.value.toFixed(12)}`,
-    `visits ${root.visits} `
-    + `${(root.visits / T * 1e3).toFixed(2)} visits/s`,
-    `nodes ${nodes} `
-    + `${(nodes / T * 1e3).toFixed(2)} nodes/s`,
-    "\n"
-  ];
-  return [T < 1e3, T > 350 ? res : []];
-}
-
-function stepReport(input, button, output, reps) {
-  let [flag, res] = mockSearch(reps);
-  let text = res.join("\n");
-  if (text.length)
-    output.innerText += text;
-  if (flag) {
-    reps *= 2;
-    setTimeout(() => {
-      stepReport(input, button, output, reps)
-    }, 1);
-  } else {
-    button.removeAttribute("disabled");
+  const endTime = t0 + 3e3;
+  let nodes = 0;
+  while (endTime > performance.now()) {
+    nodes += treeSearch(root, state, 16);
   }
+  const seconds = (performance.now() - t0) / 1e3;
+  return [
+    `value ${root.value.toFixed(12)}`,
+    `visits ${root.visits}, `
+    + `${(root.visits / seconds).toFixed(0)}/s`,
+    `nodes ${nodes}, `
+    + `${(nodes / seconds).toFixed(0)}/s`
+  ].join("\n")
 }
 
-function treeMock(input, options, button, parent) {
-  let output = parent.querySelector("[output]");
-  output.innerText = "Mock data test.\n\n";
-  setTimeout(() => {
-    stepReport(input, button, output, 1)
-  }, 1);
+function traverseMock() {
+  let nodes = 0;
+  const label = (num) => `node${num}`;
+  const root = new UCTNode(label(nodes++));
+  const state = {
+    moveList: () => [label(nodes++), label(nodes++)],
+    replayMove: () => { },
+    doRollout: () => 2 * Math.round(Math.random()) - 1,
+    simClone: () => state,
+  };
+  let res = [`root: ` + JSON.stringify(root, null, 2)];
+  for (let reps = 0; reps < 3; reps++) {
+    treeSearch(root, state, 1);
+    res.push(`treeSearch(root, state, 1): `
+      + JSON.stringify(root, null, 2));
+  }
+  return res.join("\n\n");
 }

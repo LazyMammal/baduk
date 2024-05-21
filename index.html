@@ -401,8 +401,8 @@
       </p>
       <p></p>
       <details>
-        <summary>montecarlo7x7.js</summary>
-        <pre><code preload-javascript data-url="montecarlo7x7.js"></code></pre>
+        <summary>gomontecarlo.js</summary>
+        <pre><code preload-javascript data-url="worker/gomontecarlo.js"></code></pre>
       </details>
       <p>Click the go board to change the "starting position" for the Rollouts.</p>
       <div data-id="montecarlo7x7" run="worker/MonteCarlo.js">
@@ -440,34 +440,41 @@
         At the leaf node we assign a reward value which is then shared with all the actions selected in the tree.
       </p>
       <details>
-        <summary>treeSearch.js</summary>
-        <pre><code preload-javascript data-url="treeSearch.js"></code></pre>
+        <summary>gotreesearch.js</summary>
+        <pre><code preload-javascript data-url="worker/gotreesearch.js"></code></pre>
       </details>
-      <div class="flex">
-        <script src="treeSearch.js" defer></script>
-        <div run="treeMock">
-          <button start>Start</button>
-          <pre><summary>output</summary><code output></code></pre>
+      <div data-id="rollouts7x7" run="worker/TreeSearch.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="gotreesearch.js">
+          </span>
         </div>
+        <pre><summary>output</summary><code output></code></pre>
       </div>
-    </section>
-    <section>
-      <div class="top"><a href="#top">top</a></div>
-      <h2 id="Traverse"><a href="#Traverse">Traverse</a></h2>
       <p>"Traverse" is the sub-routine that descends the tree from root to leaf.
         Let's take a closer look.
       </p>
-      <details>
-        <summary>traverseMock.js</summary>
-        <pre><code preload-javascript data-url="traverseMock.js"></code></pre>
-      </details>
-      <div class="flex">
-        <script src="traverseMock.js" defer></script>
-        <div run="traverseMock">
-          <button run>Run</button>
-          <pre><summary>output</summary><code output></code></pre>
+      <div data-id="rollouts7x7" run="worker/Traverse.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="gotreesearch.js">
+          </span>
         </div>
-      </div>
+        <pre><summary>output</summary><code output></code></pre>
     </section>
     <section>
       <div class="top"><a href="#top">top</a></div>
