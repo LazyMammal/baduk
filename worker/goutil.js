@@ -1,4 +1,4 @@
-importScripts("lodash.min.js"); // _.shuffle(), _.sample()
+importScripts("lodash.min.js"); // _.shuffle _.sample _.clamp
 
 const GO_EMPTY = 0;
 const GO_BLACK = 1;

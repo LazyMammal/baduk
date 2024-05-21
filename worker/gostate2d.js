@@ -3,7 +3,7 @@ class GoState {
   turn;
   playerCode;
   enemyCode;
-  constructor(board, playerCode, turn = 0) {
+  constructor(board, playerCode = GO_BLACK, turn = 0) {
     this.board = board;
     this.turn = turn;
     this.playerCode = playerCode;
@@ -99,10 +99,14 @@ class GoState {
         caps += this.eraseChain(i, j);
       }
     }
+    this.advanceTurn();
+    return caps;
+  }
+
+  advanceTurn() {
     this.playerCode ^= GO_STONE;
     this.enemyCode ^= GO_STONE;
-    this.turn++;
-    return caps;
+    this.turn++;    
   }
 
   validToPlay(x, y) {
@@ -171,7 +175,7 @@ class GoState {
       this.playMove(x, y);
       return true;
     } else {
-      this.playMove(-1, -1);
+      this.advanceTurn();
       return false;
     }
   }

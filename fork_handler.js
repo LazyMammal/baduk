@@ -8,7 +8,7 @@ Array.from(document.querySelectorAll("button[fork]"))
 async function fork_run(elem) {
   const fork = await setupFork(elem);
   const callback = (result) => {
-    if(fork.output.tagName === "TEXTAREA") {
+    if (fork.output.tagName === "TEXTAREA") {
       fork.output.value = result;
     } else {
       fork.output.innerText = "";
@@ -97,13 +97,15 @@ async function getData(parent) {
 
 async function resetButton(elem) {
   const parent = findParent(elem);
-  const output = parent.querySelector("[output]");
   const goban = parent.querySelector(".goban")?.getAttribute("id");
-  updateTextbox(output, "");
-  if (output.hasAttribute("preload-txt"))
-    await preloadTxt(output);
-  if (goban)
+  const dataId = parent.getAttribute("data-id");
+  const input = document.getElementById(dataId);
+  if (goban && input) {
+    updateTextbox(input, "");
+    if (input.hasAttribute("preload-txt"))
+      await preloadTxt(input);
     updateGoban(goban, parent);
+  }
 }
 
 Array.from(document.querySelectorAll("button[reset]"))

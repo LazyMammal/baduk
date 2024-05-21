@@ -345,8 +345,6 @@
             <input type="hidden" name="worker" value="goflood.js">
             <input type="hidden" name="worker" value="golibs.js">
             <input type="hidden" name="worker" value="goscore.js">
-            <input type="hidden" name="worker" value="test_liberty_score.js">
-            <input type="hidden" name="worker" value="gotest1.js">
             <input type="hidden" name="worker" value="gostate2d.js">
             <input type="hidden" name="worker" value="goplay.js">
           </span>
@@ -388,8 +386,6 @@
             <input type="hidden" name="worker" value="goflood.js">
             <input type="hidden" name="worker" value="golibs.js">
             <input type="hidden" name="worker" value="goscore.js">
-            <input type="hidden" name="worker" value="test_liberty_score.js">
-            <input type="hidden" name="worker" value="gotest1.js">
             <input type="hidden" name="worker" value="gostate2d.js">
             <input type="hidden" name="worker" value="test_play_move.js">
             <input type="hidden" name="worker" value="gotest2.js">
@@ -409,20 +405,29 @@
         <pre><code preload-javascript data-url="montecarlo7x7.js"></code></pre>
       </details>
       <p>Click the go board to change the "starting position" for the Rollouts.</p>
-      <script src="montecarlo7x7.js" defer></script>
-      <div data-id="montecarlo7x7" run="montecarlo7x7">
-        <div>
-          <pre><summary>input</summary><code
-            id="montecarlo7x7"
-            preload-txt data-url="montecarlo7x7.txt"></code></pre>
-          <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban" draggable="false"></div>
-        </div>
+      <div data-id="montecarlo7x7" run="worker/MonteCarlo.js">
         <div class="full">
-          <button start>Start</button> <button reset>Reset</button>
+          <button fork="fork_run">Play</button>
+          <button reset>Reset</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="gomontecarlo.js">
+          </span>
+        </div>
+        <div>
+          <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban"></div>
+          <div>
+            <summary>input</summary> <textarea cols="12" rows="9" id="montecarlo7x7"></textarea>
+            <br> <button copy>Copy</button>
+          </div>
           <pre><summary>output</summary><code output></code></pre>
         </div>
       </div>
-      <div style="clear: both"></div>
     </section>
     <section>
       <div class="top"><a href="#top">top</a></div>
