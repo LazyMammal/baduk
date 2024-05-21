@@ -34,8 +34,8 @@
           <a href="#Scoring">Scoring</a>
           <a href="#UnitTests">Unit Tests</a>
           <a href="#Rollouts">Rollouts</a>
-          <a href="#MonteCarlo">Monte Carlo</a>
           <a href="#MoveTests">Move Tests</a>
+          <a href="#MonteCarlo">Monte Carlo</a>
           <a href="#TreeSearch">Tree Search</a>
           <a href="#MCTS">MCTS</a>
         </nav>
@@ -479,13 +479,19 @@
         <summary>gomcts.js</summary>
         <pre><code preload-javascript data-url="worker/gomcts.js"></code></pre>
       </details>
-      <p>Click the go board to change the "starting position" for the Rollouts.</p>
+      <ul>
+        <li>Click <code>Config</code> to:
+          <ul>
+            <li>reset search tree</li>
+            <li>set Explore value</li>
+            <li>set board starting position</li>
+          </ul>
+        </li>
+      </ul>
       <div data-id="mcts7x7" run="worker/MCTS.js">
         <div class="full">
-          <button fork="fork_mcts_worker">Worker</button>
           <button fork="fork_mcts_config">Config</button>
           <span options>
-            <label>Seconds <input name="time" value="1" size="2"></label>
             <label>Explore <input name="explore" value="2.0" size="5"></label>
             <input type="hidden" name="worker" value="goutil.js">
             <input type="hidden" name="worker" value="goboard2d.js">
@@ -505,7 +511,19 @@
           </div>
         </div>
         <div class="full">
+          <ul>
+            <li>Click <code>Run</code> to:
+              <ul>
+                <li>perform tree search iterations</li>
+                <li>re-use existing search tree</li>
+                <li>update output statistics</li>
+              </ul>
+            </li>
+          </ul>
           <button fork="fork_mcts_run">Run</button>
+          <span options>
+            <label>Seconds <input name="time" value="1" size="2"></label>
+          </span>
           <pre><summary>output</summary><code output></code></pre>
         </div>
       </div>

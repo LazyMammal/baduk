@@ -126,9 +126,12 @@ async function fork_mcts_worker(elem) {
 
 async function fork_mcts_config(elem) {
   const fork = await setupFork(elem);
+
+  if (!window.baduk.fork_mcts_worker) {
+    await fork_mcts_worker(elem);
+    await sleep(100);
+  }
   const worker = window.baduk.fork_mcts_worker;
-  if (!worker)
-    return;
 
   fork.options.board = fork.data;
   fork.options.cmd = "config";
@@ -151,5 +154,6 @@ async function fork_mcts_run(elem) {
     elem.removeAttribute("disabled");
   };
 
-  worker.postMessage({ cmd: "mcts" });
+  fork.options.cmd = "mcts";
+  worker.postMessage(fork.options);
 }

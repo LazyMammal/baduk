@@ -7,7 +7,7 @@ function printRootArray(size, root, callback = () => 0) {
   return valueArr;
 }
 
-function mcts() {
+function mcts(runtime) {
   const t0 = performance.now();
   const endT = t0 + runtime * 1e3;
   let nodes = 0;
@@ -32,7 +32,7 @@ function mcts() {
     + `${(self.root.visits / dT * 1e3).toFixed(2)} visits/s`,
     `nodes ${nodes} `
     + `${(nodes / dT * 1e3).toFixed(2)} nodes/s`,
-    `seconds ${self.runtime}`,
+    `seconds ${runtime}`,
     `explore ${self.EX}`,
   ].join("\n");
 }
