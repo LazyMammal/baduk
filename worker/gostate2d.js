@@ -106,7 +106,7 @@ class GoState {
   advanceTurn() {
     this.playerCode ^= GO_STONE;
     this.enemyCode ^= GO_STONE;
-    this.turn++;    
+    this.turn++;
   }
 
   validToPlay(x, y) {
@@ -178,6 +178,31 @@ class GoState {
       this.advanceTurn();
       return false;
     }
+  }
+
+  doRollout() {
+    const enemy = this.playerCode; // already played
+    const player = this.enemyCode;
+    let passTurn = 0;
+    for (let t = 0; t < 100 && passTurn < 2; t++) {
+      passTurn = this.playRandom() ? 0 : passTurn + 1;
+    }
+    const score = scoreBoard(this.board);
+    const win = score[player] > score[enemy]; // TODO: komi
+    return win * 2 - 1; // -1 or +1
+  }
+
+  replayMove(action) {
+    let [x, y] = action;
+    if (this.board._xyValid(x, y)) {
+      this.playMove(x, y);
+    } else {
+      this.advanceTurn(); // pass
+    }
+  }
+
+  simClone() {
+    return _.cloneDeep(this);
   }
 }
 

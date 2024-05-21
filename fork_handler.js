@@ -7,16 +7,6 @@ Array.from(document.querySelectorAll("button[fork]"))
 
 async function fork_run(elem) {
   const fork = await setupFork(elem);
-  const callback = (result) => {
-    if (fork.output.tagName === "TEXTAREA") {
-      fork.output.value = result;
-    } else {
-      fork.output.innerText = "";
-      fork.output.insertAdjacentHTML("afterbegin", result);
-    }
-    if (fork.goban) updateGoban(fork.goban, fork.parent);
-    elem.removeAttribute("disabled");
-  }
   elem.setAttribute("disabled", true);
 
   const worker = new Worker(fork.run);
@@ -25,18 +15,17 @@ async function fork_run(elem) {
   worker.onmessage = (event) => {
     worker.terminate();
     let result = event.data;
-    callback(result);
+    updateTextbox(fork.output, result)
+    if (fork.goban) updateGoban(fork.goban, fork.parent);
+    elem.removeAttribute("disabled");
   };
+
   worker.postMessage(fork.data);
 }
 
 async function fork_time(elem) {
   const fork = await setupFork(elem);
-  const callback = (result) => {
-    fork.mark.innerText = result;
-    fork.mark.classList.remove("loading");
-    elem.removeAttribute("disabled");
-  }
+
   fork.mark.classList.add("loading");
   fork.mark.innerText = "...";
   fork.mark.removeAttribute("hidden");
@@ -55,9 +44,12 @@ async function fork_time(elem) {
       worker.terminate();
       const ops = samples / seconds;
       const result = `${ops.toFixed(0)} ops/sec`;
-      callback(result);
+      fork.mark.innerText = result;
+      fork.mark.classList.remove("loading");
+      elem.removeAttribute("disabled");
     }
   };
+
   worker.postMessage(fork.data);
 }
 
@@ -112,3 +104,52 @@ Array.from(document.querySelectorAll("button[reset]"))
   .forEach((elem) => {
     elem.addEventListener("click", async () => resetButton(elem));
   });
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+window.baduk.fork_mcts_worker = null;
+
+async function fork_mcts_worker(elem) {
+  const fork = await setupFork(elem);
+  if (window.baduk.fork_mcts_worker) {
+    window.baduk.fork_mcts_worker.terminate();
+  }
+  const worker = new Worker(fork.run);
+  window.baduk.fork_mcts_worker = worker;
+
+  fork.options.board = fork.data;
+  fork.options.cmd = "worker";
+  worker.postMessage(fork.options);
+}
+
+async function fork_mcts_config(elem) {
+  const fork = await setupFork(elem);
+  const worker = window.baduk.fork_mcts_worker;
+  if (!worker)
+    return;
+
+  fork.options.board = fork.data;
+  fork.options.cmd = "config";
+  worker.postMessage(fork.options);
+}
+
+async function fork_mcts_run(elem) {
+  const fork = await setupFork(elem);
+
+  if (!window.baduk.fork_mcts_worker) {
+    await fork_mcts_worker(elem);
+    await sleep(100);
+  }
+  const worker = window.baduk.fork_mcts_worker;
+
+  elem.setAttribute("disabled", true);
+  worker.onmessage = (event) => {
+    let result = event.data;
+    updateTextbox(fork.output, result)
+    elem.removeAttribute("disabled");
+  };
+
+  worker.postMessage({ cmd: "mcts" });
+}

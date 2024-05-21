@@ -485,77 +485,39 @@
         Many small samples by Rollouts combine together to build statistical probabilities.
       </p>
       <details>
-        <summary>mcts7x7.js</summary>
-        <pre><code preload-javascript data-url="mcts7x7.js"></code></pre>
+        <summary>gomcts.js</summary>
+        <pre><code preload-javascript data-url="worker/gomcts.js"></code></pre>
       </details>
-      <p>The output array shows <i>number of visits</i> and <i>average value</i> at each root action.
-      </p>
-      <script src="mcts7x7.js" defer></script>
-      <div data-id="mcts7x7" run="mcts7x7">
+      <p>Click the go board to change the "starting position" for the Rollouts.</p>
+      <div data-id="mcts7x7" run="worker/MCTS.js">
         <div class="full">
-          <button run>Run</button>
+          <button fork="fork_mcts_worker">Worker</button>
+          <button fork="fork_mcts_config">Config</button>
           <span options>
             <label>Seconds <input name="time" value="1" size="2"></label>
             <label>Explore <input name="explore" value="2.0" size="5"></label>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="gotreesearch.js">
+            <input type="hidden" name="worker" value="gomcts.js">
           </span>
         </div>
         <div>
           <div class="goban clickable" update="copy2input" size="7" id="mcts7x7_goban"></div>
           <div>
-            <summary>input</summary> <textarea cols="12" rows="9" id="mcts7x7"></textarea> <br> <button
-              copy>Copy</button>
+            <summary>input</summary> <textarea cols="12" rows="9" id="mcts7x7"></textarea>
+            <br> <button copy>Copy</button> <button reset>Reset</button>
           </div>
-          <pre><summary>output</summary><code output></code></pre>
         </div>
-      </div>
-    </section>
-    <section>
-      <h2 id="Worker"><a href="#Worker">Worker</a></h2>
-      <p>...</p>
-      <details>
-        <summary>goutil.js</summary>
-        <pre><code preload-javascript data-url="worker/goutil.js"></code></pre>
-      </details>
-      <details>
-        <summary>goboard.js</summary>
-        <pre><code preload-javascript data-url="worker/goboard.js"></code></pre>
-      </details>
-      <details>
-        <summary>goshuffle.js</summary>
-        <pre><code preload-javascript data-url="worker/goshuffle.js"></code></pre>
-      </details>
-      <details>
-        <summary>gostate.js</summary>
-        <pre><code preload-javascript data-url="worker/gostate.js"></code></pre>
-      </details>
-      <details>
-        <summary>worker.js</summary>
-        <pre><code preload-javascript data-url="worker/mcts.js"></code></pre>
-      </details>
-      <p>...</p>
-      <div data-id="worker7x7" run="worker/mcts.js">
         <div class="full">
-          <button fork="fork_run">Run</button>
-          <button fork="fork_time">Time</button> <mark hidden></mark>
-          <span options>
-            <label>Seconds <input name="time" value="1" size="2"></label>
-            <label>Explore <input name="explore" value="2.0" size="5"></label>
-            <input type="hidden" name="worker" value="goutil.js">
-            <input type="hidden" name="worker" value="goboard.js">
-            <input type="hidden" name="worker" value="goshuffle.js">
-            <input type="hidden" name="worker" value="gostate.js">
-          </span>
-        </div>
-        <div>
-          <div class="goban clickable" update="copy2input" size="7" id="worker7x7_goban"></div>
-          <div>
-            <summary>input</summary> <textarea cols="12" rows="9" id="worker7x7"></textarea>
-            <br> <button copy>Copy</button>
-          </div>
+          <button fork="fork_mcts_run">Run</button>
           <pre><summary>output</summary><code output></code></pre>
         </div>
       </div>
-    </section>
   </main>
   <footer>
     <p>by <a href="https://lazymammal.github.io/">LazyMammal</a></p>

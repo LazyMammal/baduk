@@ -3,13 +3,11 @@ class UCTNode {
   visits;
   reward;
   children;
-  EX;
-  constructor(action, EX = 2.0) {
+  constructor(action) {
     this.action = action;
     this.children = [];
     this.visits = 0;
     this.reward = 0;
-    this.EX = EX;
   }
 
   get value() { return this.reward / this.visits }
@@ -33,7 +31,7 @@ class UCTNode {
   selectChild() { // argmax( children, key:ucb )
     if (!this.hasChild())
       return null;
-    const EXlogN = this.EX * this.EX
+    const EXlogN = self.EX * self.EX
       * Math.log(this.visits);
     let bestChild = null;
     let bestUCB = -Infinity;
