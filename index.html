@@ -128,13 +128,14 @@
         <summary>goboard2d.js</summary>
         <pre><code preload-javascript data-url="worker/goboard2d.js"></code></pre>
       </details>
-      <div data-url="board7x7.txt" run="worker/TheFirstStep.js">
+      <div data-url="board7x7.txt" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Run</button>
           <button fork="fork_time">Time</button> <mark hidden></mark>
           <span options>
             <input type="hidden" name="worker" value="goutil.js">
             <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="fork" value="theFirstStep">
           </span>
         </div>
         <pre><summary>output</summary><code output></code></pre>
@@ -177,7 +178,7 @@
         <summary>goflood.js</summary>
         <pre><code preload-javascript data-url="worker/goflood.js"></code></pre>
       </details>
-      <div data-url="flood7x7.txt" run="worker/FloodFill.js">
+      <div data-url="flood7x7.txt" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Run</button>
           <button fork="fork_time">Time</button> <mark hidden></mark>
@@ -185,6 +186,7 @@
             <input type="hidden" name="worker" value="goutil.js">
             <input type="hidden" name="worker" value="goboard2d.js">
             <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="fork" value="floodFill">
           </span>
         </div>
         <pre><summary>output</summary><code output></code></pre>
@@ -202,7 +204,7 @@
         <summary>golibs.js</summary>
         <pre><code preload-javascript data-url="worker/golibs.js"></code></pre>
       </details>
-      <div data-url="board7x7.txt" run="worker/LibertyCount.js">
+      <div data-url="board7x7.txt" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Run</button>
           <button fork="fork_time">Time</button> <mark hidden></mark>
@@ -211,6 +213,7 @@
             <input type="hidden" name="worker" value="goboard2d.js">
             <input type="hidden" name="worker" value="goflood.js">
             <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="fork" value="libertyCount">
           </span>
         </div>
         <pre><summary>output</summary><code output></code></pre>
@@ -234,7 +237,7 @@
         <summary>goscore.js</summary>
         <pre><code preload-javascript data-url="worker/goscore.js"></code></pre>
       </details>
-      <div data-url="board7x7.txt" run="worker/Scoring.js">
+      <div data-url="board7x7.txt" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Run</button>
           <button fork="fork_time">Time</button> <mark hidden></mark>
@@ -244,6 +247,7 @@
             <input type="hidden" name="worker" value="goflood.js">
             <input type="hidden" name="worker" value="golibs.js">
             <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="fork" value="scoring">
           </span>
         </div>
         <pre><summary>output</summary><code output></code></pre>
@@ -258,7 +262,7 @@
         <summary>test_liberty_score.js</summary>
         <pre><code preload-javascript data-url="worker/test_liberty_score.js"></code></pre>
       </details>
-      <div data-url="board7x7.txt" run="worker/UnitTests.js">
+      <div data-url="board7x7.txt" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Run</button>
           <button fork="fork_time">Time</button> <mark hidden></mark>
@@ -270,6 +274,7 @@
             <input type="hidden" name="worker" value="goscore.js">
             <input type="hidden" name="worker" value="test_liberty_score.js">
             <input type="hidden" name="worker" value="gotest1.js">
+            <input type="hidden" name="fork" value="unitTests">
           </span>
         </div>
         <pre><summary>output</summary><code output></code></pre>
@@ -325,7 +330,7 @@
         <pre><code preload-javascript data-url="worker/gostate2d.js"></code></pre>
       </details>
       <p>Prohibited moves are marked with <mark warn="">⛛</mark></p>
-      <div data-id="rollouts7x7" run="worker/Rollouts.js">
+      <div data-id="rollouts7x7" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Play</button>
           <button reset>Reset</button>
@@ -338,6 +343,7 @@
             <input type="hidden" name="worker" value="goscore.js">
             <input type="hidden" name="worker" value="gostate2d.js">
             <input type="hidden" name="worker" value="goplay.js">
+            <input type="hidden" name="fork" value="playMove">
           </span>
         </div>
         <div>
@@ -368,7 +374,7 @@
         For some turns there are no valid moves and the player must pass.
         The limited moves are chosen in way that covers all rules and Rollout policies.
       </p>
-      <div data-id="rollouts7x7" run="worker/MoveTests.js">
+      <div data-id="rollouts7x7" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Run</button>
           <span options>
@@ -380,6 +386,7 @@
             <input type="hidden" name="worker" value="gostate2d.js">
             <input type="hidden" name="worker" value="test_play_move.js">
             <input type="hidden" name="worker" value="gotest2.js">
+            <input type="hidden" name="fork" value="moveTests">
           </span>
         </div>
         <pre><summary>output</summary><code output></code></pre>
@@ -396,7 +403,7 @@
         <pre><code preload-javascript data-url="worker/gomontecarlo.js"></code></pre>
       </details>
       <p>Click the go board to change the "starting position" for the Rollouts.</p>
-      <div data-id="montecarlo7x7" run="worker/MonteCarlo.js">
+      <div data-id="montecarlo7x7" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Play</button>
           <button reset>Reset</button>
@@ -408,6 +415,7 @@
             <input type="hidden" name="worker" value="goscore.js">
             <input type="hidden" name="worker" value="gostate2d.js">
             <input type="hidden" name="worker" value="gomontecarlo.js">
+            <input type="hidden" name="fork" value="monteCarlo">
           </span>
         </div>
         <div>
@@ -436,7 +444,7 @@
         <summary>gotreesearch.js</summary>
         <pre><code preload-javascript data-url="worker/gotreesearch.js"></code></pre>
       </details>
-      <div data-id="rollouts7x7" run="worker/TreeSearch.js">
+      <div data-id="rollouts7x7" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Run</button>
           <span options>
@@ -447,6 +455,7 @@
             <input type="hidden" name="worker" value="goscore.js">
             <input type="hidden" name="worker" value="gostate2d.js">
             <input type="hidden" name="worker" value="gotreesearch.js">
+            <input type="hidden" name="fork" value="treeMock">
           </span>
         </div>
         <pre><summary>output</summary><code output></code></pre>
@@ -454,7 +463,7 @@
       <p>"Traverse" is the sub-routine that descends the tree from root to leaf.
         Let's take a closer look.
       </p>
-      <div data-id="rollouts7x7" run="worker/Traverse.js">
+      <div data-id="rollouts7x7" run="worker/worker.js">
         <div class="full">
           <button fork="fork_run">Run</button>
           <span options>
@@ -465,6 +474,7 @@
             <input type="hidden" name="worker" value="goscore.js">
             <input type="hidden" name="worker" value="gostate2d.js">
             <input type="hidden" name="worker" value="gotreesearch.js">
+            <input type="hidden" name="fork" value="traverseMock">
           </span>
         </div>
         <pre><summary>output</summary><code output></code></pre>

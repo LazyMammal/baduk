@@ -23,3 +23,9 @@ function buildLibs(board) {
   }
   return libCount;
 }
+
+function libertyCount(input) {
+  const board = parseBoard2D(input);
+  const libCount = buildLibs(board);
+  return printNested(libCount);
+}

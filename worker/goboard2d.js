@@ -70,3 +70,8 @@ function parseBoard2D(input) {
   board.loadNested(nested);
   return board;
 }
+
+function theFirstStep(input) {
+  const board = parseBoard2D(input);
+  return board.printBoard();
+}
