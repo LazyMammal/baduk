@@ -115,7 +115,8 @@ function updateTextbox(elem, text) {
   if (elem.tagName === "TEXTAREA") {
     elem.value = text;
   } else {
-    elem.innerText = text;
+    elem.innerText = "";
+    elem.insertAdjacentHTML("afterbegin", text);
   }
 }
 

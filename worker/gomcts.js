@@ -10,9 +10,12 @@ function printRootArray(size, root, callback = () => 0) {
 function mcts(runtime) {
   const t0 = performance.now();
   const endT = t0 + runtime * 1e3;
+  const reps = 50;
   let nodes = 0;
+  let rollouts = 0;
   while (performance.now() < endT) {
-    nodes += treeSearch(self.root, self.state, 100);
+    nodes += treeSearch(self.root, self.state, reps);
+    rollouts += reps;
   }
   const dT = performance.now() - t0;
   const size = state.board.size;
@@ -28,10 +31,11 @@ function mcts(runtime) {
     `Value:`,
     printPadded(valueArr, true, 5),
     `root value ${self.root.value.toFixed(6)}`,
-    `visit ${self.root.visits} `
-    + `${(self.root.visits / dT * 1e3).toFixed(2)} visits/s`,
-    `nodes ${nodes} `
-    + `${(nodes / dT * 1e3).toFixed(2)} nodes/s`,
+    `nodes selected ${nodes}, `
+    + `${(nodes / dT * 1e3).toFixed(0)}/s`,
+    `new visits +${rollouts}, `
+    + `${(rollouts / dT * 1e3).toFixed(0)}/s`,
+    `total visits ${self.root.visits}`,
     `seconds ${runtime}`,
     `explore ${self.EX}`,
   ].join("\n");
