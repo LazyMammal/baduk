@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/an-old-hope.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js" defer></script>
+  <script src="lodash.min.js" defer></script>
+  <script src="gobo.js" defer></script>
+  <script src="main.js" defer></script>
+  <script src="fork_handler.js" defer></script>
+  <title>Baduk JS - Step By Step</title>
+</head>
+
+<body>
+  <header>
+    <h1>Baduk JS - Step By Step</h1>
+    <p>Experiments in Baduk/Game of Go/Weiqi using JavaScript</p>
+  </header>
+  <main>
+    <section>
+      <aside>
+        <nav>
+          <a href="#Introduction">Introduction</a>
+          <a href="#Rules">Rules of the Game</a>
+          <a href="#TheVisionAhead">The Vision Ahead</a>
+          <a href="#TheFirstStep">The First Step</a>
+          <a href="#FloodFill">Flood Fill</a>
+          <a href="#LibertyCount">Liberty Count</a>
+          <a href="#Scoring">Scoring</a>
+          <a href="#UnitTests">Unit Tests</a>
+          <a href="#Rollouts">Rollouts</a>
+          <a href="#MoveTests">Move Tests</a>
+          <a href="#MonteCarlo">Monte Carlo</a>
+          <a href="#TreeSearch">Tree Search</a>
+          <a href="#MCTS">MCTS</a>
+        </nav>
+      </aside>
+      <h2 id="Introduction"><a href="#Introduction">Introduction</a></h2>
+      <p>This page intends to demonstrate a series of small steps that all together will reach a more distant goal.</p>
+      <p>Writing a large program can be a daunting task. Even if the end goal is clearly envisioned, the steps to get
+        there might be only somewhat understood in advance. Many times the path forward must be discovered one step at a
+        time.</p>
+      <p>I have the goal of writing a <i>reasonably</i> performing Monte Carlo Tree Search (MCTS) bot for playing the
+        Game of Go.
+        I'm going to write it all in JavaScript.</p>
+      <p>In order to avoid burnout along the way, I will be dividing up the large size task into many small steps.
+        Each of the sections below will focus on one of those small steps.</p>
+      <p>This page is a <i>living document</i> and will be updated as I write more sections ...</p>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="Rules"><a href="#Rules">Rules of the Game</a></h2>
+      <p>Here's a quick refresher on the rules of Go:</p>
+      <ul>
+        <li><mark>Liberties</mark><br>
+          A liberty is an empty spot next to a stone along a painted line.
+          Liberties are shared by chains of connected same-colour stones along those same lines.
+          Lines are painted in 4 cardinal directions on a Go board.
+          Diagonally adjacent spots have no relation and cannot directly affect one another.
+          Lines do not extend beyond the bounds of the playable board.
+        </li>
+        <li><mark>Actions</mark><br>
+          Starting with Black, players take turns placing a single stone on the board.
+          Once placed, stones cannot be moved by either player.
+          Therefore stones are forever stationary (or removed entirely from the board).
+          A player may choose to "pass" instead of placing a stone.
+          The game is considered over after two passes in a row (with no play between).</li>
+        <li><mark>Capture</mark><br>
+          Stones must always have or share at least one liberty.
+          A move is invalid if the new stone would not have any liberties <i>at the end of the turn</i>.
+          If a stone is placed so that an opponent chain has no liberties, that chain is captured.
+          The entire chain is removed from the board at once.
+          This is the only way any stone can be removed from the board.
+          Revealed empty spots are counted as liberties on the same turn.
+          This allows a stone to be placed on a spot that otherwise would have zero liberties if not for the capture.
+        </li>
+        <li><mark>Repetition</mark><br>
+          It's prohibited to place a stone that repeats a previous board state.
+          Retaking single stones on adjacent spots is called a "Ko Fight".
+          To avoid the repetition rule players must wait one turn before retaking a previously captured stone.
+          This rule can be applied more generally and is called "Super-Ko".
+          According to Super-Ko players may be prevented from retaking even after "waiting one turn".
+          This usually occurs because more than one Ko Fight is present on the board.
+        </li>
+      </ul>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="TheVisionAhead"><a href="#TheVisionAhead">The Vision Ahead</a></h2>
+      <p>I want to pick a medium sized goal to directly plan towards.
+        I know that an MCTS bot will need to enact the <i>rules of the game</i> in order to perform automated Rollouts.
+        It will also need a way to score a <b>finished game</b> for counting Rollout wins and losses.</p>
+      <p>The file <code>liberty_score.js</code> contains my vision for the minimum abilities a computer would need to
+        enforce the rules of Go.</p>
+      <ol>
+        <li><mark>Count Liberties</mark></li>
+        <li><mark>Score a Finished Board</mark></li>
+      </ol>
+      <details>
+        <summary>test_liberty_score.js</summary>
+        <pre><code preload-javascript data-url="worker/test_liberty_score.js"></code></pre>
+      </details>
+      <p>The test file is written to be easy to read and process.</p>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="TheFirstStep"><a href="#TheFirstStep">The First Step</a></h2>
+      <p>Before we tackle <code>liberty_score.js</code> let's start with something less complicated.
+        The first step is reading a test file with an example position from a 7x7 board.
+        It will be easier to parse because it only has a single board and has no extra headers, comments, or trailing
+        whitespace.
+        The overall structure of <code>board7x7.txt</code> is as simple as we can make it while still being a meaningful
+        first step.
+      </p>
+      <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
+      <p>We can add coordinate labels for both axes while we're parsing the board.
+        Let's also restore the whitespace between the columns.</p>
+      <details>
+        <summary>goutil.js</summary>
+        <pre><code preload-javascript data-url="worker/goutil.js"></code></pre>
+      </details>
+      <details>
+        <summary>goboard2d.js</summary>
+        <pre><code preload-javascript data-url="worker/goboard2d.js"></code></pre>
+      </details>
+      <div data-url="board7x7.txt" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="fork" value="theFirstStep">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="FloodFill"><a href="#FloodFill">Flood Fill</a></h2>
+      <p>Now that we feel comfortable <i>parsing</i> the text board we can look ahead to processing the board for more
+        details.</p>
+      <p>To reach our medium goal we need to "count liberties" and "score the game". Scoring the game further relies on
+        identifying "enclosed empty spots" and which stone colour they "belong to".</p>
+      <ol>
+        <li><mark>Count Liberties</mark>
+          <ul>
+            <li>Follow a chain of same-colour stones.</li>
+            <li>Count all the adjacent empty spots.</li>
+          </ul>
+        </li>
+        <li><mark>Enclosed Empty Spots</mark>
+          <ul>
+            <li>Follow a chain of empty spots.</li>
+            <li>Identify the adjacent stone colours.</li>
+          </ul>
+        </li>
+      </ol>
+      <p>Both of these abilities rely on an even smaller ability. We need to be able to follow "chains" of
+        same-type pieces on the board. I know from experience that trying to do this task by "scanning" is possible
+        but very time consuming. The efficient approach here is to use Flood Fill (aka DFS, Depth First Search)</p>
+      <p>The scenario in <code>flood7x7.txt</code> challenges us to handle several issues.</p>
+      <ul>
+        <li>Follow the chain of stones through several branching points.</li>
+        <li>Avoid an infinite loop following the circular path of stones.</li>
+        <li>Avoid re-counting adjacent empty spots from multiple angles.</li>
+      </ul>
+      <pre><summary>flood7x7.txt</summary><code preload-txt data-url="flood7x7.txt"></code></pre>
+      <p>Let's count the number stones in the black chain and the number of liberties it's touching.
+        We'll also show the number of <i>visits</i> at each location of the board during our Flood Fill.</p>
+      <details>
+        <summary>goflood.js</summary>
+        <pre><code preload-javascript data-url="worker/goflood.js"></code></pre>
+      </details>
+      <div data-url="flood7x7.txt" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="fork" value="floodFill">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="LibertyCount"><a href="#LibertyCount">Liberty Count</a></h2>
+      <p>Liberties are an essential attribute in playing Go.
+        To perform a capture you need to know a chain has zero liberties.
+        It's impossible to enforce the <a href="#Rules">Rules of the Game</a> without the ability to count liberties.
+        To count liberties for the whole board we only need to run Flood Fill for each stone.</p>
+      <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
+      <details>
+        <summary>golibs.js</summary>
+        <pre><code preload-javascript data-url="worker/golibs.js"></code></pre>
+      </details>
+      <div data-url="board7x7.txt" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="fork" value="libertyCount">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="Scoring"><a href="#Scoring">Scoring</a></h2>
+      <p>Scoring is very similar to Counting Liberties with these differences:</p>
+      <ul>
+        <li>Follow empty spots instead of stones.</li>
+        <li>Identify the <i>types</i> of adjacent stones instead of summing them up.</li>
+      </ul>
+      <div>
+        <pre><summary>board7x7.txt</summary><code preload-txt data-url="board7x7.txt"></code></pre>
+      </div>
+      <p>We'll need to scan the board for stones but not follow them,
+        and follow empty spots as we find them.
+      </p>
+      <details>
+        <summary>goscore.js</summary>
+        <pre><code preload-javascript data-url="worker/goscore.js"></code></pre>
+      </details>
+      <div data-url="board7x7.txt" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="fork" value="scoring">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="UnitTests"><a href="#UnitTests">Unit Tests</a></h2>
+      <p>We have enough code now to solve all the unit tests in <code>liberty_score.js</code>.
+        With tests in hand we can verify the correctness of our previous functions.</p>
+      <details>
+        <summary>test_liberty_score.js</summary>
+        <pre><code preload-javascript data-url="worker/test_liberty_score.js"></code></pre>
+      </details>
+      <div data-url="board7x7.txt" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="test_liberty_score.js">
+            <input type="hidden" name="worker" value="gotest1.js">
+            <input type="hidden" name="fork" value="unitTests">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="Rollouts"><a href="#Rollouts">Rollouts</a></h2>
+      <p>The purpose of a Rollout is to simulate an entire game quickly and randomly.
+        Upon completion the board state will be scored as a Win or a Loss.
+        Each Rollout is a <i>statistical sample</i> for use in a larger algorithm.
+      </p>
+      <p>Rollouts entail the repeated action of adding stones to the board.
+        For most of the Rollout the stone colour will strictly alternate.
+        Near the end of the Rollout one player may need to pass before the other has run out of moves.
+        In the event of captures the player that needs to pass may change hands several times.</p>
+      <p>Key abilities needed for Rollouts:</p>
+      <ul>
+        <li><mark>Game State</mark>
+          <p>The location of stones on the board and which player is to take action.
+            We need enough information to support the analysis functions described below.
+          </p>
+        </li>
+        <li><mark>Captures</mark>
+          <p>To handle captures we need to be able to count liberties.
+            Whenever we place a stone we will check the four adjacent chains.
+            If any of the opponent chains have zero liberties they are removed according to the rules.
+          </p>
+        </li>
+        <li><mark>Legal Moves</mark>
+          <p>Check if a given location is valid for each player under the rules.
+            We will simulate or analyze the desired move.
+            A move is legal if, after any captures, the newly placed stone will have at least one liberty.
+          </p>
+        </li>
+        <li><mark>Eyes</mark>
+          <p>Rollout policies can go beyond official rules.
+            We want to encourage <i>stability</i> and <i>efficiency</i> by preventing some unwanted moves.
+            Random moves that fill in same-colour eyes are chaotic and drastically extend Rollouts.
+          </p>
+        </li>
+        <li><mark>Repetition</mark>
+          <p>In order to finalize and score a Rollout we must avoid infinite loops.
+            The fundamental issue with Ko Fights is the <i>immediate retaking</i> of single stone captures.
+            We can leverage the stochastic random quality of Rollouts to enforce a sort of move re-ordering.
+            The rule will be "Ko-like captures (single stones) can only happen on every third move".
+            This will mechanically enforce the idea of "finding a Ko threat" before re-taking the Ko stone.
+          </p>
+        </li>
+      </ul>
+      <details>
+        <summary>gostate2d.js</summary>
+        <pre><code preload-javascript data-url="worker/gostate2d.js"></code></pre>
+      </details>
+      <p>Prohibited moves are marked with <mark warn="">⛛</mark></p>
+      <div data-id="rollouts7x7" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Play</button>
+          <button reset>Reset</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="goplay.js">
+            <input type="hidden" name="fork" value="playMove">
+          </span>
+        </div>
+        <div>
+          <div class="goban clickable" update="copy2input" size="7" id="rollouts7x7_goban"></div>
+          <div>
+            <summary>input/output</summary> <textarea output cols="12" rows="9" id="rollouts7x7"></textarea>
+            <br> <button copy>Copy</button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="MoveTests"><a href="#MoveTests">Move Tests</a></h2>
+      <p>It would be a good idea to run another set of tests before coding any new features.
+        A starting game state will be given (board + toPlay) followed by the expected outcome of each turn.
+        The test will expect and require several moves played in a row with predictable outcomes.
+      </p>
+      <p>This type of test is called an <i>Integration Test</i> because several functions are executed at each step.
+        The previous <i>Unit Tests</i> attempted to test each function separately.</p>
+      <details>
+        <summary>test_play_move.js</summary>
+        <pre><code preload-javascript data-url="worker/test_play_move.js"></code></pre>
+      </details>
+      <p>Compared to Unit Tests there are only a few Move Tests.
+        Due to the sub-steps of each test, all the operations of Game State are covered.</p>
+      <p>The tests are carefully designed to have at most one valid move on each turn.
+        For some turns there are no valid moves and the player must pass.
+        The limited moves are chosen in way that covers all rules and Rollout policies.
+      </p>
+      <div data-id="rollouts7x7" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="test_play_move.js">
+            <input type="hidden" name="worker" value="gotest2.js">
+            <input type="hidden" name="fork" value="moveTests">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="MonteCarlo"><a href="#MonteCarlo">Monte Carlo</a></h2>
+      <p>Monte Carlo methods rely on collecting statistics from many Rollouts.
+        Let's collect win/loss results with Black to play first.
+      </p>
+      <p></p>
+      <details>
+        <summary>gomontecarlo.js</summary>
+        <pre><code preload-javascript data-url="worker/gomontecarlo.js"></code></pre>
+      </details>
+      <p>Click the go board to change the "starting position" for the Rollouts.</p>
+      <div data-id="montecarlo7x7" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Play</button>
+          <button reset>Reset</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="gomontecarlo.js">
+            <input type="hidden" name="fork" value="monteCarlo">
+          </span>
+        </div>
+        <div>
+          <div class="goban clickable" update="copy2input" size="7" id="montecarlo7x7_goban"></div>
+          <div>
+            <summary>input</summary> <textarea cols="12" rows="9" id="montecarlo7x7"></textarea>
+            <br> <button copy>Copy</button>
+          </div>
+        </div>
+        <div class="full">
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+      </div>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="TreeSearch"><a href="#TreeSearch">Tree Search</a></h2>
+      <p>Here we define a tree node class and Upper Confidence Bound (UCB) formula.
+        We need to traverse from a <i>root node</i> all the way to a <i>leaf node</i>.
+        At each tier in the tree the child node with the highest UCB score is selected.
+      </p>
+      <p>Each node encodes an action to replay in the game state.
+        At the leaf node we assign a reward value which is then shared with all the actions selected in the tree.
+      </p>
+      <details>
+        <summary>gotreesearch.js</summary>
+        <pre><code preload-javascript data-url="worker/gotreesearch.js"></code></pre>
+      </details>
+      <div data-id="rollouts7x7" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="gotreesearch.js">
+            <input type="hidden" name="fork" value="treeMock">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+      </div>
+      <p>"Traverse" is the sub-routine that descends the tree from root to leaf.
+        Let's take a closer look.
+      </p>
+      <div data-id="rollouts7x7" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <span options>
+            <input type="hidden" name="worker" value="gotreesearch.js">
+            <input type="hidden" name="fork" value="traverseMock">
+          </span>
+        </div>
+        <pre><summary>output</summary><code output></code></pre>
+    </section>
+    <section>
+      <div class="top"><a href="#top">top</a></div>
+      <h2 id="MCTS"><a href="#MCTS">MCTS</a></h2>
+      <p>Monte Carlo Tree Search (MCTS) is the combination of UCB Tree Search and Rollouts.
+        Rollouts will be used to stochastically estimate the reward function.
+        At every leaf node the game state is played to completion in a Rollout.
+        Many small samples by Rollouts combine together to build statistical probabilities.
+      </p>
+      <details>
+        <summary>gomcts.js</summary>
+        <pre><code preload-javascript data-url="worker/gomcts.js"></code></pre>
+      </details>
+      <ul>
+        <li>Click <code>Config</code> to:
+          <ul>
+            <li>reset search tree</li>
+            <li>set Explore value</li>
+            <li>set board starting position</li>
+          </ul>
+        </li>
+      </ul>
+      <div data-id="mcts7x7" run="worker/MCTS.js">
+        <div class="full">
+          <button fork="fork_mcts_config">Config</button>
+          <span options>
+            <label>Explore <input name="explore" value="2.0" size="5"></label>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard2d.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="worker" value="gostate2d.js">
+            <input type="hidden" name="worker" value="gotreesearch.js">
+            <input type="hidden" name="worker" value="gomcts.js">
+          </span>
+        </div>
+        <div>
+          <div class="goban clickable" update="copy2input" size="7" id="mcts7x7_goban"></div>
+          <div>
+            <summary>input</summary> <textarea cols="12" rows="9" id="mcts7x7"></textarea>
+            <br> <button copy>Copy</button> <button reset>Reset</button>
+          </div>
+        </div>
+        <div class="full">
+          <ul>
+            <li>Click <code>Run</code> to:
+              <ul>
+                <li>perform tree search iterations</li>
+                <li>re-use existing search tree</li>
+                <li>update output statistics</li>
+              </ul>
+            </li>
+          </ul>
+          <button fork="fork_mcts_run">Run</button>
+          <span options>
+            <label>Seconds <input name="time" value="1" size="2"></label>
+          </span>
+          <pre><summary>output</summary><code output></code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>
+    <p>by <a href="https://lazymammal.github.io/">LazyMammal</a></p>
+  </footer>
+</body>
+
+</html>

@@ -1,3 +1,5 @@
+const passAction = 0;
+
 class GoBoard2D {
   size;
   board;
