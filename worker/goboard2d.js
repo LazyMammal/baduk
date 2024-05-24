@@ -31,9 +31,9 @@ class GoBoard2D {
   adjacent(pos) {
     const { x, y } = pos;
     return [
+      new Pos(x, y - 1),
       new Pos(x - 1, y),
       new Pos(x + 1, y),
-      new Pos(x, y - 1),
       new Pos(x, y + 1),
     ];
   }
@@ -46,9 +46,13 @@ class GoBoard2D {
       new Pos(x + 1, y + 1),
     ];
   }
+  xy2pos(x, y) {
+    return new Pos(x, y);
+  }
   pos2xy(pos) {
     return pos; // {x, y}
   }
+  firstPos() { return new Pos(0, 0) }
   _xyValid(pos) {
     const { x, y } = pos;
     return x >= 0 && x < this.size

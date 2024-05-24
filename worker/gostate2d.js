@@ -37,7 +37,7 @@ class GoState {
       return true;
     }
     let caps = 0;
-    DFS(pos, this.board.adjacent,
+    DFS(pos, (pos) => this.board.adjacent(pos),
       this.board.isBlack(pos) ? followBlack : followWhite);
     return caps;
   }
@@ -59,7 +59,7 @@ class GoState {
     const earlyExit = () => {
       return stones > 1; // found refutation
     }
-    DFS(pos, this.board.adjacent,
+    DFS(pos, (pos) => this.board.adjacent(pos),
       this.board.isBlack(pos) ? followBlack : followWhite,
       earlyExit
     );
@@ -81,7 +81,7 @@ class GoState {
     const earlyExit = () => {
       return libs > limit; // found refutation
     }
-    DFS(pos, this.board.adjacent,
+    DFS(pos, (pos) => this.board.adjacent(pos),
       this.board.isBlack(pos) ? followBlack : followWhite,
       earlyExit
     );
@@ -116,20 +116,19 @@ class GoState {
     let playerCount = 0;
     let cache4way = [];
     for (let adj of this.board.adjacent(pos)) {
-      if (this.board.isEmpty(adj)) {
+      const code = this.board.getCode(adj);
+      if (code === GO_EMPTY) {
         return true; // adjacent liberty
       }
-      const code = this.board.getCode(adj);
-      cache4way.push({ adj: adj, code: code });
       enemyCount += code === this.enemyCode;
       playerCount += code === this.playerCode;
+      cache4way.push([adj, code]);
     }
     if (!(enemyCount || this._falseEye(pos))) {
       return false; // self-eye
     }
-
     let caps = 0; // number of captures available
-    for (let { adj, code } of cache4way) {
+    for (let [adj, code] of cache4way) {
       if (code === this.playerCode
         && !this.libsLimit(adj, 1)) { // > 1
         return true; // safely merge
@@ -153,8 +152,8 @@ class GoState {
   _falseEye(pos) {
     let edgeCount = 0;
     let enemyCount = 0;
-    for (let adj of this.board.diagonal(pos)) {
-      const code = this.board.getCode(adj);
+    for (let diag of this.board.diagonal(pos)) {
+      const code = this.board.getCode(diag);
       enemyCount += code === this.enemyCode;
       edgeCount += code === GO_OOB;
     }

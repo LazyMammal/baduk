@@ -1,5 +1,5 @@
 const testPlayMove = [{
-  name: "Self-Capture",
+  name: "Self-Capture I",
   toPlay: "B",
   input: [
     "B B B .", // setup
@@ -11,12 +11,32 @@ const testPlayMove = [{
     "B B B .", // B pass
     "W W W B", // W:D4 is only move
     "W . W B",
-    ". W W B\n"
+    ". W W B",
   ], [
     ". . . W", // W plays D4 for capture
     "W W W .",
     "W . W .",
-    ". W W .\n"
+    ". W W .",
+  ]],
+}, {
+  name: "Self-Capture II",
+  toPlay: "B",
+  input: [
+    "B W W .",
+    "B W . W",
+    "B W W W", // no B moves (self-capture)
+    "B . B B", // setup
+  ],
+  boards: [[
+    "B W W .",
+    "B W . W",
+    "B W W W", // W:B4 is only move
+    "B . B B", // B pass
+  ], [
+    ". W W .",
+    ". W . W",
+    ". W W W",
+    ". W . .", // W plays B4 for capture
   ]],
 }, {
   name: "Capture",
@@ -29,11 +49,11 @@ const testPlayMove = [{
   boards: [[
     "W W W", // W pass
     "W . W", // B:B2 is only move
-    "W W W\n"
+    "W W W",
   ], [
     ". . .", // B plays B2 for capture
     ". B .",
-    ". . .\n"
+    ". . .",
   ]],
 }, {
   name: "Repetition",

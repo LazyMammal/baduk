@@ -1,4 +1,4 @@
-class GoBoardPos {
+class GoBoard2D {
   size;
   board;
   constructor(size, board = null) {
@@ -12,7 +12,7 @@ class GoBoardPos {
     const board = new Int32Array(length);
     for (let i = 0; i < W; i++) {
       board[i] = GO_OOB; // Out-Of-Bounds
-      board[i * W] = GO_OOB;
+      board[(i + 1) * W] = GO_OOB;
       board[board.length - i - 1] = GO_OOB;
     }
     return board;
@@ -22,13 +22,26 @@ class GoBoardPos {
     return new this.constructor(this.size, this.board.slice());
   }
 
-  isPlayable(pos) {
-    return this.board[pos] === GO_EMPTY;
+  allMoves() {
+    const last = this.lastPos();
+    const moves = [];
+    for (let pos = this.firstPos(); pos <= last; pos++) {
+      if (this.board[pos] === GO_EMPTY)
+        moves.push(pos);
+    }
+    return moves;
   }
 
-  hasStone(pos) {
-    return this.board[pos] & GO_STONE;
-  }
+  setCode(pos, val) { if (this.board[pos] !== GO_OOB) this.board[pos] = val }
+  getCode(pos) { return this.board[pos] }
+
+  isEmpty(pos) { return this.board[pos] === GO_EMPTY }
+  isBlack(pos) { return this.board[pos] === GO_BLACK }
+  isWhite(pos) { return this.board[pos] === GO_WHITE }
+  isStone(pos) { return this.board[pos] & GO_STONE }
+  getColour(pos) { return GO_CHARS[this.board[pos]] }
+
+  setEmpty(pos) { this.setCode(pos, GO_EMPTY) }
 
   xy2pos(x, y) {
     return (x + 1) + (y + 1) * (this.size + 1);
@@ -49,6 +62,12 @@ class GoBoardPos {
   lastPos() {
     const L = this.size - 1;
     return this.xy2pos(L, L);
+  }
+
+  _xyValid(pos) {
+    const { x, y } = this.pos2xy(pos);
+    return x >= 0 && x < this.size
+      && y >= 0 && y < this.size;
   }
 
   adjacent(pos) { // cardinal neighbours
@@ -127,4 +146,18 @@ class GoBoardPos {
     }
     return res.join("\n");
   }
+}
+
+function parseBoard2D(input) {
+  const text = input.length ? input : defaultInput;
+  const nested = text2nested(text);
+  const size = nested[0].length;
+  const board = new GoBoard2D(size);
+  board.loadNested(nested);
+  return board;
+}
+
+function theFirstStep(input) {
+  const board = parseBoard2D(input);
+  return board.printBoard();
 }

@@ -10,10 +10,10 @@ function scoreBoard(board, enclosed, stoneArr) {
   const stone = {};
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      const pos = new Pos(x, y);
+      const pos = board.xy2pos(x, y);
       if (board.isEmpty(pos)) {
         tally = {};
-        DFS(pos, board.adjacent, followEmpty);
+        DFS(pos, (pos) => board.adjacent(pos), followEmpty);
         let result = "?";
         if (tally["W"] && !tally["B"]) {
           result = "w";

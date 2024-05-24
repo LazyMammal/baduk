@@ -11,10 +11,10 @@ function buildLibs(board) {
   }
   for (let y = 0; y < board.size; y++) {
     for (let x = 0; x < board.size; x++) {
-      const pos = new Pos(x, y);
+      const pos = board.xy2pos(x, y);
       if (board.isStone(pos)) {
         libs = 0;
-        DFS(pos, board.adjacent,
+        DFS(pos, (pos) => board.adjacent(pos),
           board.isBlack(pos) ? followBlack : followWhite);
         libCount[y][x] = libs;
       } else {

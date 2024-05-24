@@ -46,7 +46,7 @@ function floodFill(input) {
     total++;
     return isStone;
   }
-  DFS(new Pos(0, 0), board.adjacent, followBlack);
+  DFS(board.firstPos(), (pos) => board.adjacent(pos), followBlack);
   return [
     printNested(visits),
     `Black stones:  ${black}`,
