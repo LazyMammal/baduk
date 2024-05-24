@@ -17,6 +17,7 @@ self.onmessage = (event) => {
 
 function configureMCTS(options) {
   const board = parseBoard2D(options.board);
+  console.log(board.printBoard())
   const toPlay = options?.toPlay === "W" ? "W" : "B";
   self.state = new GoState(board, GO_CODES[toPlay]);
   self.state.turn = options?.turn ?? 0;

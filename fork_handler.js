@@ -20,7 +20,7 @@ async function fork_run(elem) {
     elem.removeAttribute("disabled");
   };
 
-  worker.postMessage(fork.data);
+  worker.postMessage(fork.options.board);
 }
 
 async function fork_time(elem) {
@@ -39,7 +39,7 @@ async function fork_time(elem) {
   worker.onmessage = () => {
     const seconds = (performance.now() - t0) / 1e3;
     if (++samples < 20 || seconds < 3.0) {
-      worker.postMessage(fork.data);
+      worker.postMessage(fork.options.board);
     } else {
       worker.terminate();
       const ops = samples / seconds;
@@ -50,16 +50,17 @@ async function fork_time(elem) {
     }
   };
 
-  worker.postMessage(fork.data);
+  worker.postMessage(fork.options.board);
 }
 
 async function setupFork(elem) {
   const parent = findParent(elem);
+  const data = await getData(parent);
+  const options = workerOptions(parent);
   return {
     parent: parent,
-    data: await getData(parent),
+    options: Object.assign(options, { board: data }),
     run: parent.getAttribute("run"),
-    options: workerOptions(parent),
     goban: parent.querySelector(".goban")?.getAttribute("id"),
     output: parent.querySelector("[output]"),
     mark: parent.querySelector("mark"),
@@ -119,7 +120,6 @@ async function fork_mcts_worker(elem) {
   const worker = new Worker(fork.run);
   window.baduk.fork_mcts_worker = worker;
 
-  fork.options.board = fork.data;
   fork.options.cmd = "worker";
   worker.postMessage(fork.options);
 }
@@ -133,7 +133,6 @@ async function fork_mcts_config(elem) {
   }
   const worker = window.baduk.fork_mcts_worker;
 
-  fork.options.board = fork.data;
   fork.options.cmd = "config";
   worker.postMessage(fork.options);
 }
