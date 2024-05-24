@@ -1,20 +1,21 @@
 function buildLibs(board) {
   const libCount = createNested(board.size, 0);
   let libs = 0;
-  const followBlack = ({ x, y }) => {
-    libs += board.isEmpty(x, y);
-    return board.isBlack(x, y);
+  const followBlack = (pos) => {
+    libs += board.isEmpty(pos);
+    return board.isBlack(pos);
   }
-  const followWhite = ({ x, y }) => {
-    libs += board.isEmpty(x, y);
-    return board.isWhite(x, y);
+  const followWhite = (pos) => {
+    libs += board.isEmpty(pos);
+    return board.isWhite(pos);
   }
   for (let y = 0; y < board.size; y++) {
     for (let x = 0; x < board.size; x++) {
-      if (board.isStone(x, y)) {
+      const pos = new Pos(x, y);
+      if (board.isStone(pos)) {
         libs = 0;
-        DFS(new Pos(x, y), xy4way,
-          board.isBlack(x, y) ? followBlack : followWhite);
+        DFS(pos, xy4way,
+          board.isBlack(pos) ? followBlack : followWhite);
         libCount[y][x] = libs;
       } else {
         libCount[y][x] = ".";

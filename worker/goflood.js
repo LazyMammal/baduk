@@ -50,12 +50,12 @@ function floodFill(input) {
   let libs = 0;
   let total = 0;
   let visits = createNested(board.size, 0);
-  const followBlack = ({ x, y }) => {
-    const isStone = board.isBlack(x, y);
+  const followBlack = (pos) => {
+    const isStone = board.isBlack(pos);
     black += isStone;
-    libs += board.isEmpty(x, y);
-    if (board._xyValid(x, y))
-      visits[y][x]++;
+    libs += board.isEmpty(pos);
+    if (board._xyValid(pos))
+      visits[pos.y][pos.x]++;
     total++;
     return isStone;
   }

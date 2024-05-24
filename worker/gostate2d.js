@@ -13,89 +13,88 @@ class GoState {
   moveList() {
     const moves = [];
     for (let pos of this.board.allMoves()) {
-      const { x, y } = pos;
-      if (this.validToPlay(x, y))
+      if (this.validToPlay(pos))
         moves.push(pos);
     }
     return moves;
   }
 
-  eraseChain(x, y) {
-    if (!this.board.isStone(x, y))
+  eraseChain(pos) {
+    if (!this.board.isStone(pos))
       return 0;
-    const followBlack = ({ x, y }) => {
-      if (!this.board.isBlack(x, y))
+    const followBlack = (pos) => {
+      if (!this.board.isBlack(pos))
         return false;
-      this.board.setEmpty(x, y);
+      this.board.setEmpty(pos);
       caps++;
       return true;
     }
-    const followWhite = ({ x, y }) => {
-      if (!this.board.isWhite(x, y))
+    const followWhite = (pos) => {
+      if (!this.board.isWhite(pos))
         return false;
-      this.board.setEmpty(x, y);
+      this.board.setEmpty(pos);
       caps++;
       return true;
     }
     let caps = 0;
-    DFS(new Pos(x, y), xy4way,
-      this.board.isBlack(x, y) ? followBlack : followWhite);
+    DFS(pos, xy4way,
+      this.board.isBlack(pos) ? followBlack : followWhite);
     return caps;
   }
 
-  isSingleStone(x, y) {
-    if (!this.board.isStone(x, y))
+  isSingleStone(pos) {
+    if (!this.board.isStone(pos))
       return 0;
     let stones = 0;
-    const followBlack = ({ x, y }) => {
-      const isStone = this.board.isBlack(x, y);
+    const followBlack = (pos) => {
+      const isStone = this.board.isBlack(pos);
       stones += isStone;
       return isStone;
     }
-    const followWhite = ({ x, y }) => {
-      const isStone = this.board.isWhite(x, y);
+    const followWhite = (pos) => {
+      const isStone = this.board.isWhite(pos);
       stones += isStone;
       return isStone;
     }
     const earlyExit = () => {
       return stones > 1; // found refutation
     }
-    DFS(new Pos(x, y), xy4way,
-      this.board.isBlack(x, y) ? followBlack : followWhite,
+    DFS(pos, xy4way,
+      this.board.isBlack(pos) ? followBlack : followWhite,
       earlyExit
     );
     return stones === 1;
   }
 
-  libsLimit(x, y, limit = 0) {
-    if (!this.board.isStone(x, y))
+  libsLimit(pos, limit = 0) {
+    if (!this.board.isStone(pos))
       return 0;
     let libs = 0;
-    const followBlack = ({ x, y }) => {
-      libs += this.board.isEmpty(x, y);
-      return this.board.isBlack(x, y);
+    const followBlack = (pos) => {
+      libs += this.board.isEmpty(pos);
+      return this.board.isBlack(pos);
     }
-    const followWhite = ({ x, y }) => {
-      libs += this.board.isEmpty(x, y);
-      return this.board.isWhite(x, y);
+    const followWhite = (pos) => {
+      libs += this.board.isEmpty(pos);
+      return this.board.isWhite(pos);
     }
     const earlyExit = () => {
       return libs > limit; // found refutation
     }
-    DFS(new Pos(x, y), xy4way,
-      this.board.isBlack(x, y) ? followBlack : followWhite,
+    DFS(pos, xy4way,
+      this.board.isBlack(pos) ? followBlack : followWhite,
       earlyExit
     );
     return libs <= limit;
   }
 
-  playMove(x, y) {
-    this.board.setCode(x, y, this.playerCode);
+  playMove(pos) {
+    this.board.setCode(pos, this.playerCode);
     let caps = 0;
-    for (let adj of xy4way(new Pos(x, y))) {
-      if (this.board.getCode(adj.x, adj.y) === this.enemyCode
-        && this.libsLimit(adj.x, adj.y)) { // capture
-        caps += this.eraseChain(adj.x, adj.y);
+    for (let adj of xy4way(pos)) {
+      if (this.board.getCode(adj) === this.enemyCode
+        && this.libsLimit(adj)) { // capture
+        caps += this.eraseChain(adj);
       }
     }
     this.advanceTurn();
@@ -108,37 +107,37 @@ class GoState {
     this.turn++;
   }
 
-  validToPlay(x, y) {
-    if (!this.board.isEmpty(x, y)) {
+  validToPlay(pos) {
+    if (!this.board.isEmpty(pos)) {
       return false; // not empty
     }
 
     let enemyCount = 0; // prep for eye check
     let playerCount = 0;
     let cache4way = [];
-    for (let adj of xy4way(new Pos(x, y))) {
-      if (this.board.isEmpty(adj.x, adj.y)) {
+    for (let adj of xy4way(pos)) {
+      if (this.board.isEmpty(adj)) {
         return true; // adjacent liberty
       }
-      const code = this.board.getCode(adj.x, adj.y);
+      const code = this.board.getCode(adj);
       cache4way.push({ adj: adj, code: code });
       enemyCount += code === this.enemyCode;
       playerCount += code === this.playerCode;
     }
-    if (!(enemyCount || this._falseEye(x, y))) {
+    if (!(enemyCount || this._falseEye(pos))) {
       return false; // self-eye
     }
 
     let caps = 0; // number of captures available
     for (let { adj, code } of cache4way) {
       if (code === this.playerCode
-        && !this.libsLimit(adj.x, adj.y, 1)) { // > 1
+        && !this.libsLimit(adj, 1)) { // > 1
         return true; // safely merge
       }
       if (code === this.enemyCode
-        && this.libsLimit(adj.x, adj.y, 1) // atari == 1
+        && this.libsLimit(adj, 1) // atari == 1
       ) {
-        const isOne = this.isSingleStone(adj.x, adj.y);
+        const isOne = this.isSingleStone(adj);
         if (!isOne || ++caps > 1) {
           return true; // safely capture two+
         }
@@ -151,12 +150,13 @@ class GoState {
     return caps > 0; // valid if capture
   }
 
-  _falseEye(x, y) {
+  _falseEye(pos) {
+    const { x, y } = pos;
     let edgeCount = 0;
     let enemyCount = 0;
     for (let a = -1; a <= 1; a += 2) {
       for (let b = -1; b <= 1; b += 2) {
-        const code = this.board.getCode(x + a, y + b);
+        const code = this.board.getCode(new Pos(x + a, y + b));
         enemyCount += code === this.enemyCode;
         edgeCount += code === GO_OOB;
       }
@@ -170,8 +170,7 @@ class GoState {
   playRandom() {
     const moves = this.moveList();
     if (moves.length) {
-      let { x, y } = _.sample(moves); // random
-      this.playMove(x, y);
+      this.playMove(_.sample(moves)); // random
       return true;
     } else {
       this.advanceTurn();
@@ -191,10 +190,9 @@ class GoState {
     return win * 2 - 1; // -1 or +1
   }
 
-  replayMove(action) {
-    let { x, y } = action;
-    if (this.board._xyValid(x, y)) {
-      this.playMove(x, y);
+  replayMove(pos) {
+    if (this.board._xyValid(pos)) {
+      this.playMove(pos);
     } else {
       this.advanceTurn(); // pass
     }

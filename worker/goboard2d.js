@@ -28,28 +28,29 @@ class GoBoard2D {
     }
     return moves;
   }
-  _xyValid(x, y) {
+  _xyValid(pos) {
+    const { x, y } = pos;
     return x >= 0 && x < this.size
       && y >= 0 && y < this.size;
   }
-  setCode(x, y, val) {
-    if (this._xyValid(x, y))
-      this.board[y][x] = val;
+  setCode(pos, val) {
+    if (this._xyValid(pos))
+      this.board[pos.y][pos.x] = val;
   }
-  getCode(x, y) {
-    if (this._xyValid(x, y))
-      return this.board[y][x];
+  getCode(pos) {
+    if (this._xyValid(pos))
+      return this.board[pos.y][pos.x];
     return GO_OOB;
   }
-  getColour(x, y) { return GO_CHARS[this.getCode(x, y)] }
-  isEmpty(x, y) { return this.getCode(x, y) === GO_EMPTY }
-  isBlack(x, y) { return this.getCode(x, y) === GO_BLACK }
-  isWhite(x, y) { return this.getCode(x, y) === GO_WHITE }
-  isStone(x, y) { return this.getCode(x, y) & GO_STONE }
-  isOOB(x, y) { return this.getCode(x, y) === GO_OOB }
-  setEmpty(x, y) { this.setCode(x, y, GO_EMPTY) }
-  setBlack(x, y) { this.setCode(x, y, GO_BLACK) }
-  setWhite(x, y) { this.setCode(x, y, GO_WHITE) }
+  getColour(pos) { return GO_CHARS[this.getCode(pos)] }
+  isEmpty(pos) { return this.getCode(pos) === GO_EMPTY }
+  isBlack(pos) { return this.getCode(pos) === GO_BLACK }
+  isWhite(pos) { return this.getCode(pos) === GO_WHITE }
+  isStone(pos) { return this.getCode(pos) & GO_STONE }
+  isOOB(pos) { return this.getCode(pos) === GO_OOB }
+  setEmpty(pos) { this.setCode(pos, GO_EMPTY) }
+  setBlack(pos) { this.setCode(pos, GO_BLACK) }
+  setWhite(pos) { this.setCode(pos, GO_WHITE) }
 
   loadNested(nested) {
     for (let y = 0; y < nested.length && y < this.size; y++) {
@@ -74,7 +75,7 @@ class GoBoard2D {
     for (let y = this.size - 1; y >= 0; y--) {
       let row = [];
       for (let x = 0; x < this.size; x++) {
-        let char = this.getColour(x, y);
+        let char = this.getColour(new Pos(x, y));
         row.push(`${char}`.padStart(pad, " "));
       }
       if (addLabels)

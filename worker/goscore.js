@@ -1,18 +1,19 @@
 function scoreBoard(board, enclosed, stoneArr) {
   const size = board.size;
   let tally;
-  const followEmpty = ({ x, y }) => {
-    let piece = board.getColour(x, y);
+  const followEmpty = (pos) => {
+    let piece = board.getColour(pos);
     tally[piece] = 1 + (tally[piece] ?? 0);
-    return board.isEmpty(x, y);
+    return board.isEmpty(pos);
   }
   const empty = {};
   const stone = {};
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
-      if (board.isEmpty(x, y)) {
+      const pos = new Pos(x, y);
+      if (board.isEmpty(pos)) {
         tally = {};
-        DFS(new Pos(x, y), xy4way, followEmpty);
+        DFS(pos, xy4way, followEmpty);
         let result = "?";
         if (tally["W"] && !tally["B"]) {
           result = "w";
@@ -24,7 +25,7 @@ function scoreBoard(board, enclosed, stoneArr) {
         if (enclosed) enclosed[y][x] = result;
         empty[result] = 1 + (empty[result] ?? 0);
       } else {
-        const piece = board.getColour(x, y);
+        const piece = board.getColour(pos);
         if (stoneArr) stoneArr[y][x] = piece;
         stone[piece] = 1 + (stone[piece] ?? 0);
       }
