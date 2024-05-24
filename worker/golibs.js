@@ -14,7 +14,7 @@ function buildLibs(board) {
       const pos = new Pos(x, y);
       if (board.isStone(pos)) {
         libs = 0;
-        DFS(pos, xy4way,
+        DFS(pos, board.adjacent,
           board.isBlack(pos) ? followBlack : followWhite);
         libCount[y][x] = libs;
       } else {

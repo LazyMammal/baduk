@@ -29,20 +29,6 @@ function DFS(start,
   return visited;
 }
 
-function xy4way(pos) {
-  /*
-  - generic for {x, y} 
-  - doesn't know board.size
-  */
-  const { x, y } = pos;
-  return [
-    new Pos(x - 1, y),
-    new Pos(x + 1, y),
-    new Pos(x, y - 1),
-    new Pos(x, y + 1),
-  ];
-}
-
 function floodFill(input) {
   const board = parseBoard2D(input);
 
@@ -54,12 +40,13 @@ function floodFill(input) {
     const isStone = board.isBlack(pos);
     black += isStone;
     libs += board.isEmpty(pos);
+    const { x, y } = board.pos2xy(pos);
     if (board._xyValid(pos))
-      visits[pos.y][pos.x]++;
+      visits[y][x]++;
     total++;
     return isStone;
   }
-  DFS(new Pos(0, 0), xy4way, followBlack);
+  DFS(new Pos(0, 0), board.adjacent, followBlack);
   return [
     printNested(visits),
     `Black stones:  ${black}`,

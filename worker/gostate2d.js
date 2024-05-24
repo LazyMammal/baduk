@@ -37,7 +37,7 @@ class GoState {
       return true;
     }
     let caps = 0;
-    DFS(pos, xy4way,
+    DFS(pos, this.board.adjacent,
       this.board.isBlack(pos) ? followBlack : followWhite);
     return caps;
   }
@@ -59,7 +59,7 @@ class GoState {
     const earlyExit = () => {
       return stones > 1; // found refutation
     }
-    DFS(pos, xy4way,
+    DFS(pos, this.board.adjacent,
       this.board.isBlack(pos) ? followBlack : followWhite,
       earlyExit
     );
@@ -81,7 +81,7 @@ class GoState {
     const earlyExit = () => {
       return libs > limit; // found refutation
     }
-    DFS(pos, xy4way,
+    DFS(pos, this.board.adjacent,
       this.board.isBlack(pos) ? followBlack : followWhite,
       earlyExit
     );
@@ -91,7 +91,7 @@ class GoState {
   playMove(pos) {
     this.board.setCode(pos, this.playerCode);
     let caps = 0;
-    for (let adj of xy4way(pos)) {
+    for (let adj of this.board.adjacent(pos)) {
       if (this.board.getCode(adj) === this.enemyCode
         && this.libsLimit(adj)) { // capture
         caps += this.eraseChain(adj);
@@ -115,7 +115,7 @@ class GoState {
     let enemyCount = 0; // prep for eye check
     let playerCount = 0;
     let cache4way = [];
-    for (let adj of xy4way(pos)) {
+    for (let adj of this.board.adjacent(pos)) {
       if (this.board.isEmpty(adj)) {
         return true; // adjacent liberty
       }
@@ -151,15 +151,12 @@ class GoState {
   }
 
   _falseEye(pos) {
-    const { x, y } = pos;
     let edgeCount = 0;
     let enemyCount = 0;
-    for (let a = -1; a <= 1; a += 2) {
-      for (let b = -1; b <= 1; b += 2) {
-        const code = this.board.getCode(new Pos(x + a, y + b));
-        enemyCount += code === this.enemyCode;
-        edgeCount += code === GO_OOB;
-      }
+    for (let adj of this.board.diagonal(pos)) {
+      const code = this.board.getCode(adj);
+      enemyCount += code === this.enemyCode;
+      edgeCount += code === GO_OOB;
     }
     if ((edgeCount && enemyCount)
       || enemyCount > 1)
@@ -205,16 +202,13 @@ class GoState {
 
 function markLegal(state) {
   const moves = state.moveList();
-  return markInverse(state, moves);
-}
-
-function markInverse(state, moves) {
   const warn = "V";
   const board = text2nested(
     state.board.printBoard({ addLabels: false })
       .replaceAll(".", warn)
   );
-  for (let { x, y } of moves) {
+  for (let pos of moves) {
+    const { x, y } = state.board.pos2xy(pos);
     if (board[y][x] === warn)
       board[y][x] = ".";
   }

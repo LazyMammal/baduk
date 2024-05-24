@@ -17,7 +17,7 @@ class GoBoard2D {
   board;
   constructor(size) {
     this.size = size;
-    this.board = createNested(size, GO_EMPTY);
+    this.board = Array(size * size).fill(GO_EMPTY);
   }
   allMoves() {
     const moves = [];
@@ -28,6 +28,27 @@ class GoBoard2D {
     }
     return moves;
   }
+  adjacent(pos) {
+    const { x, y } = pos;
+    return [
+      new Pos(x - 1, y),
+      new Pos(x + 1, y),
+      new Pos(x, y - 1),
+      new Pos(x, y + 1),
+    ];
+  }
+  diagonal(pos) {
+    const { x, y } = pos;
+    return [
+      new Pos(x - 1, y - 1),
+      new Pos(x + 1, y - 1),
+      new Pos(x - 1, y + 1),
+      new Pos(x + 1, y + 1),
+    ];
+  }
+  pos2xy(pos) {
+    return pos; // {x, y}
+  }
   _xyValid(pos) {
     const { x, y } = pos;
     return x >= 0 && x < this.size
@@ -35,11 +56,11 @@ class GoBoard2D {
   }
   setCode(pos, val) {
     if (this._xyValid(pos))
-      this.board[pos.y][pos.x] = val;
+      this.board[this.size * pos.y + pos.x] = val;
   }
   getCode(pos) {
     if (this._xyValid(pos))
-      return this.board[pos.y][pos.x];
+      return this.board[this.size * pos.y + pos.x];
     return GO_OOB;
   }
   getColour(pos) { return GO_CHARS[this.getCode(pos)] }
@@ -55,7 +76,7 @@ class GoBoard2D {
   loadNested(nested) {
     for (let y = 0; y < nested.length && y < this.size; y++) {
       for (let x = 0; x < nested[y].length && x < this.size; x++) {
-        this.board[y][x] = GO_CODES[nested[y][x]] ?? GO_EMPTY;
+        this.board[this.size * y + x] = GO_CODES[nested[y][x]] ?? GO_EMPTY;
       }
     }
   }
