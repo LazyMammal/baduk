@@ -1,9 +1,20 @@
+const passAction = { x: -1, y: -1 };
+
 class GoBoard2D {
   size;
   board;
   constructor(size) {
     this.size = size;
     this.board = createNested(size, GO_EMPTY);
+  }
+  allMoves() {
+    const moves = [];
+    for (let y = 0; y < this.size; y++) {
+      for (let x = 0; x < this.size; x++) {
+        moves.push({ x: x, y: y });
+      }
+    }
+    return moves;
   }
   _xyValid(x, y) {
     return x >= 0 && x < this.size

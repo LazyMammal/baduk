@@ -12,11 +12,10 @@ class GoState {
 
   moveList() {
     const moves = [];
-    for (let y = 0; y < this.board.size; y++) {
-      for (let x = 0; x < this.board.size; x++) {
-        if (this.validToPlay(x, y))
-          moves.push([x, y]);
-      }
+    for (let pos of this.board.allMoves()) {
+      const { x, y } = pos;
+      if (this.validToPlay(x, y))
+        moves.push(pos);
     }
     return moves;
   }
@@ -24,14 +23,14 @@ class GoState {
   eraseChain(x, y) {
     if (!this.board.isStone(x, y))
       return 0;
-    const followBlack = ([x, y]) => {
+    const followBlack = ({ x, y }) => {
       if (!this.board.isBlack(x, y))
         return false;
       this.board.setEmpty(x, y);
       caps++;
       return true;
     }
-    const followWhite = ([x, y]) => {
+    const followWhite = ({ x, y }) => {
       if (!this.board.isWhite(x, y))
         return false;
       this.board.setEmpty(x, y);
@@ -39,7 +38,7 @@ class GoState {
       return true;
     }
     let caps = 0;
-    DFS([x, y], xy4way,
+    DFS({ x: x, y: y }, xy4way,
       this.board.isBlack(x, y) ? followBlack : followWhite);
     return caps;
   }
@@ -48,12 +47,12 @@ class GoState {
     if (!this.board.isStone(x, y))
       return 0;
     let stones = 0;
-    const followBlack = ([x, y]) => {
+    const followBlack = ({ x, y }) => {
       const isStone = this.board.isBlack(x, y);
       stones += isStone;
       return isStone;
     }
-    const followWhite = ([x, y]) => {
+    const followWhite = ({ x, y }) => {
       const isStone = this.board.isWhite(x, y);
       stones += isStone;
       return isStone;
@@ -61,7 +60,7 @@ class GoState {
     const earlyExit = () => {
       return stones > 1; // found refutation
     }
-    DFS([x, y], xy4way,
+    DFS({ x: x, y: y }, xy4way,
       this.board.isBlack(x, y) ? followBlack : followWhite,
       earlyExit
     );
@@ -72,18 +71,18 @@ class GoState {
     if (!this.board.isStone(x, y))
       return 0;
     let libs = 0;
-    const followBlack = ([x, y]) => {
+    const followBlack = ({ x, y }) => {
       libs += this.board.isEmpty(x, y);
       return this.board.isBlack(x, y);
     }
-    const followWhite = ([x, y]) => {
+    const followWhite = ({ x, y }) => {
       libs += this.board.isEmpty(x, y);
       return this.board.isWhite(x, y);
     }
     const earlyExit = () => {
       return libs > limit; // found refutation
     }
-    DFS([x, y], xy4way,
+    DFS({ x: x, y: y }, xy4way,
       this.board.isBlack(x, y) ? followBlack : followWhite,
       earlyExit
     );
@@ -93,10 +92,10 @@ class GoState {
   playMove(x, y) {
     this.board.setCode(x, y, this.playerCode);
     let caps = 0;
-    for (let [i, j] of xy4way([x, y])) {
-      if (this.board.getCode(i, j) === this.enemyCode
-        && this.libsLimit(i, j)) { // capture
-        caps += this.eraseChain(i, j);
+    for (let adj of xy4way({ x: x, y: y })) {
+      if (this.board.getCode(adj.x, adj.y) === this.enemyCode
+        && this.libsLimit(adj.x, adj.y)) { // capture
+        caps += this.eraseChain(adj.x, adj.y);
       }
     }
     this.advanceTurn();
@@ -117,12 +116,12 @@ class GoState {
     let enemyCount = 0; // prep for eye check
     let playerCount = 0;
     let cache4way = [];
-    for (let [i, j] of xy4way([x, y])) {
-      if (this.board.isEmpty(i, j)) {
+    for (let adj of xy4way({ x: x, y: y })) {
+      if (this.board.isEmpty(adj.x, adj.y)) {
         return true; // adjacent liberty
       }
-      const code = this.board.getCode(i, j);
-      cache4way.push([[i, j], code]);
+      const code = this.board.getCode(adj.x, adj.y);
+      cache4way.push({ adj: adj, code: code });
       enemyCount += code === this.enemyCode;
       playerCount += code === this.playerCode;
     }
@@ -131,15 +130,15 @@ class GoState {
     }
 
     let caps = 0; // number of captures available
-    for (let [[i, j], code] of cache4way) {
+    for (let { adj, code } of cache4way) {
       if (code === this.playerCode
-        && !this.libsLimit(i, j, 1)) { // > 1
+        && !this.libsLimit(adj.x, adj.y, 1)) { // > 1
         return true; // safely merge
       }
       if (code === this.enemyCode
-        && this.libsLimit(i, j, 1) // atari == 1
+        && this.libsLimit(adj.x, adj.y, 1) // atari == 1
       ) {
-        const isOne = this.isSingleStone(i, j);
+        const isOne = this.isSingleStone(adj.x, adj.y);
         if (!isOne || ++caps > 1) {
           return true; // safely capture two+
         }
@@ -171,7 +170,7 @@ class GoState {
   playRandom() {
     const moves = this.moveList();
     if (moves.length) {
-      let [x, y] = _.sample(moves); // random
+      let { x, y } = _.sample(moves); // random
       this.playMove(x, y);
       return true;
     } else {
@@ -193,7 +192,7 @@ class GoState {
   }
 
   replayMove(action) {
-    let [x, y] = action;
+    let { x, y } = action;
     if (this.board._xyValid(x, y)) {
       this.playMove(x, y);
     } else {
@@ -217,7 +216,7 @@ function markInverse(state, moves) {
     state.board.printBoard({ addLabels: false })
       .replaceAll(".", warn)
   );
-  for (let [x, y] of moves) {
+  for (let { x, y } of moves) {
     if (board[y][x] === warn)
       board[y][x] = ".";
   }

@@ -1,7 +1,7 @@
 function scoreBoard(board, enclosed, stoneArr) {
   const size = board.size;
   let tally;
-  const followEmpty = ([x, y]) => {
+  const followEmpty = ({ x, y }) => {
     let piece = board.getColour(x, y);
     tally[piece] = 1 + (tally[piece] ?? 0);
     return board.isEmpty(x, y);
@@ -12,7 +12,7 @@ function scoreBoard(board, enclosed, stoneArr) {
     for (let x = 0; x < size; x++) {
       if (board.isEmpty(x, y)) {
         tally = {};
-        DFS([x, y], xy4way, followEmpty);
+        DFS({ x: x, y: y }, xy4way, followEmpty);
         let result = "?";
         if (tally["W"] && !tally["B"]) {
           result = "w";

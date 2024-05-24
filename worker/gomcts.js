@@ -1,7 +1,7 @@
 function printRootArray(size, root, callback = () => 0) {
   const valueArr = createNested(size, 0);
   for (let child of root.children) {
-    let [x, y] = child.action;
+    let {x, y} = child.action;
     valueArr[y][x] = callback(child);
   }
   return valueArr;
