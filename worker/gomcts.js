@@ -1,7 +1,7 @@
-function printRootArray(size, root, callback = () => 0) {
+function printRootArray(size, root, state, callback = () => 0) {
   const valueArr = createNested(size, 0);
   for (let child of root.children) {
-    let {x, y} = child.action;
+    let { x, y } = state.board.pos2xy(child.action);
     valueArr[y][x] = callback(child);
   }
   return valueArr;
@@ -19,8 +19,8 @@ function mcts(runtime) {
   }
   const dT = performance.now() - t0;
   const size = state.board.size;
-  const visitsArr = printRootArray(size, self.root, (node) => node.visits);
-  const valueArr = printRootArray(size, self.root, (node) => `${node.value}`
+  const visitsArr = printRootArray(size, self.root, self.state, (node) => node.visits);
+  const valueArr = printRootArray(size, self.root, self.state, (node) => `${node.value}`
     .replace(/^0./, ".")
     .replace(/^-0./, "-.")
     .slice(0, 5)

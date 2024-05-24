@@ -187,7 +187,7 @@ class GoState {
   }
 
   replayMove(pos) {
-    if (this.board._xyValid(pos)) {
+    if (pos !== passAction) {
       this.playMove(pos);
     } else {
       this.advanceTurn(); // pass
