@@ -13,7 +13,7 @@ function buildLibs(board) {
     for (let x = 0; x < board.size; x++) {
       if (board.isStone(x, y)) {
         libs = 0;
-        DFS({ x: x, y: y }, xy4way,
+        DFS(new Pos(x, y), xy4way,
           board.isBlack(x, y) ? followBlack : followWhite);
         libCount[y][x] = libs;
       } else {

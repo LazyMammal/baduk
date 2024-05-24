@@ -12,7 +12,7 @@ function scoreBoard(board, enclosed, stoneArr) {
     for (let x = 0; x < size; x++) {
       if (board.isEmpty(x, y)) {
         tally = {};
-        DFS({ x: x, y: y }, xy4way, followEmpty);
+        DFS(new Pos(x, y), xy4way, followEmpty);
         let result = "?";
         if (tally["W"] && !tally["B"]) {
           result = "w";

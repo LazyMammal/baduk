@@ -1,4 +1,16 @@
-const passAction = { x: -1, y: -1 };
+class Pos {
+  x;
+  y;
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  toString() {
+    return this.x + "," + this.y;
+  }
+}
+
+const passAction = new Pos(-1, -1);
 
 class GoBoard2D {
   size;
@@ -11,7 +23,7 @@ class GoBoard2D {
     const moves = [];
     for (let y = 0; y < this.size; y++) {
       for (let x = 0; x < this.size; x++) {
-        moves.push({ x: x, y: y });
+        moves.push(new Pos(x, y));
       }
     }
     return moves;

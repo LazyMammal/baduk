@@ -9,17 +9,16 @@ function DFS(start,
   - no knowledge of TYPE
   - not optimized
   */
-  const _key = ({ x, y }) => `${x}|${y}`;
   let Q = [start];
   let visited = {};
-  visited[_key(start)] = start;
+  visited[start.toString()] = start;
   callback(start);
   while (Q.length) {
     let cur = Q.pop();
     if (earlyexit(cur))
       break;
     for (let adj of adjacent(cur)) {
-      const k = _key(adj);
+      const k = adj.toString();
       if (!(k in visited)) {
         visited[k] = cur;
         if (callback(adj))
@@ -37,10 +36,10 @@ function xy4way(pos) {
   */
   const { x, y } = pos;
   return [
-    { x: x - 1, y: y },
-    { x: x + 1, y: y },
-    { x: x, y: y - 1 },
-    { x: x, y: y + 1 },
+    new Pos(x - 1, y),
+    new Pos(x + 1, y),
+    new Pos(x, y - 1),
+    new Pos(x, y + 1),
   ];
 }
 
@@ -60,7 +59,7 @@ function floodFill(input) {
     total++;
     return isStone;
   }
-  DFS({ x: 0, y: 0 }, xy4way, followBlack);
+  DFS(new Pos(0, 0), xy4way, followBlack);
   return [
     printNested(visits),
     `Black stones:  ${black}`,

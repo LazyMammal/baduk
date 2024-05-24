@@ -38,7 +38,7 @@ class GoState {
       return true;
     }
     let caps = 0;
-    DFS({ x: x, y: y }, xy4way,
+    DFS(new Pos(x, y), xy4way,
       this.board.isBlack(x, y) ? followBlack : followWhite);
     return caps;
   }
@@ -60,7 +60,7 @@ class GoState {
     const earlyExit = () => {
       return stones > 1; // found refutation
     }
-    DFS({ x: x, y: y }, xy4way,
+    DFS(new Pos(x, y), xy4way,
       this.board.isBlack(x, y) ? followBlack : followWhite,
       earlyExit
     );
@@ -82,7 +82,7 @@ class GoState {
     const earlyExit = () => {
       return libs > limit; // found refutation
     }
-    DFS({ x: x, y: y }, xy4way,
+    DFS(new Pos(x, y), xy4way,
       this.board.isBlack(x, y) ? followBlack : followWhite,
       earlyExit
     );
@@ -92,7 +92,7 @@ class GoState {
   playMove(x, y) {
     this.board.setCode(x, y, this.playerCode);
     let caps = 0;
-    for (let adj of xy4way({ x: x, y: y })) {
+    for (let adj of xy4way(new Pos(x, y))) {
       if (this.board.getCode(adj.x, adj.y) === this.enemyCode
         && this.libsLimit(adj.x, adj.y)) { // capture
         caps += this.eraseChain(adj.x, adj.y);
@@ -116,7 +116,7 @@ class GoState {
     let enemyCount = 0; // prep for eye check
     let playerCount = 0;
     let cache4way = [];
-    for (let adj of xy4way({ x: x, y: y })) {
+    for (let adj of xy4way(new Pos(x, y))) {
       if (this.board.isEmpty(adj.x, adj.y)) {
         return true; // adjacent liberty
       }
