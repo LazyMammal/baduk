@@ -27,7 +27,7 @@ function mcts(runtime) {
   );
   return [
     `Visits:`,
-    printPadded(visitsArr, true, 5),
+    printPadded(visitsArr, true, 7),
     `Value:`,
     printPadded(valueArr, true, 7),
     `root value ${self.root.value.toFixed(6)}`,
