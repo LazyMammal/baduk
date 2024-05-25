@@ -11,16 +11,15 @@ function DFS(start,
   */
   let Q = [start];
   let visited = {};
-  visited[key(start)] = start;
+  visited[start] = start;
   callback(start);
   while (Q.length) {
     let cur = Q.pop();
     if (earlyexit(cur))
       break;
     for (let adj of adjacent(cur)) {
-      const k = key(adj);
-      if (!(k in visited)) {
-        visited[k] = cur;
+      if (!(adj in visited)) {
+        visited[adj] = cur;
         if (callback(adj))
           Q.push(adj);
       }

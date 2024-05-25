@@ -1,15 +1,4 @@
-class Pos {
-  x;
-  y;
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-  }
-}
-
-const key = (pos) => pos.x << 5 | pos.y;
-
-const passAction = new Pos(21, 21);
+const passAction = 21 * 21;
 
 class GoBoard2D {
   size;
@@ -20,83 +9,81 @@ class GoBoard2D {
   }
   allMoves() {
     const moves = [];
-    for (let y = 0; y < this.size; y++) {
-      for (let x = 0; x < this.size; x++) {
-        moves.push(new Pos(x, y));
-      }
+    for (let pos = 0; pos < this.board.length; pos++) {
+      moves.push(pos);
     }
     return moves;
   }
   allEmpty() {
     const moves = [];
-    for (let y = 0; y < this.size; y++) {
-      for (let x = 0; x < this.size; x++) {
-        const pos = new Pos(x, y);
-        if (this.isEmpty(pos))
-          moves.push(pos);
-      }
+    for (let pos = 0; pos < this.board.length; pos++) {
+      if (this.board[pos] === GO_EMPTY)
+        moves.push(pos);
     }
     return moves;
   }
   adjacent(pos) {
     const max = this.size - 1;
-    const { x, y } = pos;
+    const x = pos % this.size;
     const moves = [];
-    if (y > 0)
-      moves.push(new Pos(x, y - 1));
-    if (x > 0)
-      moves.push(new Pos(x - 1, y));
-    if (x < max)
-      moves.push(new Pos(x + 1, y));
-    if (y < max)
-      moves.push(new Pos(x, y + 1));
+    if (pos >= this.size)
+      moves.push(pos - this.size);
+    if (x !== 0)
+      moves.push(pos - 1);
+    if (x !== max)
+      moves.push(pos + 1);
+    if (pos + this.size < this.board.length)
+      moves.push(pos + this.size);
     return moves;
   }
   diagonal(pos) {
     const max = this.size - 1;
-    const { x, y } = pos;
+    const x = pos % this.size;
     const moves = [];
-    const ysub = y > 0;
-    const xsub = x > 0;
-    const xinc = x < max;
-    const yinc = y < max;
+    const ysub = pos >= this.size;
+    const xsub = x !== 0;
+    const xinc = x !== max;
+    const yinc = pos + this.size < this.board.length;
     if (xsub && ysub)
-      moves.push(new Pos(x - 1, y - 1));
+      moves.push(pos - this.size - 1);
     if (xinc && ysub)
-      moves.push(new Pos(x + 1, y - 1));
+      moves.push(pos - this.size + 1);
     if (xsub && yinc)
-      moves.push(new Pos(x - 1, y + 1));
+      moves.push(pos + this.size - 1);
     if (xinc && yinc)
-      moves.push(new Pos(x + 1, y + 1));
+      moves.push(pos + this.size + 1);
     return moves;
   }
   xy2pos(x, y) {
-    return new Pos(x, y);
+    return this.size * y + x;
   }
   pos2xy(pos) {
-    return pos; // {x, y}
+    return {
+      x: pos % this.size,
+      y: ~~(pos / this.size)
+    };
   }
-  firstPos() { return new Pos(0, 0) }
+  firstPos() { return 0 }
   _xyValid(pos) {
     const { x, y } = pos;
     return x >= 0 && x < this.size
       && y >= 0 && y < this.size;
   }
   setCode(pos, val) {
-    this.board[this.size * pos.y + pos.x] = val;
+    this.board[pos] = val;
   }
   getCode(pos) {
-    return this.board[this.size * pos.y + pos.x];
+    return this.board[pos];
   }
-  getColour(pos) { return GO_CHARS[this.getCode(pos)] }
-  isEmpty(pos) { return this.getCode(pos) === GO_EMPTY }
-  isBlack(pos) { return this.getCode(pos) === GO_BLACK }
-  isWhite(pos) { return this.getCode(pos) === GO_WHITE }
-  isStone(pos) { return this.getCode(pos) & GO_STONE }
-  isOOB(pos) { return this.getCode(pos) === GO_OOB }
-  setEmpty(pos) { this.setCode(pos, GO_EMPTY) }
-  setBlack(pos) { this.setCode(pos, GO_BLACK) }
-  setWhite(pos) { this.setCode(pos, GO_WHITE) }
+  getColour(pos) { return GO_CHARS[this.board[pos]] }
+  isEmpty(pos) { return this.board[pos] === GO_EMPTY }
+  isBlack(pos) { return this.board[pos] === GO_BLACK }
+  isWhite(pos) { return this.board[pos] === GO_WHITE }
+  isStone(pos) { return this.board[pos] & GO_STONE }
+  isOOB(pos) { return this.board[pos] === GO_OOB }
+  setEmpty(pos) { this.board[pos] = GO_EMPTY }
+  setBlack(pos) { this.board[pos] = GO_BLACK }
+  setWhite(pos) { this.board[pos] = GO_WHITE }
 
   loadNested(nested) {
     for (let y = 0; y < nested.length && y < this.size; y++) {
