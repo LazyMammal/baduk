@@ -9,7 +9,7 @@ class Pos {
 
 const key = (pos) => pos.x << 5 | pos.y;
 
-const passAction = new Pos(-1, -1);
+const passAction = new Pos(21, 21);
 
 class GoBoard2D {
   size;
