@@ -1,23 +1,20 @@
+const key = (pos) => pos;
+
 const passAction = 0;
 
 class GoBoard2D {
   size;
   board;
-  constructor(size, board = null) {
+  constructor(size) {
     this.size = size;
-    this.board = board ?? this.makeBoard();
-  }
-
-  makeBoard() {
     const W = this.size + 1;
     const length = (W + 1) * W + 1;
-    const board = new Int32Array(length);
+    this.board = new Int32Array(length);
     for (let i = 0; i < W; i++) {
-      board[i] = GO_OOB; // Out-Of-Bounds
-      board[(i + 1) * W] = GO_OOB;
-      board[board.length - i - 1] = GO_OOB;
+      this.board[i] = GO_OOB; // Out-Of-Bounds
+      this.board[(i + 1) * W] = GO_OOB;
+      this.board[length - i - 1] = GO_OOB;
     }
-    return board;
   }
 
   clone() {
@@ -55,7 +52,7 @@ class GoBoard2D {
       x: (pos % W) - 1,
       y: Math.floor(pos / W) - 1
     }
-  };
+  }
 
   firstPos() {
     return this.xy2pos(0, 0);

@@ -20,79 +20,83 @@ class GoState {
   }
 
   eraseChain(pos) {
-    if (!this.board.isStone(pos))
+    if ((this.board.board[pos] & GO_STONE) === 0)
       return 0;
     const followBlack = (pos) => {
-      if (!this.board.isBlack(pos))
+      if (this.board.board[pos] !== GO_BLACK)
         return false;
-      this.board.setEmpty(pos);
+      this.board.board[pos] = GO_EMPTY;
       caps++;
       return true;
     }
     const followWhite = (pos) => {
-      if (!this.board.isWhite(pos))
+      if (this.board.board[pos] !== GO_WHITE)
         return false;
-      this.board.setEmpty(pos);
+      this.board.board[pos] = GO_EMPTY;
       caps++;
       return true;
     }
     let caps = 0;
-    DFS(pos, (pos) => this.board.adjacent(pos),
-      this.board.isBlack(pos) ? followBlack : followWhite);
+    DFS2(this.board.size, pos, (pos) => this.board.adjacent(pos),
+      (this.board.board[pos] === GO_BLACK) ? followBlack : followWhite
+    );
     return caps;
   }
 
   isSingleStone(pos) {
-    if (!this.board.isStone(pos))
+    if ((this.board.board[pos] & GO_STONE) === 0)
       return 0;
     let stones = 0;
     const followBlack = (pos) => {
-      const isStone = this.board.isBlack(pos);
+      const isStone = this.board.board[pos] === GO_BLACK;
       stones += isStone;
       return isStone;
     }
     const followWhite = (pos) => {
-      const isStone = this.board.isWhite(pos);
+      const isStone = this.board.board[pos] === GO_WHITE;
       stones += isStone;
       return isStone;
     }
     const earlyExit = () => {
       return stones > 1; // found refutation
     }
-    DFS(pos, (pos) => this.board.adjacent(pos),
-      this.board.isBlack(pos) ? followBlack : followWhite,
+    DFS2(this.board.size, pos, (pos) => this.board.adjacent(pos),
+      (this.board.board[pos] === GO_BLACK) ? followBlack : followWhite,
       earlyExit
     );
     return stones === 1;
   }
 
   libsLimit(pos, limit = 0) {
-    if (!this.board.isStone(pos))
+    if ((this.board.board[pos] & GO_STONE) === 0)
       return 0;
     let libs = 0;
     const followBlack = (pos) => {
-      libs += this.board.isEmpty(pos);
-      return this.board.isBlack(pos);
+      libs += this.board.board[pos] === GO_EMPTY;
+      return this.board.board[pos] === GO_BLACK;
     }
     const followWhite = (pos) => {
-      libs += this.board.isEmpty(pos);
-      return this.board.isWhite(pos);
+      libs += this.board.board[pos] === GO_EMPTY;
+      return this.board.board[pos] === GO_WHITE;
     }
     const earlyExit = () => {
       return libs > limit; // found refutation
     }
-    DFS(pos, (pos) => this.board.adjacent(pos),
-      this.board.isBlack(pos) ? followBlack : followWhite,
+    DFS2(this.board.size, pos, (pos) => this.board.adjacent(pos),
+      (this.board.board[pos] === GO_BLACK) ? followBlack : followWhite,
       earlyExit
     );
     return libs <= limit;
   }
 
   playMove(pos) {
-    this.board.setCode(pos, this.playerCode);
+    if(this.board.board[pos] !== GO_EMPTY) {
+      console.log("ERROR: playing illegal move");
+    }
+    this.board.board[pos] = this.playerCode;
     let caps = 0;
     for (let adj of this.board.adjacent(pos)) {
-      if (this.board.getCode(adj) === this.enemyCode
+      if (this.board.board[adj] === this.enemyCode
         && this.libsLimit(adj)) { // capture
         caps += this.eraseChain(adj);
       }
@@ -108,7 +112,7 @@ class GoState {
   }
 
   validToPlay(pos) {
-    if (!this.board.isEmpty(pos)) {
+    if (this.board.board[pos] !== GO_EMPTY) {
       return false; // not empty
     }
 
@@ -116,7 +120,7 @@ class GoState {
     let playerCount = 0;
     let cache4way = [];
     for (let adj of this.board.adjacent(pos)) {
-      const code = this.board.getCode(adj);
+      const code = this.board.board[adj];
       if (code === GO_EMPTY) {
         return true; // adjacent liberty
       }
@@ -153,7 +157,7 @@ class GoState {
     let edgeCount = 0;
     let enemyCount = 0;
     for (let diag of this.board.diagonal(pos)) {
-      const code = this.board.getCode(diag);
+      const code = this.board.board[diag];
       enemyCount += code === this.enemyCode;
       edgeCount += code === GO_OOB;
     }
