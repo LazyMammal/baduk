@@ -12,7 +12,7 @@ class GoState {
 
   moveList() {
     const moves = [];
-    for (let pos of this.board.allMoves()) {
+    for (let pos of this.board.allEmpty()) {
       if (this.validToPlay(pos))
         moves.push(pos);
     }
@@ -20,77 +20,74 @@ class GoState {
   }
 
   eraseChain(pos) {
-    if ((this.board.board[pos] & GO_STONE) === 0)
+    const stoneCode = this.board.board[pos] & GO_STONE;
+    if (!stoneCode)
       return 0;
-    const followBlack = (pos) => {
-      if (this.board.board[pos] !== GO_BLACK)
-        return false;
-      this.board.board[pos] = GO_EMPTY;
-      caps++;
-      return true;
+
+    const Q = [pos];
+    const visited = {};
+    visited[pos] = 1;
+
+    this.board.board[pos] = GO_EMPTY;
+    let caps = 1;
+    while (Q.length) {
+      let cur = Q.pop();
+      for (let adj of this.board.adjacent(cur)) {
+        if (!(adj in visited)) {
+          visited[adj] = 1;
+          if (this.board.board[adj] === stoneCode) {
+            this.board.board[adj] = GO_EMPTY;
+            caps++;
+            Q.push(adj);
+          }
+        }
+      }
     }
-    const followWhite = (pos) => {
-      if (this.board.board[pos] !== GO_WHITE)
-        return false;
-      this.board.board[pos] = GO_EMPTY;
-      caps++;
-      return true;
-    }
-    let caps = 0;
-    DFS2(this.board.size, pos, (pos) => this.board.adjacent(pos),
-      (this.board.board[pos] === GO_BLACK) ? followBlack : followWhite
-    );
     return caps;
   }
 
   isSingleStone(pos) {
-    if ((this.board.board[pos] & GO_STONE) === 0)
-      return 0;
-    let stones = 0;
-    const followBlack = (pos) => {
-      const isStone = this.board.board[pos] === GO_BLACK;
-      stones += isStone;
-      return isStone;
+    const stoneCode = this.board.board[pos] & GO_STONE;
+    if (!stoneCode)
+      return false;
+    for (let adj of this.board.adjacent(pos)) {
+      if (this.board.board[adj] === stoneCode) {
+        return false;
+      }
     }
-    const followWhite = (pos) => {
-      const isStone = this.board.board[pos] === GO_WHITE;
-      stones += isStone;
-      return isStone;
-    }
-    const earlyExit = () => {
-      return stones > 1; // found refutation
-    }
-    DFS2(this.board.size, pos, (pos) => this.board.adjacent(pos),
-      (this.board.board[pos] === GO_BLACK) ? followBlack : followWhite,
-      earlyExit
-    );
-    return stones === 1;
+    return true;
   }
 
   libsLimit(pos, limit = 0) {
-    if ((this.board.board[pos] & GO_STONE) === 0)
+    const stoneCode = this.board.board[pos] & GO_STONE;
+    if (!stoneCode)
       return 0;
+
+    const Q = [pos];
+    const visited = {};
+    visited[pos] = 1;
+
     let libs = 0;
-    const followBlack = (pos) => {
-      libs += this.board.board[pos] === GO_EMPTY;
-      return this.board.board[pos] === GO_BLACK;
+    while (Q.length) {
+      let cur = Q.pop();
+      for (let adj of this.board.adjacent(cur)) {
+        if (!(adj in visited)) {
+          visited[adj] = 1;
+          const code = this.board.board[adj];
+          if (code === stoneCode) {
+            Q.push(adj);
+          } else if (code === GO_EMPTY) {
+            if(++libs > limit)
+              return false;
+          }
+        }
+      }
     }
-    const followWhite = (pos) => {
-      libs += this.board.board[pos] === GO_EMPTY;
-      return this.board.board[pos] === GO_WHITE;
-    }
-    const earlyExit = () => {
-      return libs > limit; // found refutation
-    }
-    DFS2(this.board.size, pos, (pos) => this.board.adjacent(pos),
-      (this.board.board[pos] === GO_BLACK) ? followBlack : followWhite,
-      earlyExit
-    );
     return libs <= limit;
   }
 
   playMove(pos) {
-    if(this.board.board[pos] !== GO_EMPTY) {
+    if (this.board.board[pos] !== GO_EMPTY) {
       console.log("ERROR: playing illegal move");
     }
     this.board.board[pos] = this.playerCode;
@@ -112,13 +109,9 @@ class GoState {
   }
 
   validToPlay(pos) {
-    if (this.board.board[pos] !== GO_EMPTY) {
-      return false; // not empty
-    }
-
     let enemyCount = 0; // prep for eye check
     let playerCount = 0;
-    let cache4way = [];
+    let cacheStones = [];
     for (let adj of this.board.adjacent(pos)) {
       const code = this.board.board[adj];
       if (code === GO_EMPTY) {
@@ -126,17 +119,19 @@ class GoState {
       }
       enemyCount += code === this.enemyCode;
       playerCount += code === this.playerCode;
-      cache4way.push([adj, code]);
+      cacheStones.push([adj, code]);
     }
     if (!(enemyCount || this._falseEye(pos))) {
       return false; // self-eye
     }
-    let caps = 0; // number of captures available
-    for (let [adj, code] of cache4way) {
+    for (let [adj, code] of cacheStones) {
       if (code === this.playerCode
         && !this.libsLimit(adj, 1)) { // > 1
         return true; // safely merge
       }
+    }
+    let caps = 0; // number of captures available
+    for (let [adj, code] of cacheStones) {
       if (code === this.enemyCode
         && this.libsLimit(adj, 1) // atari == 1
       ) {
@@ -154,16 +149,14 @@ class GoState {
   }
 
   _falseEye(pos) {
-    let edgeCount = 0;
-    let enemyCount = 0;
-    for (let diag of this.board.diagonal(pos)) {
-      const code = this.board.board[diag];
-      enemyCount += code === this.enemyCode;
-      edgeCount += code === GO_OOB;
+    const diagMoves = this.board.diagonal(pos);
+    const edgeCount = 4 - diagMoves.length;
+    let enemyCount = edgeCount > 0;
+    for (let diag of diagMoves) {
+      enemyCount += this.board.board[diag] === this.enemyCode;
+      if (enemyCount > 1)
+        return true; // false eye (diagonal)
     }
-    if ((edgeCount && enemyCount)
-      || enemyCount > 1)
-      return true; // false eye (diagonal)
     return false; // probably an eye!
   }
 
