@@ -178,7 +178,7 @@ class GoState {
     for (let t = 0; t < 100 && passTurn < 2; t++) {
       passTurn = this.playRandom() ? 0 : passTurn + 1;
     }
-    const score = scoreBoard(this.board);
+    const score = getScore(this.board);
     const win = score[player] > score[enemy]; // TODO: komi
     return win * 2 - 1; // -1 or +1
   }

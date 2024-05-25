@@ -1,3 +1,35 @@
+function getScore(board) {
+  const visitEmpty = Array(board.board.length).fill(0);
+  const score = { 1: 0, 2: 0, 3: 0 };
+
+  for (let pos of board.allMoves()) {
+    const piece = board.board[pos];
+    if (piece) {
+      score[piece]++;
+      continue;
+    }
+    if (visitEmpty[pos]++) {
+      continue;
+    }
+    const Q = [pos];
+    let countEmpty = 1;
+    let stoneTypes = 0;
+    while (Q.length) {
+      const cur = Q.pop();
+      for (let adj of board.adjacent(cur)) {
+        const piece = board.board[adj] & GO_STONE;
+        stoneTypes |= piece;
+        if (piece === GO_EMPTY && !visitEmpty[adj]++) {
+          Q.push(adj);
+          countEmpty++;
+        }
+      }
+    }
+    score[stoneTypes] += countEmpty;
+  }
+  return score;
+}
+
 function scoreBoard(board, enclosed, stoneArr) {
   const size = board.size;
   let tally;
@@ -40,9 +72,6 @@ function scoreBoard(board, enclosed, stoneArr) {
     B: B,
     W: W,
     "?": S,
-    GO_BLACK: B,
-    GO_WHITE: W,
-    GO_STONE: S,
   }
 }
 
@@ -51,7 +80,7 @@ function scoring(input) {
   const size = board.size;
   const enclosed = createNested(size, ".");
   const stoneArr = createNested(size, ".");
-  let score = scoreBoard(board, enclosed, stoneArr);
+  const score = scoreBoard(board, enclosed, stoneArr);
   return [
     printNested(enclosed),
     `Enclosed: b: ${score.empty["b"]}`,
@@ -62,5 +91,15 @@ function scoring(input) {
     `B: ${score.B}`,
     `W: ${score.W}`,
     `?: ${score["?"]}`,
+  ].join("\n");
+}
+
+function fastScoring(input) {
+  const board = parseBoard2D(input);
+  const score = getScore(board);
+  return [
+    `GO_BLACK: ${score[GO_BLACK]}`,
+    `GO_WHITE: ${score[GO_WHITE]}`,
+    `GO_STONE: ${score[GO_STONE]} (contested)`,
   ].join("\n");
 }

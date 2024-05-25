@@ -250,7 +250,22 @@
             <input type="hidden" name="fork" value="scoring">
           </span>
         </div>
-        <pre><summary>output</summary><code output></code></pre>
+        <pre><summary>scoreBoard()</summary><code output></code></pre>
+      </div>
+      <div data-url="board7x7.txt" run="worker/worker.js">
+        <div class="full">
+          <button fork="fork_run">Run</button>
+          <button fork="fork_time">Time</button> <mark hidden></mark>
+          <span options>
+            <input type="hidden" name="worker" value="goutil.js">
+            <input type="hidden" name="worker" value="goboard.js">
+            <input type="hidden" name="worker" value="goflood.js">
+            <input type="hidden" name="worker" value="golibs.js">
+            <input type="hidden" name="worker" value="goscore.js">
+            <input type="hidden" name="fork" value="fastScoring">
+          </span>
+        </div>
+        <pre><summary>getScore()</summary><code output></code></pre>
       </div>
     </section>
     <section>

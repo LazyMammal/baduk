@@ -11,8 +11,8 @@ function monteCarlo(input) {
     for (let turn = 0; pass < 2 && turn < maxTurns; turn++) {
       pass = state.playRandom() ? 0 : pass + 1;
     }
-    let score = scoreBoard(state.board);
-    let win = _.clamp(score.B - score.W, -1, 1);
+    let score = getScore(state.board);
+    let win = _.clamp(score[GO_BLACK] - score[GO_WHITE], -1, 1);
     wins[win] = 1 + (wins[win] ?? 0);
     rollouts++;
   }

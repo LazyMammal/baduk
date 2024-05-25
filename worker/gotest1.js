@@ -2,11 +2,11 @@ function createLookup(data) {
   const board = parseBoard2D(data.join("\n"));
   const enclosed = createNested(board.size, ".");
   const stoneArr = createNested(board.size, ".");
-  let score = scoreBoard(board, enclosed, stoneArr);
-  return Object.assign(score, {
+  return Object.assign(scoreBoard(board, enclosed, stoneArr), {
     Enclosed: printNested(enclosed, true),
     Score: printNested(stoneArr, true),
     'LibertyCount': printNested(buildLibs(board), true),
+    ...getScore(board),
   });
 }
 
