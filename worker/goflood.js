@@ -26,7 +26,7 @@ function DFS(start,
       }
     }
   }
-  return visited;
+  // return visited;
 }
 
 function floodFill(input) {
