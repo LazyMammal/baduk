@@ -161,14 +161,18 @@ class GoState {
   }
 
   playRandom() {
-    const moves = this.moveList();
-    if (moves.length) {
-      this.playMove(_.sample(moves)); // random
-      return true;
-    } else {
-      this.advanceTurn();
-      return false;
+    const moves = this.board.allEmpty();
+    while(moves.length) {
+      const idx = ~~(Math.random() * moves.length);
+      const pos = moves[idx];
+      if (this.validToPlay(pos)) {
+        this.playMove(pos);
+        return true;
+      }
+      moves.splice(idx, 1);
     }
+    this.advanceTurn();
+    return false;
   }
 
   doRollout() {
