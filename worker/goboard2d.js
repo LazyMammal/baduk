@@ -5,10 +5,9 @@ class Pos {
     this.x = x;
     this.y = y;
   }
-  toString() {
-    return this.x + "," + this.y;
-  }
 }
+
+const key = (pos) => pos.x << 5 | pos.y;
 
 const passAction = new Pos(-1, -1);
 
