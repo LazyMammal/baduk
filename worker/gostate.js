@@ -87,9 +87,6 @@ class GoState {
   }
 
   playMove(pos) {
-    if (this.board.board[pos] !== GO_EMPTY) {
-      console.log("ERROR: playing illegal move");
-    }
     this.board.board[pos] = this.playerCode;
     let caps = 0;
     for (let adj of this.board.adjacent(pos)) {
