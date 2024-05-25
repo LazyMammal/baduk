@@ -29,7 +29,7 @@ function mcts(runtime) {
     `Visits:`,
     printPadded(visitsArr, true, 5),
     `Value:`,
-    printPadded(valueArr, true, 5),
+    printPadded(valueArr, true, 7),
     `root value ${self.root.value.toFixed(6)}`,
     `nodes selected ${nodes}, `
     + `${(nodes / dT * 1e3).toFixed(0)}/s`,

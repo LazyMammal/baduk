@@ -38,7 +38,7 @@ const testLibertyScore = {
   "B": 27,
   "W": 16,
   "?": 6,
-  1: 27,
-  2: 16,
-  3: 6,
+  [GO_BLACK]: 27,
+  [GO_WHITE]: 16,
+  [GO_STONE]: 6,
 };

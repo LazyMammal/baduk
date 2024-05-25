@@ -1,6 +1,10 @@
 function getScore(board) {
   const visitEmpty = Array(board.board.length).fill(0);
-  const score = { 1: 0, 2: 0, 3: 0 };
+  const score = {
+    [GO_BLACK]: 0,
+    [GO_WHITE]: 0,
+    [GO_STONE]: 0
+  };
 
   for (let pos of board.allMoves()) {
     const piece = board.board[pos];

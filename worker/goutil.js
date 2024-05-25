@@ -5,8 +5,20 @@ const GO_BLACK = 1;
 const GO_WHITE = 2;
 const GO_STONE = 3;
 const GO_OOB = 4;
-const GO_CHARS = [".", "B", "W", "?", "#"];
-const GO_CODES = { ".": 0, "B": 1, "W": 2, "?": 3, "#": 4 };
+const GO_CHARS = {
+  [GO_EMPTY]: ".",
+  [GO_BLACK]: "B",
+  [GO_WHITE]: "W",
+  [GO_STONE]: "?",
+  [GO_OOB]: "#"
+};
+const GO_CODES = {
+  ".": GO_EMPTY,
+  "B": GO_BLACK,
+  "W": GO_WHITE,
+  "?": GO_STONE,
+  "#": GO_OOB
+};
 
 const defaultInput = ".......\n".repeat(7);
 
