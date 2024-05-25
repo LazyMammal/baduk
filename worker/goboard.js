@@ -54,6 +54,45 @@ class GoBoard2D {
       moves.push(pos + this.size + 1);
     return moves;
   }
+  patch3x3(pos) {
+    const max = this.size - 1;
+    const x = pos % this.size;
+    const moves = [pos];
+    const ysub = pos >= this.size;
+    const xsub = x !== 0;
+    const xinc = x !== max;
+    const yinc = pos + this.size < this.board.length;
+    if (ysub)
+      moves.push(pos - this.size);
+    if (xsub)
+      moves.push(pos - 1);
+    if (xinc)
+      moves.push(pos + 1);
+    if (yinc)
+      moves.push(pos + this.size);
+    if (xsub && ysub)
+      moves.push(pos - this.size - 1);
+    if (xinc && ysub)
+      moves.push(pos - this.size + 1);
+    if (xsub && yinc)
+      moves.push(pos + this.size - 1);
+    if (xinc && yinc)
+      moves.push(pos + this.size + 1);
+    return moves;
+  }
+  nthLine(num) { // num = 0 to size-1
+    // "ring of positions" along Nth line from edge
+    const flip = this.size - 1 - num;
+    const count = flip - num;
+    const moves = [];
+    for (let i = 0; i < count; i++) {
+      moves.push(this.xy2pos(num, num + i));
+      moves.push(this.xy2pos(num + i, flip));
+      moves.push(this.xy2pos(flip, flip - i));
+      moves.push(this.xy2pos(flip - i, num));
+    }
+    return moves;
+  }
   xy2pos(x, y) {
     return this.size * y + x;
   }
