@@ -77,7 +77,7 @@ class GoState {
           if (code === stoneCode) {
             Q.push(adj);
           } else if (code === GO_EMPTY) {
-            if(++libs > limit)
+            if (++libs > limit)
               return false;
           }
         }
@@ -106,40 +106,43 @@ class GoState {
   }
 
   validToPlay(pos) {
-    let enemyCount = 0; // prep for eye check
-    let playerCount = 0;
-    let cacheStones = [];
+    const enemyStones = [];
+    const playerStones = [];
     for (let adj of this.board.adjacent(pos)) {
       const code = this.board.board[adj];
-      if (code === GO_EMPTY) {
-        return true; // adjacent liberty
+      switch (code) {
+        case GO_EMPTY: // adjacent liberty
+          return true;
+        case this.enemyCode:
+          enemyStones.push(adj);
+          break;
+        case this.playerCode:
+          playerStones.push(adj);
+          break;
       }
-      enemyCount += code === this.enemyCode;
-      playerCount += code === this.playerCode;
-      cacheStones.push([adj, code]);
     }
-    if (!(enemyCount || this._falseEye(pos))) {
+    if (!(enemyStones.length || this._falseEye(pos))) {
       return false; // self-eye
     }
-    for (let [adj, code] of cacheStones) {
-      if (code === this.playerCode
-        && !this.libsLimit(adj, 1)) { // > 1
+    for (let adj of playerStones) {
+      if (!this.libsLimit(adj, 1)) { // > 1
         return true; // safely merge
       }
     }
     let caps = 0; // number of captures available
-    for (let [adj, code] of cacheStones) {
-      if (code === this.enemyCode
-        && this.libsLimit(adj, 1) // atari == 1
+    for (let adj of enemyStones) {
+      if (this.libsLimit(adj, 1) // atari == 1
       ) {
-        const isOne = this.isSingleStone(adj);
-        if (!isOne || ++caps > 1) {
-          return true; // safely capture two+
+        if (++caps > 1) {
+          return true; // second adjacent capture
+        }
+        if (!this.isSingleStone(adj)) {
+          return true; // chain has multiple stones
         }
       }
     }
 
-    if (caps && !playerCount) { // ko-like
+    if (caps && !playerStones.length) { // ko-like
       return this.turn % 3 === 0; // valid every 3rd turn
     }
     return caps > 0; // valid if capture
