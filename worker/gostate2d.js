@@ -150,16 +150,14 @@ class GoState {
   }
 
   _falseEye(pos) {
-    let edgeCount = 0;
-    let enemyCount = 0;
-    for (let diag of this.board.diagonal(pos)) {
-      const code = this.board.getCode(diag);
-      enemyCount += code === this.enemyCode;
-      edgeCount += code === GO_OOB;
+    const diagMoves = this.board.diagonal(pos);
+    const edgeCount = 4 - diagMoves.length;
+    let enemyCount = edgeCount > 0;
+    for (let diag of diagMoves) {
+      enemyCount += this.board.getCode(diag) === this.enemyCode;
+      if (enemyCount > 1)
+        return true; // false eye (diagonal)
     }
-    if ((edgeCount && enemyCount)
-      || enemyCount > 1)
-      return true; // false eye (diagonal)
     return false; // probably an eye!
   }
 

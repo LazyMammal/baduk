@@ -28,22 +28,36 @@ class GoBoard2D {
     return moves;
   }
   adjacent(pos) {
+    const max = this.size - 1;
     const { x, y } = pos;
-    return [
-      new Pos(x, y - 1),
-      new Pos(x - 1, y),
-      new Pos(x + 1, y),
-      new Pos(x, y + 1),
-    ];
+    const moves = [];
+    if (y > 0)
+      moves.push(new Pos(x, y - 1));
+    if (x > 0)
+      moves.push(new Pos(x - 1, y));
+    if (x < max)
+      moves.push(new Pos(x + 1, y));
+    if (y < max)
+      moves.push(new Pos(x, y + 1));
+    return moves;
   }
   diagonal(pos) {
+    const max = this.size - 1;
     const { x, y } = pos;
-    return [
-      new Pos(x - 1, y - 1),
-      new Pos(x + 1, y - 1),
-      new Pos(x - 1, y + 1),
-      new Pos(x + 1, y + 1),
-    ];
+    const moves = [];
+    const ysub = y > 0;
+    const xsub = x > 0;
+    const xinc = x < max;
+    const yinc = y < max;
+    if (xsub && ysub)
+      moves.push(new Pos(x - 1, y - 1));
+    if (xinc && ysub)
+      moves.push(new Pos(x + 1, y - 1));
+    if (xsub && yinc)
+      moves.push(new Pos(x - 1, y + 1));
+    if (xinc && yinc)
+      moves.push(new Pos(x + 1, y + 1));
+    return moves;
   }
   xy2pos(x, y) {
     return new Pos(x, y);
@@ -58,13 +72,10 @@ class GoBoard2D {
       && y >= 0 && y < this.size;
   }
   setCode(pos, val) {
-    if (this._xyValid(pos))
-      this.board[this.size * pos.y + pos.x] = val;
+    this.board[this.size * pos.y + pos.x] = val;
   }
   getCode(pos) {
-    if (this._xyValid(pos))
-      return this.board[this.size * pos.y + pos.x];
-    return GO_OOB;
+    return this.board[this.size * pos.y + pos.x];
   }
   getColour(pos) { return GO_CHARS[this.getCode(pos)] }
   isEmpty(pos) { return this.getCode(pos) === GO_EMPTY }
