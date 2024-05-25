@@ -12,7 +12,7 @@ class GoState {
 
   moveList() {
     const moves = [];
-    for (let pos of this.board.allMoves()) {
+    for (let pos of this.board.allEmpty()) {
       if (this.validToPlay(pos))
         moves.push(pos);
     }
@@ -108,10 +108,6 @@ class GoState {
   }
 
   validToPlay(pos) {
-    if (!this.board.isEmpty(pos)) {
-      return false; // not empty
-    }
-
     let enemyCount = 0; // prep for eye check
     let playerCount = 0;
     let cache4way = [];

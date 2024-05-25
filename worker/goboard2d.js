@@ -27,6 +27,17 @@ class GoBoard2D {
     }
     return moves;
   }
+  allEmpty() {
+    const moves = [];
+    for (let y = 0; y < this.size; y++) {
+      for (let x = 0; x < this.size; x++) {
+        const pos = new Pos(x, y);
+        if (this.isEmpty(pos))
+          moves.push(pos);
+      }
+    }
+    return moves;
+  }
   adjacent(pos) {
     const max = this.size - 1;
     const { x, y } = pos;
@@ -110,7 +121,7 @@ class GoBoard2D {
     for (let y = this.size - 1; y >= 0; y--) {
       let row = [];
       for (let x = 0; x < this.size; x++) {
-        let char = this.getColour(new Pos(x, y));
+        let char = this.getColour(this.xy2pos(x, y));
         row.push(`${char}`.padStart(pad, " "));
       }
       if (addLabels)
